@@ -9,5 +9,5 @@ export const login = (req , res) => {
 }
 
 export const home = (req , res) => {
-    res.render('pages/index');
+    res.render('partials/nav');
 }
