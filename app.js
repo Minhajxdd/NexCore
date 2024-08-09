@@ -1,8 +1,16 @@
-const express = require('express');
+import express from 'express';
 const app = express();
 
-app.get('/' , (req,  res ) =>{
-    res.send("Hai world");
-});
+// Importing Routes
+import Routes from './routes/userRoute.js'
 
-app.listen(4000 , () => {console.log("server started at port 4000")})
+app.set('view engine', 'ejs');
+
+app.use(express.static('public'));
+
+
+
+
+app.use('/' , Routes);
+
+export default app;
