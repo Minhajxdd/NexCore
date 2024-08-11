@@ -11,5 +11,7 @@ router.route('/login')
 router.route('/')
     .get(userController.home);
 
+router.route('/signup')
+    .get(userController.signup);
 
 export default router; 

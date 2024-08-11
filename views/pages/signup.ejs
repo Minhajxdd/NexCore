@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Signup</title>
+
+    <!-- Google font -->
+    <link href="/style/googleFontMontserrat.css" rel="stylesheet">
+
+    <!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/style/bootstrap.min.css"/>
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #000, #333);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .signup-form {
+            max-width: 450px;
+            width: 100%;
+            padding: 40px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: fadeInUp 1s;
+        }
+
+        .signup-form h2 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: #000;
+            text-align: center;
+            background: linear-gradient(135deg, #000, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2em;
+        }
+
+        .form-control {
+            height: 45px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #ff3333;
+        }
+
+        .btn-signup {
+            background: #000;
+            color: #fff;
+            font-weight: 700;
+            border-radius: 5px;
+            padding: 10px 20px;
+            border: none;
+            width: 100%;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-signup:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #ff3333;
+            font-size: 0.875em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: #000;
+            margin: 0 10px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ff3333;
+        }
+
+        .tooltip-inner {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .tooltip-arrow {
+            border-top-color: #000 !important;
+        }
+
+        #error-message{
+            text-align: center;
+            color: red; 
+            font-weight: bolder;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- SIGNUP FORM -->
+    <div class="signup-form">
+        <h2>Create Your Account</h2>
+        <!-- Error message placeholder -->
+        <label id="error-message"></label> 
+
+        <form action="/signup" method="POST" onsubmit="return validateSignupForm()">
+            <div class="form-group">
+                <input id="full-name" type="text" class="form-control" placeholder="Full Name" name="fullname" required data-toggle="tooltip" data-placement="top" title="Enter your full name">
+            </div>
+            <div class="form-group">
+                <input id="email" type="email" class="form-control" placeholder="Email" name="email" required data-toggle="tooltip" data-placement="top" title="Enter your email address">
+            </div>
+            <div class="form-group">
+                <input id="phone-number" type="tel" class="form-control" placeholder="Phone Number" name="phone" required data-toggle="tooltip" data-placement="top" title="Enter your phone number">
+            </div>
+            <div class="form-group">
+                <input id="password" type="password" class="form-control" placeholder="Password" name="password" required data-toggle="tooltip" data-placement="top" title="Create a password">
+            </div>
+            <div class="form-group">
+                <input id="re-password" type="password" class="form-control" placeholder="Re-enter Password" name="repassword" required data-toggle="tooltip" data-placement="top" title="Re-enter your password">
+            </div>
+            <button type="submit" class="btn btn-signup">Sign Up <i class="fas fa-arrow-right"></i></button>
+        </form>
+        <div class="footer-links">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+    </div>
+    <!-- /SIGNUP FORM -->
+
+    <!-- jQuery Plugins -->
+    <script src="/script/jQuery.js"></script>
+    <script src="/script/bootstrap.min.js"></script>
+    <script src="/script/validate.js"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+</body>
+
+</html>
