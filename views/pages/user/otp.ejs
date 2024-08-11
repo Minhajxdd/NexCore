@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Otp</title>
+    
+    <!-- Google font -->
+    <link href="/style/cdn/googleFontMontserrat.css" rel="stylesheet">
+
+    <!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/style/cdn/bootstrap.css"/>
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="/style/form-style.css">
+
+    <style>
+        html{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIGNUP FORM -->
+    <div class="signup-form mt-5">
+        <h2>Verify Your OTP</h2>
+        <p id="error_message" style="color: red; font-weight: bolder;"></p>
+        <form action="/otp/verify" method="POST" onsubmit="return validateNumber()">
+            <div class="form-group">
+                <input id="otp" type="text" class="form-control" placeholder="Enter OTP" name="otp" required data-toggle="tooltip" data-placement="top" title="Enter the otp code">
+            </div>
+           
+            <button type="submit" class="btn btn-signup">Verify <i class="fas fa-arrow-right"></i></button>
+        </form>
+    
+    </div>
+    <!-- /SIGNUP FORM -->
+
+    <!-- jQuery Plugins -->
+    <script src="/script/jQuery.js"></script>
+    <script src="/script/bootstrap.min.js"></script>
+    <script src="/script/validate.js"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+    <script>
+        function validateNumber(){
+            const otp = Number( document.getElementById('otp').value);
+            const errorMessage = document.getElementById('error_message');
+
+            if(Number.isNaN(otp)){
+                errorMessage.innerHTML = "Otp should be a number!!";
+                return false;
+            }
+
+            errorMessage.innerHTML = "";
+            return true;
+        }
+  
+    </script> 
+
+</body>
+
+</html>

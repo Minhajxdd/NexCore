@@ -6,12 +6,16 @@ const router = express.Router();
 
 
 router.route('/login')
-    .get(userController.login);
+    .get(userController.loginGet);
 
 router.route('/')
-    .get(userController.home);
+    .get(userController.homeGet);
 
 router.route('/signup')
-    .get(userController.signup);
+    .get(userController.signupGet);
+
+router.route('/otp')
+    .get(userController.getOtp);
+
 
 export default router; 

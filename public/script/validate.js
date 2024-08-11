@@ -81,7 +81,41 @@ function validateSignupForm(){
 
     }
 
-
+function validateLoginForm(){
+        const email = document.getElementById('email').value;
+        const pword = document.getElementById('password').value; 
+        let errorLabel = document.getElementById('error_message');
+        
+        const numSymValidate = /[0123456789!@#$%^&*()]/;
+        const emailValidate = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+        // Email validation
+        if(!email.match(emailValidate)){
+            errorLabel.innerHTML = "Please Enter a valid email";
+            return false;
+        }
+        else{
+            errorLabel.innerHTML = "";
+        }
+        
+        // Password Validate
+        if(pword.trim() === ''){
+            errorLabel.innerHTML = "Password cant be empty";
+            return false;
+        }
+        else if(pword.length <= 7){
+            errorLabel.innerHTML = "Password should contians atleast 8 characters";
+            return false;
+        }
+        else if(!pword.match(numSymValidate)){
+            errorLabel.innerHTML = "Password should contain numbers and characters";
+            return false;
+        }
+        else{
+            errorLabel.innerHTML = "";
+            return true;
+        }
+}
 
 
 //  function logInValidate(){

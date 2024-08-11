@@ -1,13 +1,17 @@
 
 
-export const login = (req , res) => {
-    res.send('ths is login page form controller');
+export const loginGet = (req , res) => {
+    res.render('pages/user/login');
 }
 
-export const home = (req , res) => {
-    res.render('pages/home');
+export const homeGet = (req , res) => {
+    res.render('pages/user/home');
 }
 
-export const signup = (req , res) => {
-    res.render('pages/signup');
+export const signupGet = (req , res) => {
+    res.render('pages/user/signup');
+}
+
+export const getOtp = (req , res) => {
+    res.render('pages/user/otp');
 }
