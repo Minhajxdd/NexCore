@@ -25,3 +25,7 @@ export const loginPost = (req, res) => {
     res.redirect('/admin/login?err=1');
 
 }
+
+export const homeGet = (req, res) => {
+    res.render(`pages/admin/dashboard`);
+}

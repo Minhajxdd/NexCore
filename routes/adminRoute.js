@@ -8,5 +8,7 @@ adminRouter.route('/login')
     .get(adminContoller.loginGet)
     .post(adminContoller.loginPost)
 
+adminRouter.route('/')
+    .get(adminContoller.homeGet)
 
 export default adminRouter;
