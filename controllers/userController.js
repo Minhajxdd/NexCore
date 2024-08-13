@@ -1,10 +1,5 @@
 // Importing Services
-import {generateOTP, sendOTP, verifyPin, tempUser, createUser} from '../services/otpServices.js';
-
-
-export const loginGet = (req , res) => {
-    res.render('pages/user/login');
-}
+import {generateOTP, sendOTP, verifyPin, tempUser, createUser, loginUser} from '../services/authServices.js';
 
 export const homeGet = (req , res) => {
     res.render('pages/user/home');
@@ -26,7 +21,7 @@ export const signupPost = async (req , res) => {
     tempUser(req.body , otp);
 
     res.cookie('email', req.body.email, {
-        maxAge: 5 * 60 * 1000, 
+        maxAge: 1.5 * 60 * 1000, 
         httpOnly: true, 
       });
 
@@ -61,3 +56,36 @@ export const postOtp = async (req , res) => {
     res.redirect('/login');
 }
 
+export const loginGet = (req, res) => {
+    
+    if(req.query){
+        const errorCode = Number(req.query.err);
+        switch(errorCode){
+            case 1:
+                return res.render('pages/user/login' , {alertMessage : `User or password not found!`});
+        }
+    }
+
+    res.render('pages/user/login' , {alertMessage : null});
+}
+
+export const loginPost = async (req, res) => {
+
+    const { email , password } = req.body;
+
+    const userData = await loginUser(email, password);
+
+    if(userData.length === 0){
+        return res.redirect('/login?err=1')
+    }
+
+    req.session.user = email;
+    res.redirect('/');
+}
+
+export const logRedirect = (req, res, next) => { 
+    if(!req.session.user){
+        return res.redirect('/login');
+    }
+    next();
+} 

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Login</title>
+    <title>Signup</title>
     
     <!-- Google font -->
     <link href="/style/cdn/googleFontMontserrat.css" rel="stylesheet">
@@ -20,78 +20,42 @@
     <!-- Style Sheet -->
     <link rel="stylesheet" href="/style/form-style.css">
 
-    <style>
-        html{
-            height: 100%;
-        }
-
-        .alert {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            position: fixed;
-            top: 5%;
-        }
-
-        .alert-info {
-            color: #0056b3;
-            background-color: #e7f0ff;
-            border-color: #b6d4fe;
-            font-weight: bolder;
-        }
-
-    </style>
 </head>
 
 <body>
 
-    <% if (alertMessage) { %>
-        <div class="alert alert-info">
-            <%= alertMessage %>
-        </div>
-    <% } %>
-
-    <!-- SIGNUP FORM -->
-    <div class="signup-form mt-5">
-        <h2 style="font-size: 1.9em;">Login to Your Account</h2>
+    <!-- LOGIN FORM -->
+    <div class="signup-form">
+        <h2>Create Your Account</h2>
         <!-- Error message placeholder -->
-        <label id="error_message" style="color: red; font-weight: bolder;"></label> 
+        <label id="error-message"></label> 
 
-        <form action="/login" method="POST" onsubmit="return validateLoginForm()">
-
+        <form action="/signup" method="POST" onsubmit="return validateSignupForm()">
             <div class="form-group">
-                <input id="email" type="email" class="form-control" placeholder="Email" name="email" required data-toggle="tooltip" data-placement="top" title="Enter your email address">
+                <input id="user-name" type="text" class="form-control" placeholder="User Name" name="uname" required data-toggle="tooltip" data-placement="top" title="Create a password">
             </div>
-
             <div class="form-group">
                 <input id="password" type="password" class="form-control" placeholder="Password" name="password" required data-toggle="tooltip" data-placement="top" title="Create a password">
             </div>
-
             <button type="submit" class="btn btn-signup">Sign Up <i class="fas fa-arrow-right"></i></button>
         </form>
-        <div class="footer-links">
-            <a href="/password_reset">Forgot Password?</a>
-            <a href="/signup">Create Account</a>
-        </div>
-      
+
     </div>
-    <!-- /SIGNUP FORM -->
+    <!-- /LOGIN FORM -->
 
     <!-- jQuery Plugins -->
     <script src="/script/jQuery.js"></script>
     <script src="/script/bootstrap.min.js"></script>
     <script src="/script/validate.js"></script>
 
-
-
     <script>
-
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
 
+        
     </script>
+
 </body>
 
 </html>

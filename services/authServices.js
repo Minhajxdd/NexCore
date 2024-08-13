@@ -104,4 +104,12 @@ export async function createUser(email){
     console.log(`User Created Successfully`);
 }
 
-
+export async function loginUser(email , password){
+    try{
+        const data = await userModel.find({email: email , password: password})
+        return data;
+    }catch(err){
+        console.error(`Error while fething loginUser email and password ${err.message}`);
+        return [];
+    }
+}

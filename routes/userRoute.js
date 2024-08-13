@@ -7,9 +7,10 @@ const router = express.Router();
 
 router.route('/login')
     .get(userController.loginGet)
+    .post(userController.loginPost)
 
 router.route('/')
-    .get(userController.homeGet)
+    .get(userController.logRedirect, userController.homeGet)
 
 router.route('/signup')
     .get(userController.signupGet)
@@ -21,4 +22,4 @@ router.route('/otp')
 router.route('/otp/verify')
     .post(userController.postOtp)
 
-export default router; 
+export default router;
