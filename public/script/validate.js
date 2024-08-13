@@ -117,6 +117,50 @@ function validateLoginForm(){
         }
 }
 
+function adminLoginForm(){
+    const uname = document.getElementById('user-name').value;
+    const pword = document.getElementById('password').value; 
+    let errorLabel = document.getElementById('error-message');
+    
+    const numSymValidate = /[0123456789!@#$%^&*()]/;
+    const emailValidate = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // User Name validation
+    if(uname.match(numSymValidate)){
+        errorLabel.innerHTML = "User Name Shouldt include Number or Symbol!!";
+        return false;
+    }
+    else if(uname.trim() === ''){
+        errorLabel.innerHTML = "user name cant be empty";
+        return false;
+    }
+    else if(uname.length < 5){
+        errorLabel.innerHTML = "user name should have at lease 4 character"
+        return false;
+    }
+    else{
+         errorLabel.innerHTML = "";
+     }
+    
+    // Password Validate
+    if(pword.trim() === ''){
+        errorLabel.innerHTML = "Password cant be empty";
+        return false;
+    }
+    else if(pword.length <= 7){
+        errorLabel.innerHTML = "Password should contians atleast 8 characters";
+        return false;
+    }
+    else if(!pword.match(numSymValidate)){
+        errorLabel.innerHTML = "Password should contain numbers and characters";
+        return false;
+    }
+    else{
+        errorLabel.innerHTML = "";
+        return true;
+    }
+}
+
 
 //  function logInValidate(){
 //     const email = document.getElementById('email-login').value;

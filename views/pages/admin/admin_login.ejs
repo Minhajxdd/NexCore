@@ -20,9 +20,38 @@
     <!-- Style Sheet -->
     <link rel="stylesheet" href="/style/form-style.css">
 
+    <style>
+        html{
+            height: 100%;
+        }
+
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            position: fixed;
+            top: 5%;
+        }
+
+        .alert-info {
+            color: #0056b3;
+            background-color: #e7f0ff;
+            border-color: #b6d4fe;
+            font-weight: bolder;
+        }
+
+    </style>
+
 </head>
 
 <body>
+
+    <% if (alertMessage) { %>
+        <div class="alert alert-info">
+            <%= alertMessage %>
+        </div>
+    <% } %>
 
     <!-- LOGIN FORM -->
     <div class="signup-form">
@@ -30,14 +59,14 @@
         <!-- Error message placeholder -->
         <label id="error-message"></label> 
 
-        <form action="/signup" method="POST" onsubmit="return validateSignupForm()">
+        <form action="/admin/login" method="POST" onsubmit="return adminLoginForm()">
             <div class="form-group">
                 <input id="user-name" type="text" class="form-control" placeholder="User Name" name="uname" required data-toggle="tooltip" data-placement="top" title="Create a password">
             </div>
             <div class="form-group">
                 <input id="password" type="password" class="form-control" placeholder="Password" name="password" required data-toggle="tooltip" data-placement="top" title="Create a password">
             </div>
-            <button type="submit" class="btn btn-signup">Sign Up <i class="fas fa-arrow-right"></i></button>
+            <button type="submit" class="btn btn-signup">Login <i class="fas fa-arrow-right"></i></button>
         </form>
 
     </div>
@@ -52,8 +81,6 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
-
-        
     </script>
 
 </body>
