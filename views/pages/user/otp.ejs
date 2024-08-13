@@ -35,6 +35,7 @@
     <div class="signup-form mt-5">
         <h2>Verify Your OTP</h2>
         <p id="error_message" style="color: red; font-weight: bolder;"></p>
+        <p style="color: red; font-weight: bolder;"><%=ERROR_MESSAGE%></p>
         <form action="/otp/verify" method="POST" onsubmit="return validateNumber()">
             <div class="form-group">
                 <input id="otp" type="text" class="form-control" placeholder="Enter OTP" name="otp" required data-toggle="tooltip" data-placement="top" title="Enter the otp code">
@@ -59,18 +60,42 @@
 
     <script>
         function validateNumber(){
-            const otp = Number( document.getElementById('otp').value);
+            const otp = document.getElementById('otp').value;
             const errorMessage = document.getElementById('error_message');
 
-            if(Number.isNaN(otp)){
-                errorMessage.innerHTML = "Otp should be a number!!";
-                return false;
-            }
+            console.log(otp.length)
 
+            // if(Number.isNaN(otp)){
+            //     errorMessage.innerHTML = "Otp should be a number!!";
+            //     return false;
+            // }
+            // else if(otp.length == 4){
+            //     errorMessage.innerHTML = "";
+            //     return true;
+            // }
+            // else{
+            //     errorMessage.innerHTML = "Otp Must be 4 Numbers";
+            //     return false;             
+            // }
+   
+
+            if (isNaN(otp) || otp.toString().length !== 4) {
+            if (otp.trim() === "") {
+                errorMessage.innerHTML = "OTP should not be empty!";
+            } else {
+                errorMessage.innerHTML = "Invalid OTP";
+            }
+            return false;
+        }
+
+            // OTP is a number and exactly 4 digits
             errorMessage.innerHTML = "";
             return true;
-        }
-  
+
+}
+
+      
+   
     </script> 
 
 </body>
