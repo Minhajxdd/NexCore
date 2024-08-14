@@ -10,7 +10,6 @@ function validateSignupForm(){
     const emailValidate = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneValidate = /^[0-9]{10}$/;
 
-
     // Full name validation
     if(fullName.match(numSymValidate)){
         errorLabel.innerHTML = "Full Name Shouldt include Number or Symbol!!";

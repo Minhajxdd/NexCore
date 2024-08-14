@@ -20849,3 +20849,29 @@ div.tagsinput {
 .title-div{
   background: linear-gradient(to right, rgb(94, 39, 188), #E04C82);
 }
+
+#card-title{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#btn-action{
+  color: white;
+  border: 1px solid white;
+  outline: white;
+  border: 0;
+}
+
+#btn-edit{
+  background-color: #0050e3;
+  border: 0;
+}
+
+.form-table{
+  display: none;
+  position: fixed;
+  width: 82%;
+  border: 1px solid black;
+}
+
