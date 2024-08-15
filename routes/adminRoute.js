@@ -11,9 +11,17 @@ adminRouter.route('/login')
 adminRouter.route('/')
     .get(adminContoller.homeGet)
 
+// User dashboard routes
 adminRouter.route('/users')
     .get(adminContoller.usersGet)
     .post(adminContoller.usersPost)
+
+adminRouter.route('/users/form/edit')
+    .get(adminContoller.edituser)
+    .post(adminContoller.editPost)
+
+adminRouter.route('/users/edit/block')
+    .patch(adminContoller.editBlocked)
 
 adminRouter.route('/products')
     .get(adminContoller.productsGet)

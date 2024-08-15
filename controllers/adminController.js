@@ -1,6 +1,6 @@
 
 
-import { createUser, getUsers } from '../services/admin/usersServices.js';
+import { createUser, getUsers, axiosIdFetch, userEdit, updateIsBlocked } from '../services/admin/usersServices.js';
 
 
 export const loginGet = (req, res) => {
@@ -33,6 +33,7 @@ export const homeGet = (req, res) => {
     res.render(`pages/admin/dashboard`); 
 }
  
+// Admin User Dashboard Controllers
 export const usersGet = async (req, res) => {
     const users = await getUsers();
 
@@ -44,8 +45,27 @@ export const usersGet = async (req, res) => {
 export const usersPost = async (req, res) => {
 
     await createUser(req.body);
-
     res.redirect('/admin/users');
+}
+
+export const edituser = async (req, res) => {
+
+    const data = await axiosIdFetch(req.query.id);
+    res.json(data)
+}
+
+export const editPost = async(req, res) => {
+    await userEdit(req.body)
+
+    res.redirect('/admin/users')
+}
+
+export const editBlocked = async (req, res) => {
+    updateIsBlocked(req.body.id)
+    res.json({
+        status: "success",
+        message: "updated successfully"
+    })
 }
 
 

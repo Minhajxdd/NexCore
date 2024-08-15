@@ -20875,3 +20875,10 @@ div.tagsinput {
   border: 1px solid black;
 }
 
+.form-table-edit{
+  display: none;
+  position: fixed;
+  width: 82%;
+  border: 1px solid black;
+}
+

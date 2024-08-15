@@ -7,9 +7,9 @@
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "Mohammed Minhaj",
   "license": "ISC",
-  "description": "",
+  "description": "This is a Ecommerce Webiste NexCore",
   "dependencies": {
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
