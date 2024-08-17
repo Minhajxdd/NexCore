@@ -22,6 +22,16 @@ adminRouter.route('/users/form/edit')
 
 adminRouter.route('/users/edit/block')
     .patch(adminContoller.editBlocked)
+// User dashboard routes
+
+
+// Categories dashboard routes
+adminRouter.route('/categories')
+    .get(adminContoller.categoriesGet)
+    
+adminRouter.route('/add/categories')
+    .post(adminContoller.addCategoryPost)
+
 
 adminRouter.route('/products')
     .get(adminContoller.productsGet)

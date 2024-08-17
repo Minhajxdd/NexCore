@@ -1,0 +1,112 @@
+<%- include('../../partials/admin/head'); -%>
+
+
+
+<%- include('../../partials/admin/nav'); -%>
+
+    <!-- partial -->
+    <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card corona-gradient-card">
+                <div class="card-body py-0 px-0 px-sm-3 title-div">
+                  <div class="row align-items-center ">
+                    <div class="col-4 col-sm-3 col-xl-2">
+                      <img src="/admin_template/assets/images/dashboard/Group126@2x1.png" class="gradient-corona-img img-fluid" alt="">
+                    </div>
+                    <div class="col-5 col-sm-7 col-xl-8 p-0 title">
+                      <h2 class="mb-1 mb-sm-0">Categories Dashboard</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <!-- User List -->
+
+    
+    <div class="content-wrapper">
+      <div class="row ">
+        <div class="col-12 grid-margin">
+          <div class="card">
+            <div class="card-body">
+              <div id="card-title">
+                <h4 class="card-title">Users</h4>
+                <button class="btn btn-success" id="add-button">+ Add Categories </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th> NO:</th>
+                      <th> Category Name </th>
+                      <th> Description </th>
+                      <th> Category </th>
+                      <th> Stock </th>
+                      <th> Action </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% data.forEach((val , ind) => { %>
+                        <tr>
+                          <td><%= ind + 1 %></td>
+                          <td><%= val.name %></td>
+                          <td id="tb-description"><%= val.description %></td>
+                          <td>
+                            <button class="badge" id="btn-action">Delete</button>
+                            <button class="badge" id="btn-edit">Edit</button>
+                          </td>
+                        </tr>
+                    <% })  %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>  
+  
+  <!-- Add Category form -->
+  <div class="col-12 grid-margin stretch-card form-table" id="add-category-form">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Add User</h4>
+        <form id="add-form-field">
+          <label id="error-message" style="color: red; font-weight: bolder;"></label>
+          <div class="form-group">
+            <label for="exampleInputName1">Name</label>
+            <input type="text" class="form-control" id="exampleInputName1" placeholder="Name" name="name" required style="color: #fff;">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputName2">Description</label>
+            <textarea class="form-control" id="exampleInputName2" placeholder="Description..." name="description" style="color: #fff;"></textarea>
+          </div>
+          <button id="add-form-submit" type="submit" class="btn btn-primary me-2">Submit</button>
+          <div id="add-form-cancel" class="btn btn-dark">Cancel</div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Add Category form -->
+
+
+
+  </div> 
+</div> 
+
+
+<!-- Cdns -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.4/axios.min.js" defer></script>
+
+<!-- Custom Js -->
+<script src="/admin_template/assets/js/custom/categoryAdminCustom.js"></script>
+
+
+
+<%- include('../../partials/admin/body'); -%>
+

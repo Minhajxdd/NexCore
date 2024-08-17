@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-// Define your schema
+
 const otp_schema = new Schema({
   email: {
     type: String,
