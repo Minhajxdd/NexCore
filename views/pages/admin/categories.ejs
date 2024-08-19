@@ -54,7 +54,7 @@
                           <td><%= val.name %></td>
                           <td id="tb-description"><%= val.description %></td>
                           <td>
-                            <button class="badge" category-id="<%= val._id %>" id="btn-action">Delete</button>
+                            <button class="badge" category-id="<%= val._id %>" id="btn-action"><%= val.isDeleted ? 'Undo' : 'Delete' %></button>
                             <button class="badge" category-id="<%= val._id %>" id="btn-edit">Edit</button>
                           </td>
                         </tr>

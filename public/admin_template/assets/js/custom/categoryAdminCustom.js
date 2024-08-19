@@ -168,8 +168,7 @@ document.getElementById('edit-form-field').addEventListener('submit' , (event) =
 
         document.getElementById('edit-category-form').style.display = 'none';
 
-    });
-    
-    
+    });     
 
 })();
+// Edit Form Submit
