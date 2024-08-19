@@ -1,7 +1,7 @@
 
 // Importing Services functions
 import { createUser, getUsers, axiosIdFetch, userEdit, updateIsBlocked } from '../services/admin/usersServices.js';
-import { createCategory, getCategory } from '../services/admin/categoryServices.js';
+import { createCategory, getCategory, updateDeleted, editCategory } from '../services/admin/categoryServices.js';
 
 
 export const loginGet = (req, res) => {
@@ -86,6 +86,20 @@ export async function addCategoryPost(req, res){
     res.json({data});
 }
 
+export async function deleteCategory(req, res){
+    await updateDeleted(req.query.id);
+    res.json({
+        status: "success",
+        message: "successfully updated"
+    });
+}
+
+export async function editCategoryPost(req, res){
+    await editCategory(req.body);
+    res.json({
+        status: "success"
+    })
+}
 
 // Admin Categories Dashboard Controllers
 

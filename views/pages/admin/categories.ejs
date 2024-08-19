@@ -1,6 +1,6 @@
 <%- include('../../partials/admin/head'); -%>
 
-
+<title>Categories Dashboard</title>
 
 <%- include('../../partials/admin/nav'); -%>
 
@@ -44,8 +44,6 @@
                       <th> NO:</th>
                       <th> Category Name </th>
                       <th> Description </th>
-                      <th> Category </th>
-                      <th> Stock </th>
                       <th> Action </th>
                     </tr>
                   </thead>
@@ -56,8 +54,8 @@
                           <td><%= val.name %></td>
                           <td id="tb-description"><%= val.description %></td>
                           <td>
-                            <button class="badge" id="btn-action">Delete</button>
-                            <button class="badge" id="btn-edit">Edit</button>
+                            <button class="badge" category-id="<%= val._id %>" id="btn-action">Delete</button>
+                            <button class="badge" category-id="<%= val._id %>" id="btn-edit">Edit</button>
                           </td>
                         </tr>
                     <% })  %>
@@ -95,7 +93,32 @@
   <!-- Add Category form -->
 
 
+    <!-- Edit Category form -->
+    <div class="col-12 grid-margin stretch-card form-table" id="edit-category-form" >
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Add User</h4>
+          <form id="edit-form-field">
+            <label id="error-message" style="color: red; font-weight: bolder;"></label>
+            <div class="form-group">
+              <label for="exampleInputName1">Name</label>
+              <input type="text" class="form-control" id="edit-category-name" placeholder="Name" name="name" required style="color: #fff;">
+              <input type="text" value="" name="id" id="edit-category-empty" style="display: none;">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputName2">Description</label>
+              <textarea class="form-control" id="edit-category-description" placeholder="Description..." name="description" style="color: #fff;"></textarea>
+            </div>
+            <button id="add-form-submit" type="submit" class="btn btn-primary me-2">Submit</button>
+            <div id="edit-form-cancel" class="btn btn-dark">Cancel</div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Edit Category form -->
 
+
+    </div>
   </div> 
 </div> 
 

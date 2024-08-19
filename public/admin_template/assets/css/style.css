@@ -20887,3 +20887,8 @@ div.tagsinput {
   max-width: 200px;
   white-space: normal;
 }
+
+
+#edit-category-form{
+  display: none;
+}

@@ -32,6 +32,14 @@ adminRouter.route('/categories')
 adminRouter.route('/add/categories')
     .post(adminContoller.addCategoryPost)
 
+adminRouter.route('/categories/delete')
+    .get(adminContoller.deleteCategory)
+
+adminRouter.route('/categories/add')
+    .post(adminContoller.editCategoryPost)
+
+
+
 
 adminRouter.route('/products')
     .get(adminContoller.productsGet)
