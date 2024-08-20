@@ -20894,7 +20894,7 @@ div.tagsinput {
 }
 
 #add-products-table{
-  display: block;
+  display: none;
   overflow: auto;
   background-color: red;
   z-index: 99999;
@@ -20954,4 +20954,22 @@ div.tagsinput {
 
 .form-control{
   color: #ffff !important;
+}
+
+#tb-description1{
+  padding: 10px;
+  max-width: 200px;
+  white-space: normal;
+}
+
+#tb-description2{
+  padding: 10px;
+  max-width: 200px;
+  white-space: normal;
+}
+
+.prod-img{
+  height: 100px !important;
+  width: 100px !important;
+  border-radius: 0 !important;
 }

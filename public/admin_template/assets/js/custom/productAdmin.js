@@ -89,75 +89,28 @@
             count++;
             parentDiv.appendChild(container);
         });
-
-        // document.getElementById('imageUploadForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-
-        //     const formData = new FormData();
-        //     document.querySelectorAll('.imageInput').forEach((input, index) => {
-        //         if (input.files[0]) {
-        //             formData.append(`image${index + 1}`, input.files[0]);
-        //         }
-        //     });
-
-        //     axios.post('/upload', formData)
-        //         .then(response => {
-        //             console.log(response.data);
-        //         })
-        //         .catch(error => {
-        //             console.error('Error:', error);
-        //         });
-        // });
 })();
 // Cropperjs
 
 // Create Product
 (function(){
-    // document.getElementById('product-add-form').addEventListener('submit' ,(event) => {
-    //     // event.preventDefault();
-    //     alert('hello')
-    //     const form = event.target;
-    //     const formData = new FormData(form); 
-
-    //     const data = {};
-    //     formData.forEach((value, key) => {
-    //         data[key] = value;
-    //     });
-
-    //     axios.post('/admin/products/add', data)
-    //     .then((res) => {
-            
-    //     })
-    //     .catch(function (error) {
-    //         console.log(`Error message axios edit category post ${error.message}`);
-    //     });
-
-    //     document.getElementById('edit-category-form').style.display = 'none';
-
-    // });    
     
     document.getElementById('product-add-form').addEventListener('submit', function(event) {
         event.preventDefault(); 
         let formData = new FormData(this);
-
-        // Append images as an array
-        let imageInputs = document.querySelectorAll('input[type="file"]');
-        imageInputs.forEach((input, index) => {
-            if (input.files[0]) {
-                formData.append('images[]', input.files[0]);
-            }
-        });
-
-
         
+        const dropDown = document.getElementById('add-usr-category');
+        const selectedDropDown = dropDown.options[dropDown.selectedIndex];
+        const id = selectedDropDown.getAttribute('data-id');
+
         // Send the POST request using Axios
-        axios.post('/admin/products/add', formData, {
+        axios.post(`/admin/products/add?cat_id=${id}`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data'   
             }
         })
         .then(function(response) {
-            console.log('Product added successfully:', response.data);
+            document.getElementById('add-products-table').style.display = 'none';
         })
         .catch(function(error) {
             console.error('Error adding product:', error);
@@ -166,3 +119,65 @@
     
 
 })();
+// Create Product
+
+// Button Color Change
+(function (){
+    const buttons = document.querySelectorAll('#btn-action');
+
+    buttons.forEach(button => {
+        if(button.innerHTML === 'Delete'){
+            button.style.backgroundColor = 'red';
+        }else{
+            button.style.backgroundColor = 'green';
+        }
+    });
+
+})();
+// Button Color Change
+
+
+(function (){
+    const buttons = document.querySelectorAll('#btn-action');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            if(button.innerHTML === 'Delete'){
+                button.innerHTML = 'Undo';
+                button.style.backgroundColor = 'green';
+            }else{
+                button.innerHTML = 'Delete';
+                button.style.backgroundColor = 'red';
+            }
+            const result = button.getAttribute('data-id');
+
+            axios.get(`/admin/product/delete?id=${result}`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) =>{
+                console.log(`error while axios delete get request ${err.message}`);
+            });
+
+        });
+    });
+
+
+})();
+
+
+
+
+
+// async function sendDeleteRequest(element){
+//     let id = element.getAttribute('category-id');
+
+//     await axios.get(`/admin/categories/delete?id=${id}`)
+//             .then(response => {
+//                 // console.log(response.data);
+//             })
+//             .catch(error => {
+//                 console.error(`Axios delete request error ${error.message}`);
+//             });
+
+// }

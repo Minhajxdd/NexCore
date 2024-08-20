@@ -2,7 +2,7 @@
 // Importing Services functions
 import { createUser, getUsers, axiosIdFetch, userEdit, updateIsBlocked } from '../services/admin/usersServices.js';
 import { createCategory, getCategory, updateDeleted, editCategory } from '../services/admin/categoryServices.js';
-import { getCategoryDetails } from '../services/admin/productServices.js';
+import { getCategoryDetails, createProduct, getProducts, updateDeletedProduct } from '../services/admin/productServices.js';
 
 export const loginGet = (req, res) => {
 
@@ -107,15 +107,22 @@ export async function editCategoryPost(req, res){
 // Admin Product Dashboard Controllers
 export async function productsGet(req, res){
     const categories = await getCategoryDetails();
+    const products  = await getProducts();
+    console.log(products)
     res.render(`pages/admin/product`, {
-        categories
+        categories,
+        products
     });
 }
 
 export async function addProducts(req, res){
-    console.log(req.body);
-
+    await createProduct(req.body, req.query.cat_id, req.files);
     res.json({status: 'Success'});
+}
+
+export async function deleteProducts(req, res){
+    await updateDeletedProduct(req.query.id);
+    res.json({status: "success"});
 }
 
 // Admin Product Dashboard Controllers

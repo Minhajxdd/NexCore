@@ -47,6 +47,8 @@ adminRouter.route('/products')
 adminRouter.route('/products/add')
     .post(upload.array('image' , 10), adminContoller.addProducts)
 
+adminRouter.route('/product/delete')
+    .get(adminContoller.deleteProducts)
 
 
 adminRouter.route('/orders')

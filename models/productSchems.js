@@ -3,35 +3,56 @@ import mongoose from 'mongoose';
 const {Schema} = mongoose;
 
 
-const otp_schema = new Schema({
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    fullname: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-    },
-    otp: {
-      type: String,  
-      required: false,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      expires: '1m'
-    }
-  });
+const productSchema = new Schema({
+  name: { 
+    type: String, 
+    required: true,
+    unique: true, 
+  },
+  description: { 
+    type: String, 
+    required: true 
+  },
+  category: { 
+    type: Schema.Types.ObjectId, 
+    required: true 
+  },
+  size_field: { 
+    type: String 
+  },
+  size_options: [{ 
+    type: String  
+  }],
+  images: [{ 
+    type: String, 
+    required: true  
+  }],
+  original_price: { 
+    type: Number, 
+    required: true 
+  },
+  discounted_price: {
+    type: Number,
+    required: true
+  },
+  stock: {
+    type: Number,
+    required: true
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
+    immutable: true,
+  },
+  updated_at: {
+    type: Date
+  },
+  isDeleted: { 
+    type: Boolean, 
+    default: false 
+  }
+});
   
-  const otpModel = mongoose.model('otp_schema', otp_schema);
-  
-  export default otpModel;
+const productModel = mongoose.model('products', productSchema);
+
+export default productModel;
