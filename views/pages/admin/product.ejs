@@ -1,6 +1,7 @@
 <%- include('../../partials/admin/head'); -%>
 
-
+<!-- Cropper js -->
+<link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet"/>
 
 <%- include('../../partials/admin/nav'); -%>
 
@@ -35,7 +36,7 @@
             <div class="card-body">
               <div id="card-title">
                 <h4 class="card-title">Users</h4>
-                <button class="btn btn-success">+ New Users </button>
+                <button class="btn btn-success" id="add-usr-btn">+ New Users </button>
               </div>
               <div class="table-responsive">
                 <table class="table">
@@ -74,10 +75,122 @@
     </div>
     </div>  
   
+
+      <!-- Edit user form -->
+      <div class="col-12 grid-margin stretch-card form-table-edit" id="add-products-table">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Add User</h4>
+            <!-- Add a wrapper with a fixed height and overflow -->
+            <div class="form-scroll-container">
+              <form id="product-add-form"> 
+                <div class="form-group">
+                  <label for="product-name-add">Product Name</label>
+                  <input type="text" class="form-control" id="product-name-add" placeholder="Product Name" name="name" required>
+                </div>
+                <div class="form-group">
+                  <label for="description-form-add">Description</label>
+                  <textarea class="form-control" id="description-form-add" placeholder="Description..." name="description" ></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="add-usr-category">Category</label>
+                  <select class="selectpicker form-control" id="add-usr-category" data-style="btn-info" name="category">
+                    <optgroup label="Select Category">
+
+                      <% categories.forEach(val => { %>
+                        <option data-id="<%= val._id%>" ><%= val.name %></option>
+                      <% }) %>
+                    
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="add-size-field">Size</label>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <input type="text" class="form-control" placeholder="Size Field Name" name="size">
+                    </div>
+                    <div class="col-md-6">
+                      <input type="text" class="form-control" placeholder="Opton's Comma Separated" name="size_values">
+                    </div>
+                  </div>
+                </div>
+
+
+                 <div class="form-group">
+                      <label for="imageInput1">Image 1</label>
+                      <input name="image" type="file" class="form-control" id="imageInput1" accept="image/*" required>
+                      <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
+                  </div> 
+                  <div class="form-group">
+                      <label for="imageInput2">Image 2</label>
+                      <input name="image" type="file" class="form-control" id="imageInput2" accept="image/*" required>
+                      <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
+                  </div>
+                  <div class="form-group">
+                      <label for="imageInput3">Image 3</label>
+                      <input name="image" type="file" class="form-control" id="imageInput3" accept="image/*" required>
+                      <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
+                  </div> 
+                  <div class="" id="add-image-form-new-content-div"></div>
+              <!-- Button to add more image upload fields -->
+              <button type="button" id="addImageButton" class="btn btn-success my-2">+ Add Another Image</button>
+                  
+              <div id="cropContainer">
+                <img id="imagePreview">
+                <div id="cropButtons">
+                    <button type="button" class="btn btn-primary" id="cropAndSaveButton">Crop and Save</button>
+                    <button type="button" class="btn btn-danger" id="cancelCropButton">Cancel</button>
+                </div>
+             </div>
+    
+            <!-- Overlay for the Pop-Up -->
+            <div class="overlay" id="overlay"></div>  
+
+
+            <div class="form-group">
+              <label>Price</label>
+              <div class="row">
+                <div class="col-md-6">
+                  <input type="number" class="form-control" placeholder="Original Price" name="od_price">
+                </div>
+                <div class="col-md-6">
+                  <input type="number" class="form-control" placeholder="Discounted Price" name="ds_price">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="add-product-stock">Stock</label>
+                  <input type="number" id="add-product-stock" class="form-control" name="stock">
+                </div>
+              </div>
+            </div>
+                
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <div class="btn btn-dark" id="add-prd-cancel">Cancel</div>
+              </form>
+            </div>
+            <!-- End of wrapper -->
+          </div>
+        </div>
+      </div>
+        <!-- Edit user form -->
+
   </div> 
 
-
 </div> 
+
+
+<!-- Cdns -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.4/axios.min.js" defer></script>
+
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+<!-- Custom Js -->
+<script src="/admin_template/assets/js/custom/productAdmin.js"></script>
+
 
 <%- include('../../partials/admin/body'); -%>
 

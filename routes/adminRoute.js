@@ -1,6 +1,7 @@
 import express from 'express';
 import * as adminContoller from '../controllers/adminController.js';
 
+import { upload } from '../services/admin/productServices.js';
 
 const adminRouter = express.Router();
 
@@ -37,12 +38,16 @@ adminRouter.route('/categories/delete')
 
 adminRouter.route('/categories/add')
     .post(adminContoller.editCategoryPost)
+// Categories dashboard routes
 
-
-
-
+// Products dashboard routes
 adminRouter.route('/products')
     .get(adminContoller.productsGet)
+
+adminRouter.route('/products/add')
+    .post(upload.array('image' , 10), adminContoller.addProducts)
+
+
 
 adminRouter.route('/orders')
     .get(adminContoller.ordersGet)

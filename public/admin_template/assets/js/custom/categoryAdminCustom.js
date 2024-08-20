@@ -37,7 +37,7 @@
 
         axios.post('/admin/add/categories', data)
         .then((res) => {
-            const data = res.data.data;
+            const data = res.data.data; 
 
 
 

@@ -14,7 +14,6 @@ export async function createCategory(body){
     }catch(err){
         console.error(`Error while creating a category on createCategory on categoryServices ${err.message}`);
     }
-     console.log(`Category created succesfully`)
 }
 
 
