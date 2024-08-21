@@ -17,6 +17,10 @@ const productSchema = new Schema({
     type: Schema.Types.ObjectId, 
     required: true 
   },
+  category_name: {
+    type: String,
+    required: true
+  },
   size_field: { 
     type: String 
   },

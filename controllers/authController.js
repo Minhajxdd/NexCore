@@ -1,10 +1,6 @@
 // Importing Services
 import {generateOTP, sendOTP, verifyPin, tempUser, createUser, loginUser} from '../services/authServices.js';
 
-export const homeGet = (req , res) => {
-    res.render('pages/user/home');
-}
-
 export const signupGet = (req , res) => {
     res.render('pages/user/signup');
 }

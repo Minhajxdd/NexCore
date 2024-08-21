@@ -10,6 +10,7 @@
 
     cancel.addEventListener('click', () => {
         form.style.display = 'none';
+        document.getElementById('product-add-form').reset();
     })
     
 })();
@@ -94,8 +95,8 @@
 
 // Create Product
 (function(){
-    
-    document.getElementById('product-add-form').addEventListener('submit', function(event) {
+    const form = document.getElementById('product-add-form'); 
+    form.addEventListener('submit', function(event) {
         event.preventDefault(); 
         let formData = new FormData(this);
         
@@ -115,6 +116,7 @@
         .catch(function(error) {
             console.error('Error adding product:', error);
         });
+        form.reset();
     });
     
 
@@ -166,18 +168,30 @@
 })();
 
 
+(function(){
+    const buttons = document.querySelectorAll('#btn-edit')
+    const form = document.getElementById('edit-products-table');
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+
+            const row = button.closest('tr');
+            const cells = row.getElementsByTagName('td');
+            const name = cells[1].textContent.trim(); 
+            const description = cells[2].textContent.trim();
+            const id = row.querySelector('#btn-edit').getAttribute('category-id');
+
+            const nameInput = document.getElementById('edit-category-name');
+            const descriptionInput = document.getElementById('edit-category-description');
+            const emptyInput = document.getElementById('edit-category-empty');
 
 
 
-// async function sendDeleteRequest(element){
-//     let id = element.getAttribute('category-id');
+            form.style.display = 'block';
+        })
+    })
 
-//     await axios.get(`/admin/categories/delete?id=${id}`)
-//             .then(response => {
-//                 // console.log(response.data);
-//             })
-//             .catch(error => {
-//                 console.error(`Axios delete request error ${error.message}`);
-//             });
+    document.getElementById('edit-prd-cancel').addEventListener('click', () => {
+        form.style.display = 'none';
+    })
 
-// }
+})();

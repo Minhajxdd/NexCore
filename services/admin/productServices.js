@@ -40,7 +40,8 @@ export async function createProduct(body, id, files){
         images: fileNames,
         original_price: body.og_price,
         discounted_price: body.ds_price,
-        stock: body.stock
+        stock: body.stock,
+        category_name: body.category
     }
 
     if(body.size){

@@ -1,7 +1,9 @@
 <%- include('../../partials/admin/head'); -%>
 
+<title>Admin Products</title>
 <!-- Cropper js -->
 <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet"/>
+
 
 <%- include('../../partials/admin/nav'); -%>
 
@@ -57,7 +59,7 @@
                         <td><%= ind + 1 %></td>
                         <td><img class="prod-img" src="/uploads/products/<%= val.images[0] %>" alt="product_image"></td>
                         <td id="tb-description2"><%= val.name %></td>
-                        <td id="tb-description1"><%= val.description %></td>
+                        <td id="tb-description1"><%= val.description.substring(0,300)+'...' %></td>
                         <td>
                           <h6>Original Price: </h6>
                           <p><%= val.original_price %></p>

@@ -1,25 +1,34 @@
 import express from 'express';
-import * as userController from '../controllers/userController.js';
-
+import * as authController from '../controllers/authController.js';
+import * as users from '../controllers/usserController.js';
 
 const router = express.Router();
 
 
 router.route('/login')
-    .get(userController.loginGet)
-    .post(userController.loginPost)
+    .get(authController.loginGet)
+    .post(authController.loginPost)
+  
+router.route('/signup')
+    .get(authController.signupGet)
+    .post(authController.signupPost)
+    
+router.route('/otp')
+    .get(authController.getOtp)
+    
+router.route('/otp/verify')
+    .post(authController.postOtp)
+    
+
+
 
 router.route('/')
-    .get(userController.logRedirect, userController.homeGet)
+    // .get(userController.logRedirect, userController.homeGet)
+    .get(users.homeGet);
 
-router.route('/signup')
-    .get(userController.signupGet)
-    .post(userController.signupPost)
+router.route('/product')
+    .get(users.productGet);
 
-router.route('/otp')
-    .get(userController.getOtp)
 
-router.route('/otp/verify')
-    .post(userController.postOtp)
 
 export default router;

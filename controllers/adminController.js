@@ -108,7 +108,7 @@ export async function editCategoryPost(req, res){
 export async function productsGet(req, res){
     const categories = await getCategoryDetails();
     const products  = await getProducts();
-    console.log(products)
+
     res.render(`pages/admin/product`, {
         categories,
         products
