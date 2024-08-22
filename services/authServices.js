@@ -2,7 +2,6 @@
 import randomstring from 'randomstring';
 import nodemailer from 'nodemailer';
 
-
 // Importing Schemas
 import userModel from '../models/userSchema.js';
 import otpModel  from '../models/otpSchema.js';

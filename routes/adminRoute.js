@@ -1,5 +1,6 @@
 import express from 'express';
 import * as adminContoller from '../controllers/adminController.js';
+import { NotFound } from '../controllers/authController.js';
 
 import { upload } from '../services/admin/productServices.js';
 
@@ -60,5 +61,8 @@ adminRouter.route('/coupons')
 adminRouter.route('/sales-report')
     .get(adminContoller.salesReportGet)
 
+
+// adminRouter.route('*')
+//     .all(NotFound)
 
 export default adminRouter;

@@ -11,7 +11,9 @@ export async function homeGet(req, res){
 }
 
 export async function productGet(req, res){
-    const product = await getProductDetails();
+    if(!req.query.id) return res.redirect('/not-found');
+    const product = await getProductDetails(req.query.id);
+    if(!product) return res.redirect('/not-found');
     const products = await getProducts();
     res.render('pages/user/product' , {
         product,

@@ -13,8 +13,7 @@ const UsersSchema = new Schema({
     required: true 
 },
   phone_number: { 
-    type: String, 
-    required: true 
+    type: String 
 },
   created_at: {
     type: Date,
@@ -22,12 +21,14 @@ const UsersSchema = new Schema({
     immutable: true,
 },
   updated_at: { 
-    type: Date 
+    type: Date
 },
-  password: 
-  { 
-    type: String, 
-    required: true 
+  password: { 
+    type: String
+},
+  googleId: {
+    type: String,
+    unique: true
 },
   isBlocked: { 
     type: Boolean, 

@@ -1,5 +1,9 @@
+import passport from 'passport';
+
 // Importing Services
 import {generateOTP, sendOTP, verifyPin, tempUser, createUser, loginUser} from '../services/authServices.js';
+
+import '../services/googleAuth.js';
 
 export const signupGet = (req , res) => {
     res.render('pages/user/signup');
@@ -79,9 +83,41 @@ export const loginPost = async (req, res) => {
     res.redirect('/');
 }
 
-export const logRedirect = (req, res, next) => { 
-    if(!req.session.user){
-        return res.redirect('/login');
-    }
-    next();
-} 
+export const NotFound = (req, res) => {
+    res.render('404');
+}
+
+// Google Auth Contollers
+  
+export const googleAuth = (req, res, next) => {
+    passport.authenticate('google', { scope: ['email', 'profile'] })(req, res, next);
+};
+  
+export const googleCallback = (req, res, next) => {
+    passport.authenticate('google', {
+      successRedirect: '/auth/protected',
+      failureRedirect: '/auth/google/failure'
+    })(req, res, next);
+};
+
+export function protectedRoute(req, res){
+    req.session.user = req.user.googleId;
+    res.redirect('/');
+}
+
+export const googleFailure = (req, res) => {
+    res.send('Something went wrong');
+
+};
+
+export function logout(req, res){
+    req.session.user = null;
+    req.logout((err) => {
+        if (err) { return next(err); }
+        res.redirect('/login');
+    })
+}
+
+// Google Auth Contollers
+
+

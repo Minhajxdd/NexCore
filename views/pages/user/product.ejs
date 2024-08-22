@@ -1,5 +1,7 @@
 <%- include('../../partials/user/nav'); -%>
 
+<title><%= product.name.substring(0,35) %></title>
+
 
 <!-- NAVIGATION -->
 <nav id="navigation">
@@ -399,7 +401,7 @@
                                         </div>
                                         <div class="product-body">
                                             <p class="product-category"><%= val.category_name %></p>
-                                            <h3 class="product-name"><a href="#"><%= val.name.substring(0,42)+"..." %></a></h3>
+                                            <h3 class="product-name"><a href="/product?id=<%= val._id %>"><%= val.name.substring(0,42)+"..." %></a></h3>
                                             <h4 class="product-price"><%= val.discounted_price %> <del class="product-old-price"><%= val.original_price %></del></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
@@ -411,7 +413,7 @@
                                             <div class="product-btns">
                                                 <button class="add-to-wishlist"><i class="fa-regular fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
                                                 <button class="quick-view">
-                                                    <a href="/product.html" target="_blank">
+                                                    <a href="/product?id=<%= val._id %>" target="_blank">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                     <span class="tooltipp">quick view</span></button>

@@ -20,10 +20,8 @@ export const loginGet = (req, res) => {
 export const loginPost = (req, res) => {
     const {uname, password } = req.body;
     if(uname === 'Admin' && password === 'admin123'){
-        return res.json({
-            status: "success",
-            message: "Admin verified successfully"
-        })
+        req.session.admin = uname;
+        return res.redirect('/admin');
     }
 
     res.redirect('/admin/login?err=1');

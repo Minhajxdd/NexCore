@@ -12,8 +12,7 @@ export async function getProducts(catId){
     }
 }
 
-export async function getProductDetails(){
-    const id = '66c5a8cdb1ae2e5996d26e6b';
+export async function getProductDetails(id){
     try{
         const product = await productModel.findById(id);
         return product;
