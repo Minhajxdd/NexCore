@@ -1,6 +1,6 @@
 import express from 'express';
-import * as adminContoller from '../controllers/adminController.js';
-import { NotFound } from '../controllers/authController.js';
+import authenticate,* as adminContoller from '../controllers/adminController.js';
+import { NotFound, adminLogout } from '../controllers/authController.js';
 
 import { upload } from '../services/admin/productServices.js';
 
@@ -10,56 +10,60 @@ adminRouter.route('/login')
     .get(adminContoller.loginGet)
     .post(adminContoller.loginPost)
 
+adminRouter.route('/logout')
+    .get(adminLogout)
+
+
 adminRouter.route('/')
-    .get(adminContoller.homeGet)
+    .get(authenticate, adminContoller.homeGet)
 
 // User dashboard routes
 adminRouter.route('/users')
-    .get(adminContoller.usersGet)
-    .post(adminContoller.usersPost)
+    .get(authenticate, adminContoller.usersGet)
+    .post(authenticate, adminContoller.usersPost)
 
 adminRouter.route('/users/form/edit')
-    .get(adminContoller.edituser)
-    .post(adminContoller.editPost)
+    .get(authenticate, adminContoller.edituser)
+    .post(authenticate, adminContoller.editPost)
 
 adminRouter.route('/users/edit/block')
-    .patch(adminContoller.editBlocked)
+    .patch(authenticate, adminContoller.editBlocked)
 // User dashboard routes
 
 
 // Categories dashboard routes
 adminRouter.route('/categories')
-    .get(adminContoller.categoriesGet)
+    .get(authenticate, adminContoller.categoriesGet)
     
 adminRouter.route('/add/categories')
-    .post(adminContoller.addCategoryPost)
+    .post(authenticate, adminContoller.addCategoryPost)
 
 adminRouter.route('/categories/delete')
-    .get(adminContoller.deleteCategory)
+    .get(authenticate, adminContoller.deleteCategory)
 
 adminRouter.route('/categories/add')
-    .post(adminContoller.editCategoryPost)
+    .post(authenticate, adminContoller.editCategoryPost)
 // Categories dashboard routes
 
 // Products dashboard routes
 adminRouter.route('/products')
-    .get(adminContoller.productsGet)
+    .get(authenticate, adminContoller.productsGet)
 
 adminRouter.route('/products/add')
     .post(upload.array('image' , 10), adminContoller.addProducts)
 
 adminRouter.route('/product/delete')
-    .get(adminContoller.deleteProducts)
+    .get(authenticate, adminContoller.deleteProducts)
 
 
 adminRouter.route('/orders')
-    .get(adminContoller.ordersGet)
+    .get(authenticate, adminContoller.ordersGet)
 
 adminRouter.route('/coupons')
-    .get(adminContoller.couponsGet)
+    .get(authenticate, adminContoller.couponsGet)
 
 adminRouter.route('/sales-report')
-    .get(adminContoller.salesReportGet)
+    .get(authenticate, adminContoller.salesReportGet)
 
 
 // adminRouter.route('*')

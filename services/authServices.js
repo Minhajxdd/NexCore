@@ -20,16 +20,16 @@ export async function sendOTP(email, otp, fullName) {
         subject: 'Your OTP for NexCore Signup',
         text: `Dear ${fullName},
 
-Your OTP for completing your signup is:
+    Your OTP for completing your signup is:
 
-${otp}
+    ${otp}
 
-Please enter this code to verify your account. The code is valid for 1 minutes.
+    Please enter this code to verify your account. The code is valid for 1 minutes.
 
-If you didn’t request this, please ignore this email.
+    If you didn’t request this, please ignore this email.
 
-Thank you,
-NexCore Team`
+    Thank you,
+    NexCore Team`
     };
   
     let transporter = nodemailer.createTransport({
@@ -110,5 +110,40 @@ export async function loginUser(email , password){
     }catch(err){
         console.error(`Error while fething loginUser email and password ${err.message}`);
         return [];
+    }
+}
+
+export async function updateOtp(email, otp){
+    try{
+        const updatedData = await otpModel.updateOne(
+            {email: email},
+            {$set: {otp: otp}}
+        );
+        return updatedData;
+    }catch(err){
+        console.log(`error while updating otp on authServices ${err.message}`);
+    }
+}
+
+export async function validateEmail(email){
+    try{
+        const data = await userModel.find({
+            email: email
+        })
+        return data;
+    }catch(err){
+        console.log(`error while checking validateEmail at authServices`);
+    }
+
+}
+
+export async function updatePassword(email, otp){
+    try{
+        await otpModel.create({
+            email: email,
+            otp: otp
+        })
+    }catch(err){
+        console.log('error while updating otp on update Password ${err.message}');
     }
 }

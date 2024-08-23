@@ -137,3 +137,12 @@ export const couponsGet = (req, res) => {
 export const salesReportGet = (req, res) => {
     res.render(`pages/admin/s-report`);
 }
+
+function authenticate(req, res, next){
+    if(req.session.admin){
+        return next();
+    }
+    res.redirect('/admin/login');
+}
+
+export default authenticate;

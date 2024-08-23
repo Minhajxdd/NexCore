@@ -11,15 +11,12 @@ const otp_schema = new Schema({
   },
   fullname: {
     type: String,
-    required: true,
   },
   password: {
     type: String,
-    required: true,
   },
   phoneNumber: {
     type: String,
-    required: true,
   },
   otp: {
     type: String,  
@@ -28,7 +25,7 @@ const otp_schema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: '1m'
+    expires: '10m'
   }
 });
 

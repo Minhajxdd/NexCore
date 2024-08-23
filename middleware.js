@@ -31,18 +31,27 @@ const passportSession = passport.session();
 
 // Authentication Middleware
 function isAuthenticated(req, res, next){
-    const allowedRoutes = ['/login', '/signup', '/auth/google', '/auth/google/callback', '/otp', '/otp/verify'];
+
+    if(req.path === '/login' && req.session.user){
+        res.redirect('/');
+    }
+
+    const allowedRoutes = ['/login', '/signup', '/auth/google', '/auth/google/callback', '/otp', '/otp/verify', '/password_reset', '/auth/protected', '/otp/re-sent'];
 
     if(allowedRoutes.includes(req.path)){
         return next();
     }
 
     if(req.path.startsWith('/admin')){
-        if(req.session.fdaf){
-            return next();
-        }
-        return res.redirect('/admin/login');
+        return next();
     }
+
+    // if(req.path.startsWith('/admin')){
+    //     if(req.session.fdaf){
+    //         return next();
+    //     }
+    //     return res.redirect('/admin/login');
+    // }
 
     if(req.session.user){
         return next();

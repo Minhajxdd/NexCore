@@ -1,7 +1,7 @@
 import passport from 'passport';
 
 // Importing Services
-import {generateOTP, sendOTP, verifyPin, tempUser, createUser, loginUser} from '../services/authServices.js';
+import {generateOTP, sendOTP, verifyPin, tempUser, createUser, loginUser, updateOtp, updatePassword} from '../services/authServices.js';
 
 import '../services/googleAuth.js';
 
@@ -10,18 +10,17 @@ export const signupGet = (req , res) => {
 }
 
 export const signupPost = async (req , res) => {
-
     const { email } = req.body;
     const otp = await generateOTP();
 
+
     // Send OTP via email
     await sendOTP(email, otp , req.body.fullname);
-    // console.log("OTP sent");
 
     tempUser(req.body , otp);
 
     res.cookie('email', req.body.email, {
-        maxAge: 1.5 * 60 * 1000, 
+        maxAge: 10 * 60 * 1000, 
         httpOnly: true, 
       });
 
@@ -45,7 +44,6 @@ export const postOtp = async (req , res) => {
     const email = req.cookies.email;
     const otp = req.body.otp;
     const data = await verifyPin(email , otp);    
-    // console.log(data)
 
     if(data.length === 0){
         return res.redirect('/otp?error=1');
@@ -54,6 +52,18 @@ export const postOtp = async (req , res) => {
     createUser(email);
 
     res.redirect('/login');
+}
+
+export async function reSendOtp(req, res){
+
+    const email = req.cookies.email;
+    
+    const otp = await generateOTP();
+    console.log(email + otp)
+    const data = await updateOtp(email, otp);
+    await sendOTP(email, otp, data.fullname);
+
+    res.json({status:"success", message: "otp resent successfully"});
 }
 
 export const loginGet = (req, res) => {
@@ -75,7 +85,7 @@ export const loginPost = async (req, res) => {
 
     const userData = await loginUser(email, password);
 
-    if(userData.length === 0){
+    if(userData.length === 0 || userData[0].isBlocked){
         return res.redirect('/login?err=1')
     }
 
@@ -102,6 +112,7 @@ export const googleCallback = (req, res, next) => {
 
 export function protectedRoute(req, res){
     req.session.user = req.user.googleId;
+    
     res.redirect('/');
 }
 
@@ -109,6 +120,7 @@ export const googleFailure = (req, res) => {
     res.send('Something went wrong');
 
 };
+// Google Auth Contollers
 
 export function logout(req, res){
     req.session.user = null;
@@ -118,6 +130,31 @@ export function logout(req, res){
     })
 }
 
-// Google Auth Contollers
+export function adminLogout(req, res){
+    req.session.admin = null;
+    res.redirect('/admin/login');
+}
 
 
+// Resent Otp
+export function resentEmailOtp(req, res){
+    res.render('pages/user/auth/resetOtpEmail')
+}
+
+export async function resentEmailOtpPost(req, res){
+    // /password_reset
+    const {email} = req.body;
+
+    const otp = await generateOTP();
+    await updatePassword(email, otp);
+    await sendOTP(email, otp);
+}
+
+const noCache = (req, res, next) => {
+    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    next();
+  };
+
+export default noCache;

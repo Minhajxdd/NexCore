@@ -25,6 +25,19 @@
             width: 100%;
             height: 100%;
         }
+
+        .timer{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        #reset-otp{
+            font-weight: bolder;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
     </style>
 
 </head>
@@ -34,13 +47,13 @@
     <!-- SIGNUP FORM -->
     <div class="signup-form mt-5">
         <h2>Verify Your OTP</h2>
-        <p id="error_message" style="color: red; font-weight: bolder;"></p>
+        <div class="timer" id="otp-timer">01:00</div>
         <p style="color: red; font-weight: bolder;"><%=ERROR_MESSAGE%></p>
         <form action="/otp/verify" method="POST" onsubmit="return validateNumber()">
             <div class="form-group">
                 <input id="otp" type="text" class="form-control" placeholder="Enter OTP" name="otp" required data-toggle="tooltip" data-placement="top" title="Enter the otp code">
             </div>
-           
+           <a href="" class="timer" id="reset-otp">Re Sent Otp</a>
             <button type="submit" class="btn btn-signup">Verify <i class="fas fa-arrow-right"></i></button>
         </form>
     
@@ -58,45 +71,10 @@
         })
     </script>
 
-    <script>
-        function validateNumber(){
-            const otp = document.getElementById('otp').value;
-            const errorMessage = document.getElementById('error_message');
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.4/axios.min.js"></script>
 
-            console.log(otp.length)
-
-            // if(Number.isNaN(otp)){
-            //     errorMessage.innerHTML = "Otp should be a number!!";
-            //     return false;
-            // }
-            // else if(otp.length == 4){
-            //     errorMessage.innerHTML = "";
-            //     return true;
-            // }
-            // else{
-            //     errorMessage.innerHTML = "Otp Must be 4 Numbers";
-            //     return false;             
-            // }
-   
-
-            if (isNaN(otp) || otp.toString().length !== 4) {
-            if (otp.trim() === "") {
-                errorMessage.innerHTML = "OTP should not be empty!";
-            } else {
-                errorMessage.innerHTML = "Invalid OTP";
-            }
-            return false;
-        }
-
-            // OTP is a number and exactly 4 digits
-            errorMessage.innerHTML = "";
-            return true;
-
-}
-
-      
-   
-    </script> 
+    <!-- Custom Song -->
+    <script src="/script/user/otpPage.js"></script>
 
 </body>
 
