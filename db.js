@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 async function connectDB() {
     try {
-        await mongoose.connect('mongodb://localhost/NexCore');
+        await mongoose.connect(process.env.MONGO_URL);
         console.log('MongoDB connected');
     } catch (error) {
         console.error('MongoDB connection error:', error.message);

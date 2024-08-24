@@ -1,5 +1,4 @@
 
-
 // Importing Schemas
 import categoryModel from '../../models/categorySchema.js';
 
@@ -45,10 +44,17 @@ export async function updateDeleted(id){
 
 export async function editCategory(data){
     try{
-        await categoryModel.findByIdAndUpdate(data.id ,{
+        const data = await categoryModel.findByIdAndUpdate(
+            data.id ,
+            {
             name: data.name,
             description: data.description
-        })
+            },
+            {new: true});
+        
+        data.success = "success"
+
+        return data;
     }catch(err){
         console.log(`Error while editing category on category editCategory on CategoryServices`, err.message);
     }

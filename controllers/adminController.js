@@ -93,10 +93,8 @@ export async function deleteCategory(req, res){
 }
 
 export async function editCategoryPost(req, res){
-    await editCategory(req.body);
-    res.json({
-        status: "success"
-    })
+    const data = await editCategory(req.body);
+    res.json(data);
 }
 
 // Admin Categories Dashboard Controllers

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Login</title>
+    <title>Enter Email</title>
     
     <!-- Google font -->
     <link href="/style/cdn/googleFontMontserrat.css" rel="stylesheet">
@@ -42,10 +42,30 @@
             font-weight: bolder;
         }
 
+        #err_div{
+            position: fixed;
+            top: 30px;
+            height: 50px;
+            width: 300px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bolder;
+            font-size: larger;
+            color: rgb(52, 76, 211);
+            text-align: center;
+            display: none;
+        }
+
     </style>
 </head>
 
 <body>
+        <div id="err_div">
+            <p id="err_div_msg"></p>
+        </div>
+   
 
     <!-- SIGNUP FORM -->
     <div class="signup-form mt-5">
@@ -53,7 +73,7 @@
         <!-- Error message placeholder -->
         <label id="error_message" style="color: red; font-weight: bolder;"></label> 
 
-        <form action="/password_reset" method="POST" onsubmit="">
+        <form id="form-email" onsubmit="return validateEmail()">
 
             <div class="form-group">
                 <input id="email" type="email" class="form-control" placeholder="Email" name="email" required data-toggle="tooltip" data-placement="top" title="Enter your email address">
@@ -79,6 +99,13 @@
         })
 
     </script>
+
+    <!-- Axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.4/axios.min.js"></script>
+
+    <!-- Custome Js -->
+    <script src="/script/user/otpResendEmail.js"></script>
+
 </body>
 
 </html>

@@ -33,10 +33,10 @@ const passportSession = passport.session();
 function isAuthenticated(req, res, next){
 
     if(req.path === '/login' && req.session.user){
-        res.redirect('/');
+        return res.redirect('/');
     }
 
-    const allowedRoutes = ['/login', '/signup', '/auth/google', '/auth/google/callback', '/otp', '/otp/verify', '/password_reset', '/auth/protected', '/otp/re-sent'];
+    const allowedRoutes = ['/login', '/signup', '/auth/google', '/auth/google/callback', '/otp', '/otp/verify', '/password_reset', '/auth/protected', '/otp/re-sent', '/password_resent/otp'];
 
     if(allowedRoutes.includes(req.path)){
         return next();

@@ -52,6 +52,45 @@ export async function sendOTP(email, otp, fullName) {
     });
 }
 
+export async function sendOTPReset(email, otp) {
+    const mailOptions = {
+        from: 'nexcore.ecommerce@gmail.com', 
+        to: email,
+        subject: 'Otp for Reset Password',
+        text: `
+
+    Your OTP for ReSetting Password is:
+
+    ${otp}
+
+    Please enter this code to verify your account. The code is valid for 1 minutes.
+
+    If you didn’t request this, please ignore this email.
+
+    Thank you,
+    NexCore Team`
+    };
+  
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'nexcore.ecommerce@gmail.com', // Your Email Id
+            pass: process.env.GMAIL_APP_PASS // Your Password
+        },
+        tls: {
+                rejectUnauthorized: false // Disable certificate validation (if necessary)
+            }
+    });
+  
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Error occurred:', error);
+        } else {
+            console.log('OTP Email sent successfully:', info.response);
+        }
+    });
+}
+
 export async function tempUser(body , otp){
     try{
         await otpModel.create({
@@ -137,7 +176,7 @@ export async function validateEmail(email){
 
 }
 
-export async function updatePassword(email, otp){
+export async function updatePasswordotpStore(email, otp){
     try{
         await otpModel.create({
             email: email,
@@ -145,5 +184,29 @@ export async function updatePassword(email, otp){
         })
     }catch(err){
         console.log('error while updating otp on update Password ${err.message}');
+    }
+}
+
+export async function emailOtpCheck(email, otp){
+    try{
+        const data = await otpModel.findOne({
+            email: email,
+            otp: otp
+        })
+        return data;
+
+    }catch(err){
+        console.log(`error while updating otp on emailOtpCheck ${err.message}`);
+    }
+}
+
+
+export async function updatePassword(email, pword){
+    try{
+        await userModel.findOneAndUpdate(
+            { email: email }, 
+            { $set: { password: pword } })
+    }catch(err){
+        console.log(`Error while updatePassword on authServices ${err.message}`);
     }
 }

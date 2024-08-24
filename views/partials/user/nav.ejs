@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-		
+		 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
 
 		<!-- Google font -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -34,11 +34,15 @@
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js" defer></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" defer></script>
+
     </head>
 	<body>
 		<!-- HEADER -->
 		<header>
 			<!-- TOP HEADER -->
+			
 			<div id="top-header">
 				<div class="container">
 					<ul class="header-links pull-left">
@@ -48,10 +52,23 @@
 					</ul>
 					<ul class="header-links pull-right">
 						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-						<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-user"></i> Account <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Profile</a></li>
+								<li><a href="#">Orders</a></li>
+								<li><a href="#">Logout</a></li>
+							</ul>
+						</li>
+					
 					</ul>
 				</div>
 			</div>
+			
+			
+			
 			<!-- /TOP HEADER -->
 
 			<!-- MAIN HEADER -->

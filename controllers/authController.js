@@ -1,7 +1,8 @@
 import passport from 'passport';
 
 // Importing Services
-import {generateOTP, sendOTP, verifyPin, tempUser, createUser, loginUser, updateOtp, updatePassword} from '../services/authServices.js';
+import {generateOTP, sendOTP, verifyPin, tempUser, createUser,
+     loginUser, updateOtp, updatePasswordotpStore, validateEmail, sendOTPReset, emailOtpCheck, updatePassword} from '../services/authServices.js';
 
 import '../services/googleAuth.js';
 
@@ -138,17 +139,51 @@ export function adminLogout(req, res){
 
 // Resent Otp
 export function resentEmailOtp(req, res){
-    res.render('pages/user/auth/resetOtpEmail')
+
+    res.render('pages/user/auth/resetOtpEmail', {err_div: null});
 }
 
 export async function resentEmailOtpPost(req, res){
     // /password_reset
     const {email} = req.body;
 
+    const data = await validateEmail(email);
+
+    if(data.length === 0 || data[0].isBlocked){
+        return res.json({status: "failed" , err_message: "Invalid Email Please Try Again"});
+    }
+
+    res.cookie('email_reset', email, {
+        maxAge: 10 * 60 * 1000, 
+        httpOnly: true, 
+    });
+
     const otp = await generateOTP();
-    await updatePassword(email, otp);
-    await sendOTP(email, otp);
+    await updatePasswordotpStore(email, otp);
+    await sendOTPReset(email, otp);
+
+    res.json({status: "Success", redirectUrl: '/password_resent/otp'});
+
 }
+
+export async function resentOtpOtp(req, res){
+    res.render('pages/user/auth/resetPasswordOtpVerification');
+    
+}
+
+export async function resentOtpOtpPost(req, res){
+
+    const validate = await emailOtpCheck(req.cookies.email_reset, req.body.otp);
+    if(!validate){
+        return res.json({status: "failed", err_message: "Invalida Otp"});
+    }
+    console.log(req.body.pword1);
+    await updatePassword(req.cookies.email_reset, req.body.pword1);
+    
+    res.json({status: 'success', redirect_url: '/login'});
+
+}
+
 
 const noCache = (req, res, next) => {
     res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
