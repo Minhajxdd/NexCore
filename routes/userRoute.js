@@ -1,6 +1,7 @@
 import express from 'express';
 import noCache,* as authController from '../controllers/authController.js';
 import * as users from '../controllers/usserController.js';
+import * as carts from '../controllers/cartController.js';
 
 const router = express.Router();
 
@@ -58,8 +59,12 @@ router.route('/product')
     .get(users.productGet);
 
 
+// Cart 
+router.route('/cart')
+    .get(users.cartGet)
 
-
+router.route('/cart/product/add')
+    .post(carts.addCartProductsQuick);
 
 router.route('*')
     .all(authController.NotFound);

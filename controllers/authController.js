@@ -89,7 +89,7 @@ export const loginPost = async (req, res) => {
     if(userData.length === 0 || userData[0].isBlocked){
         return res.redirect('/login?err=1')
     }
-
+    req.session.userId = userData[0]._id;
     req.session.user = email;
     res.redirect('/');
 }

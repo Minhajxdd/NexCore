@@ -33,7 +33,11 @@ const UsersSchema = new Schema({
   isBlocked: { 
     type: Boolean, 
     default: false 
+},
+  cartId: {
+  type: Schema.Types.ObjectId  
 }
+
 });
 
 const userModel = mongoose.model('Users', UsersSchema);
