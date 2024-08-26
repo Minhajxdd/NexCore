@@ -64,8 +64,15 @@ router.route('/cart')
     .get(carts.cartGet)
 
 router.route('/cart/product/add')
-    .post(carts.addCartProductsQuick);
+    .post(carts.addCartProducts);
 
+router.route('/cart/product/quantity/increase')
+    .post(carts.productQuantityInc)
+
+router.route('/cart/product/quantity/decrease')
+    .post(carts.productQuantityDec)
+
+// Cart 
 
 
 router.route('*')

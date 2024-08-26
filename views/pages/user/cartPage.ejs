@@ -1,6 +1,6 @@
 <%- include('../../partials/user/nav'); -%>
 
-
+<title>Cart Page</title>
 
 <nav id="navigation">
     <!-- container -->
@@ -74,7 +74,11 @@
                                                     </div>
                                                     <div class="col-md-3 quantity">
                                                         <label for="quantity">Quantity:</label>
-                                                        <input id="quantity" type="number" value ="<%= cart.items[ind].quantity %>" class="form-control quantity-input">
+                                                        <div class="input-number">
+                                                            <input type="number" value="<%= cart.items[ind].quantity %>" name="quantity" disabled>
+                                                            <span class="qty-up" data-id="<%= val._id %>">+</span>
+                                                            <span class="qty-down" data-id="<%= val._id %>">-</span>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-4 price" style="margin-top: -35px;">
                                                         <span>₹ <%= new Intl.NumberFormat('en-IN').format(cart.items[ind].price) %></span>
@@ -102,7 +106,7 @@
                             <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
                             <div class="summary-item"><span class="text">Total</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice) %></span></div>
                             <button type="button" style="background-color: #D10024; color: white;" class="btn btn-lg btn-block">Checkout</button>
-                        </div>
+                        </div>  
                     </div>
                 </div> 
             </div>
@@ -110,6 +114,8 @@
    </section>
 </div>
 
+<!-- Custom Script -->
+ <script src="/script/user/cartPage.js"></script>
 
 
 <%- include('../../partials/user/footer'); -%>

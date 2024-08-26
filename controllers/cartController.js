@@ -4,7 +4,7 @@ import productModel from '../models/productSchems.js';
 
 
 // Cart update api controller
-export async function addCartProductsQuick(req, res){
+export async function addCartProducts(req, res){
     const {id: productId, quantity: quantityString} = req.body;
     const quantity = quantityString !== undefined ? Number(quantityString) : undefined;
     const { userId } = req.session;
@@ -48,6 +48,7 @@ export async function addCartProductsQuick(req, res){
             cartData.totalPrice += price;
             
             await cartData.save();
+            req.session.cartId = userData.cartId;
         }else{
 
             const price = quantity ? productData.discounted_price * quantity : productData.discounted_price;
@@ -67,6 +68,7 @@ export async function addCartProductsQuick(req, res){
                 userId,
                 {cartId: cartData._id}
             )
+            req.session.cartId = cartData._id;
         }
 
         return res.status(200).json({status:'success', message:'Successfull'});
@@ -78,10 +80,13 @@ export async function addCartProductsQuick(req, res){
 
 // Render Data to the cart page
 export async function cartGet(req, res){
-
-    const { cartId } = await userModel.findById(req.session.userId, {_id: 0 , cartId: 1});
-    const [ cart ] = await cartModel.find(cartId);
+    const cartId = req.session.cartId;
+    const cart = await cartModel.findById(cartId);
     
+    if (!cart) {
+        return res.status(404).send('Cart not found');
+    }
+
     const products = await Promise.all(
         cart.items.map(async (val) => {
             return await productModel.findById(val.product_id);
@@ -94,3 +99,85 @@ export async function cartGet(req, res){
     });
 }
    
+export async function productQuantityInc(req, res){
+
+    const cartId = req.session.cartId;
+    const { id: productId, inputValue } = req.body;
+
+    try {
+        const cart = await cartModel.findById(cartId);
+        if (!cart) {
+            return res.status(404).json({ status: "failed", message: "Cart not found" });
+        }
+
+        const product = await productModel.findById(productId);
+        if (!product) {
+            return res.status(404).json({ status: "failed", message: "Product not found" });
+        }
+
+        const updatedPrice = product.discounted_price * inputValue;
+
+
+        const updateResult = await cartModel.findOneAndUpdate(
+            { _id: cartId, 'items.product_id': productId },
+            {
+                $inc: { 'items.$.quantity': 1 }, 
+                $set: { 'items.$.price': updatedPrice }
+            },
+            {
+                new: true
+            }
+        );
+
+        if (!updateResult) {
+            return res.status(400).json({ status: "failed", message: "Quantity could not be increased" });
+        }
+
+        res.json({ status: "success", updatedPrice: updatedPrice });
+    } catch (err) {
+        console.log(`Error while increasing the quantity of cart: ${err}`);
+        return res.status(500).json({ status: "failed", message: "Internal server error" });
+    }
+
+}
+
+export async function productQuantityDec(req, res) {
+    const cartId = req.session.cartId;
+    const { id: productId, inputValue } = req.body;
+
+    try {
+        const cart = await cartModel.findById(cartId);
+        if (!cart) {
+            return res.status(404).json({ status: "failed", message: "Cart not found" });
+        }
+
+        const product = await productModel.findById(productId);
+        if (!product) {
+            return res.status(404).json({ status: "failed", message: "Product not found" });
+        }
+
+        const updatedPrice = product.discounted_price * inputValue;
+
+
+        const updateResult = await cartModel.findOneAndUpdate(
+            { _id: cartId, 'items.product_id': productId },
+            {
+                $inc: { 'items.$[elem].quantity': -1 }, 
+                $set: { 'items.$[elem].price': updatedPrice }
+            },
+            {
+                arrayFilters: [{ 'elem.product_id': productId, 'elem.quantity': { $gt: 1 } }],
+                new: true
+            }
+        );
+
+        if (!updateResult) {
+            return res.status(400).json({ status: "failed", message: "Quantity could not be decremented" });
+        }
+
+        res.json({ status: "success", updatedPrice: updatedPrice });
+    } catch (err) {
+        console.log(`Error while decrementing the quantity of cart: ${err}`);
+        return res.status(500).json({ status: "failed", message: "Internal server error" });
+    }
+}

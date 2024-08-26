@@ -119,15 +119,18 @@
                         <div class="qty-label">
                             Qty
                             <div class="input-number">
-                                <input type="number" value="1" name="quantity">
+                                <input id="input-value" type="number" value="1" name="quantity" disabled>
                                 <span class="qty-up">+</span>
                                 <span class="qty-down">-</span>
                             </div>
                         </div>
                         <input type="text" value="<%= product._id %>" name="id" class="hidden">
-                        <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>add to cart</button>
+                        <button type="submit" class="add-to-cart-btn" id="add-to-cart-btn-id"><i class="fa fa-shopping-cart"></i>add to cart</button>
                     </div>
                 </form>
+
+                <!-- Popup message -->
+                <div id="cart-popup" class="popup">Item added to cart successfully!</div>
 
                     <ul class="product-btns">
                         <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
