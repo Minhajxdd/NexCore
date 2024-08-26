@@ -48,96 +48,50 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-8">
                         <div class="items">
-                            <div class="product">
-                                <div class="row ">
-                                    <div class="col-md-3 flex-custom">
-                                        <img class="img-fluid mx-auto d-block image" style="height: 100px;" src="https://rukminim2.flixcart.com/image/416/416/xif0q/graphics-card/u/4/d/gv-n4060eagle-oc-8gd-gigabyte-original-imahy7m5zkzt5uaf.jpeg?q=70&crop=false">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="info">
-                                            <div class="row">
-                                                <div class="col-md-5 product-name">
-                                                    <div class="product-name">
-                                                        <a href="#">GIGABYTE NVIDIA Geforce RTX 4060 Eagle Oc 8G</a>
-                                                        <div class="product-info">
-                                                            <div>Display: <span class="value">5 inch</span></div>
-                                                            <div>RAM: <span class="value">4GB</span></div>
-                                                            <div>Memory: <span class="value">32GB</span></div>
+                            <% products.forEach((val, ind) => { %>
+                                <div class="product">
+                                    <div class="row ">
+                                        <div class="col-md-3 flex-custom">
+                                            <img class="img-fluid mx-auto d-block image" style="height: 100px;" src="/uploads/products/<%= val.images[0] %>">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="info">
+                                                <div class="row" style="
+                                                        display: flex;
+                                                        align-items: center;
+                                                        justify-content: center;
+                                                        flex-direction: row;
+                                                    ">
+                                                    <div class="col-md-4 product-name">
+                                                        <div class="product-name">
+                                                            <a href="/product?id=<%= val._id %>" target="_blank"><%= val.name %></a>
+                                                            <!-- <div class="product-info">
+                                                                <div>Display: <span class="value">5 inch</span></div>
+                                                                <div>RAM: <span class="value">4GB</span></div>
+                                                                <div>Memory: <span class="value">32GB</span></div>
+                                                            </div> -->
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-4 quantity">
-                                                    <label for="quantity">Quantity:</label>
-                                                    <input id="quantity" type="number" value ="1" class="form-control quantity-input">
-                                                </div>
-                                                <div class="col-md-3 price">
-                                                    <span>$120</span>
+                                                    <div class="col-md-3 quantity">
+                                                        <label for="quantity">Quantity:</label>
+                                                        <input id="quantity" type="number" value ="<%= cart.items[ind].quantity %>" class="form-control quantity-input">
+                                                    </div>
+                                                    <div class="col-md-4 price" style="margin-top: -35px;">
+                                                        <span>₹ <%= new Intl.NumberFormat('en-IN').format(cart.items[ind].price) %></span>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <a href="">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="product">
-                                <div class="row ">
-                                    <div class="col-md-3 flex-custom">
-                                        <img class="img-fluid mx-auto d-block image" style="height: 100px;" src="https://www.itmegabyte.com/wp-content/uploads/2020/09/Intel-Core-i9-10900-10th-Gen-Processor-06.jpg">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="info">
-                                            <div class="row">
-                                                <div class="col-md-5 product-name">
-                                                    <div class="product-name">
-                                                        <a href="#"> Intel Core i9-10900 10th Gen Processor</a>
-                                                        <div class="product-info">
-                                                            <div>Display: <span class="value">5 inch</span></div>
-                                                            <div>RAM: <span class="value">4GB</span></div>
-                                                            <div>Memory: <span class="value">32GB</span></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 quantity">
-                                                    <label for="quantity">Quantity:</label>
-                                                    <input id="quantity" type="number" value ="1" class="form-control quantity-input">
-                                                </div>
-                                                <div class="col-md-3 price">
-                                                    <span>$120</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product">
-                                <div class="row ">
-                                    <div class="col-md-3 flex-custom">
-                                        <img class="img-fluid mx-auto d-block image" style="height: 100px;" src="https://rukminim2.flixcart.com/image/416/416/xif0q/graphics-card/u/4/d/gv-n4060eagle-oc-8gd-gigabyte-original-imahy7m5zkzt5uaf.jpeg?q=70&crop=false">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="info">
-                                            <div class="row">
-                                                <div class="col-md-5 product-name">
-                                                    <div class="product-name">
-                                                        <a href="#">GIGABYTE NVIDIA Geforce RTX 4060 Eagle Oc 8G</a>
-                                                        <div class="product-info">
-                                                            <div>Display: <span class="value">5 inch</span></div>
-                                                            <div>RAM: <span class="value">4GB</span></div>
-                                                            <div>Memory: <span class="value">32GB</span></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 quantity">
-                                                    <label for="quantity">Quantity:</label>
-                                                    <input id="quantity" type="number" value ="1" class="form-control quantity-input">
-                                                </div>
-                                                <div class="col-md-3 price">
-                                                    <span>$120</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <% }) %>
+                        
+
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-4">
@@ -146,7 +100,7 @@
                             <div class="summary-item"><span class="text">Subtotal</span><span class="price">$360</span></div>
                             <div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
                             <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Total</span><span class="price">$360</span></div>
+                            <div class="summary-item"><span class="text">Total</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice) %></span></div>
                             <button type="button" style="background-color: #D10024; color: white;" class="btn btn-lg btn-block">Checkout</button>
                         </div>
                     </div>

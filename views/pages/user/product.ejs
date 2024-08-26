@@ -114,17 +114,20 @@
 
                     </div>
 
+                <form id="cart-form">
                     <div class="add-to-cart">
                         <div class="qty-label">
                             Qty
                             <div class="input-number">
-                                <input type="number" value="1">
+                                <input type="number" value="1" name="quantity">
                                 <span class="qty-up">+</span>
                                 <span class="qty-down">-</span>
                             </div>
                         </div>
-                        <button data-id="<%= product._id %>" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                        <input type="text" value="<%= product._id %>" name="id" class="hidden">
+                        <button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>add to cart</button>
                     </div>
+                </form>
 
                     <ul class="product-btns">
                         <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
@@ -442,7 +445,7 @@
 </div>
 <!-- /Section -->
 
-
-
+<!-- Custom Script -->
+<script src="/script/user/productPage.js"></script>
 
 <%- include('../../partials/user/footer'); -%>

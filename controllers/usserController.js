@@ -21,6 +21,3 @@ export async function productGet(req, res){
     });
 }
 
-export async function cartGet(req, res){
-    res.render('pages/user/cartPage');
-}

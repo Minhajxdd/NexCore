@@ -61,10 +61,12 @@ router.route('/product')
 
 // Cart 
 router.route('/cart')
-    .get(users.cartGet)
+    .get(carts.cartGet)
 
 router.route('/cart/product/add')
     .post(carts.addCartProductsQuick);
+
+
 
 router.route('*')
     .all(authController.NotFound);
