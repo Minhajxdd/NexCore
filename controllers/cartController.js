@@ -1,6 +1,43 @@
+import { ObjectId } from 'mongodb';
+
+// Importing Models
 import cartModel from '../models/cartSchema.js';
 import userModel from '../models/userSchema.js'
 import productModel from '../models/productSchems.js';
+
+
+
+
+// Render Data to the cart page
+export async function cartGet(req, res){
+    const cartId = req.session.cartId;
+    const cart = await cartModel.findById(cartId);
+    
+    
+    if (!cart) {
+        const products = null;
+        // return res.status(404).json({status: 'failed', message: 'Cart not found'});
+        return res.render('pages/user/cartPage' , {
+            cart,
+            products
+        });
+    }
+
+    const products = await Promise.all(
+        cart.items.map(async (val) => {
+            return await productModel.findById(val.product_id);
+        })
+    ); 
+    res.render('pages/user/cartPage' , {
+        cart,
+        products
+    });
+}
+   
+
+
+
+
 
 
 // Cart update api controller
@@ -78,27 +115,12 @@ export async function addCartProducts(req, res){
     }
 }  
 
-// Render Data to the cart page
-export async function cartGet(req, res){
-    const cartId = req.session.cartId;
-    const cart = await cartModel.findById(cartId);
-    
-    if (!cart) {
-        return res.status(404).send('Cart not found');
-    }
 
-    const products = await Promise.all(
-        cart.items.map(async (val) => {
-            return await productModel.findById(val.product_id);
-        })
-    ); 
 
-    res.render('pages/user/cartPage' , {
-        cart,
-        products
-    });
-}
-   
+
+
+
+
 export async function productQuantityInc(req, res){
 
     const cartId = req.session.cartId;
@@ -132,14 +154,21 @@ export async function productQuantityInc(req, res){
         if (!updateResult) {
             return res.status(400).json({ status: "failed", message: "Quantity could not be increased" });
         }
-
-        res.json({ status: "success", updatedPrice: updatedPrice });
+        const totalPrice = await cartTotalUpdate(cartId);
+        res.json({ status: "success", updatedPrice: updatedPrice, totalPrice: totalPrice });
     } catch (err) {
         console.log(`Error while increasing the quantity of cart: ${err}`);
         return res.status(500).json({ status: "failed", message: "Internal server error" });
     }
 
 }
+
+
+
+
+
+
+
 
 export async function productQuantityDec(req, res) {
     const cartId = req.session.cartId;
@@ -174,10 +203,98 @@ export async function productQuantityDec(req, res) {
         if (!updateResult) {
             return res.status(400).json({ status: "failed", message: "Quantity could not be decremented" });
         }
-
-        res.json({ status: "success", updatedPrice: updatedPrice });
+        const totalPrice = await cartTotalUpdate(cartId);
+        
+        res.json({ status: "success", updatedPrice: updatedPrice, totalPrice: totalPrice });
     } catch (err) {
         console.log(`Error while decrementing the quantity of cart: ${err}`);
         return res.status(500).json({ status: "failed", message: "Internal server error" });
     }
+}
+
+
+
+
+
+
+
+async function cartTotalUpdate(cartId){
+    try{
+        const cart = await cartModel.findById(cartId);
+    
+        if(cart){
+            const newTotalPrice = cart.items.reduce((acc, item) => acc + item.price, 0);
+
+        cart.totalPrice = newTotalPrice;
+
+        await cart.save();
+        return newTotalPrice;
+        } else {
+            console.log('Cart not found');
+            return res.status(404).json({status: 'failed', message: "Cart Not Found"});
+        }   
+
+    
+    }catch(err){
+        console.log(`Error while updating total price on cartController ${err.message}`);
+        return res.status(500).json({status: "failed", message: "Internal server error"});
+    }
+    
+}
+
+
+
+
+
+
+export async function deleteCartProduct(req, res){
+    const cartId = req.session.cartId;
+    const productId = new ObjectId(req.body.productId);
+
+    if(!cartId){
+        return res.status(404).json({status: 'failed', message: 'cart id not found'});
+    }
+
+    if(!productId){
+        return res.status(404).json({status: 'failed', message: 'product id not found'});
+    }
+
+    try{
+        const cart = await cartModel.findById(
+            cartId,
+            {_id:0 , items: 1}
+        )
+
+        const SubPrice = cart.items.find(item => item.product_id.equals(productId)).price;
+        
+        const cartData =  await cartModel.findByIdAndUpdate(
+            cartId,
+            {
+                $pull: { items: {product_id: productId}},
+                $inc: {totalPrice: -SubPrice}
+            },
+            {new: true}
+        );
+
+        if(cartData.items.length === 0){
+            return res.json({
+                status: 'success', 
+                message: 'product deleted successfully', 
+                totalPrice: cartData.totalPrice, 
+                emptyCart: true
+            });
+        } 
+
+        return res.json({
+            status: 'success', 
+            message: 'product deleted successfully', 
+            totalPrice: cartData.totalPrice,
+            emptyCart: false
+        });
+
+    }catch(err){
+        console.log(`Error which deleting cart products on cartController : ${err.message}`);
+    }
+
+
 }

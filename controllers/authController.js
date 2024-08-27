@@ -84,12 +84,17 @@ export const loginPost = async (req, res) => {
 
     const { email , password } = req.body;
 
-    const userData = await loginUser(email, password);
+    const [ userData ] = await loginUser(email, password);
 
-    if(userData.length === 0 || userData[0].isBlocked){
-        return res.redirect('/login?err=1')
+    if(!userData ||  Object.entries(userData).length === 0 && userData.constructor === Object || userData.isBlocked){
+            return res.redirect('/login?err=1')
     }
-    req.session.userId = userData[0]._id;
+
+    if(userData.cartId){
+        req.session.cartId = userData.cartId; 
+    }
+
+    req.session.userId = userData._id;
     req.session.user = email;
     res.redirect('/');
 }

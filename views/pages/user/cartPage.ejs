@@ -41,6 +41,10 @@
 </div>
 <!-- /SECTION -->
 
+<% if(cart && cart.items.length !== 0){ %>
+
+
+
 <div class="page">
     <section class="shopping-cart dark">
         <div class="container">
@@ -49,7 +53,7 @@
                     <div class="col-md-12 col-lg-8">
                         <div class="items">
                             <% products.forEach((val, ind) => { %>
-                                <div class="product">
+                                <div class="product disable-product-listing">
                                     <div class="row ">
                                         <div class="col-md-3 flex-custom">
                                             <img class="img-fluid mx-auto d-block image" style="height: 100px;" src="/uploads/products/<%= val.images[0] %>">
@@ -84,7 +88,7 @@
                                                         <span>₹ <%= new Intl.NumberFormat('en-IN').format(cart.items[ind].price) %></span>
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <a href="">
+                                                        <a data-id="<%= val._id %>" class="cart-delete pointer">
                                                             <i class="fa-solid fa-trash"></i>
                                                         </a>
                                                     </div>
@@ -95,16 +99,20 @@
                                 </div>
                             <% }) %>
                         
-
                         </div>
+
                     </div>
                     <div class="col-md-12 col-lg-4">
                         <div class="summary">
                             <h3>Checkout</h3>
                             <div class="summary-item"><span class="text">Subtotal</span><span class="price">$360</span></div>
                             <div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Total</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice) %></span></div>
+                            <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div> 
+                            
+                            <% if(cart){ %>
+                                <div class="summary-item"><span class="text">Total</span><span class="price" id="final-price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice)  %></span></div>
+                            <% } %>
+
                             <button type="button" style="background-color: #D10024; color: white;" class="btn btn-lg btn-block">Checkout</button>
                         </div>  
                     </div>
@@ -114,8 +122,53 @@
    </section>
 </div>
 
+<% }else{ %>
+
+    <div class="container" style="margin-bottom: 100px;">
+        <div class="empty-cart-container">
+            <div class="empty-cart-message">
+                <i class="glyphicon glyphicon-shopping-cart"></i>
+                <h2>Your Cart is Empty</h2>
+                <p>Looks like you haven't added anything to your cart yet.</p>
+                <a href="/" class="btn btn-success">Start Shopping</a>
+            </div>
+        </div>
+    </div>
+
+<% } %>
+
 <!-- Custom Script -->
  <script src="/script/user/cartPage.js"></script>
+
+
+ <style>
+    .empty-cart-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+        background-color: #f8f9fa;
+        border: 2px dashed #ddd;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    .empty-cart-message {
+        text-align: center;
+        color: #666;
+    }
+    .empty-cart-message i {
+        font-size: 50px;
+        margin-bottom: 10px;
+        color: #999;
+    }
+    .empty-cart-message h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    .empty-cart-message p {
+        font-size: 16px;
+    }
+</style>
 
 
 <%- include('../../partials/user/footer'); -%>

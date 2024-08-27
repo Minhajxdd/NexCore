@@ -72,6 +72,9 @@ router.route('/cart/product/quantity/increase')
 router.route('/cart/product/quantity/decrease')
     .post(carts.productQuantityDec)
 
+router.route('/cart/product/delete')
+    .post(carts.deleteCartProduct)
+
 // Cart 
 
 

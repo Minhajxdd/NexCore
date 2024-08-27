@@ -13,7 +13,7 @@
             data[key] = value;
         });
         data.quantity = document.getElementById('input-value').value;
-        console.log(data)
+        
         axios.post('/cart/product/add', data)
         .then(res => {
             console.log(res.data);
