@@ -110,8 +110,13 @@
                 'Content-Type': 'multipart/form-data'   
             }
         })
-        .then(function(response) {
+        .then(function(res) {
+
             document.getElementById('add-products-table').style.display = 'none';
+            
+            console.log(res.data.status);
+
+            insertNewElement(res.data.product_details);
         })
         .catch(function(error) {
             console.error('Error adding product:', error);
@@ -122,6 +127,34 @@
 
 })();
 // Create Product
+
+// New item add 
+function insertNewElement(data){
+    const length =  document.querySelectorAll('.list-index').length;
+
+
+    const newRow = `
+    <tr>
+    <td>${length + 1}</td>
+    <td><img class="prod-img" src="/uploads/products/${data.images[0]}" alt="product_image"></td>
+    <td id="tb-description2">${data.name}</td>
+    <td id="tb-description1">${data.description.substring(0,300)}...</td>
+    <td>
+      <h6>Original Price: </h6>
+      <p>${data.original_price}</p>
+      <h6>Discounted Price: </h6>
+      <p>${data.discounted_price}</p>  
+    </td>
+    <td>${data.stock}</td>
+    <td>
+      <button class="badge" data-id="${data._id}" id="btn-action">Delete</button>
+      <button class="badge" data-id="${data._id}" id="btn-edit">Edit</button>
+    </td>
+  </tr>    
+  `;
+  document.getElementById('table-body-list').insertAdjacentHTML('beforeend', newRow);
+}
+// New item add 
 
 // Button Color Change
 (function (){

@@ -65,6 +65,7 @@ export async function createProduct(body, id, files){
             }}
         )    
 
+        return newDocument;
     }catch(err){
         console.log(`error while creating or updating category or product at createProduct at productServices ${err.message}`);
     }

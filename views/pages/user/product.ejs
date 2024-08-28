@@ -125,7 +125,7 @@
                             </div>
                         </div>
                         <input type="text" value="<%= product._id %>" name="id" class="hidden">
-                        <button type="submit" class="add-to-cart-btn" id="add-to-cart-btn-id"><i class="fa fa-shopping-cart"></i>add to cart</button>
+                        <button type="submit" class="add-to-cart-btn" id="add-to-cart-btn-id" onclick="cartAddedPopup()"><i class="fa fa-shopping-cart"></i>add to cart</button>
                     </div>
                 </form>
 
@@ -426,7 +426,7 @@
                                             </div>
                                         </div>
                                         <div class="add-to-cart">
-                                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                            <button class="add-to-cart-btn" data-id="<%= val._id %>"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                         </div>
                                     </div>
                                 <% }) %>

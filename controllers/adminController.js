@@ -112,8 +112,13 @@ export async function productsGet(req, res){
 }
 
 export async function addProducts(req, res){
-    await createProduct(req.body, req.query.cat_id, req.files);
-    res.json({status: 'Success'});
+    const productData = await createProduct(req.body, req.query.cat_id, req.files);
+    
+    const result = {}
+    result.product_details = productData;
+    result.status = 'Success';
+    
+    res.json(result);
 }
 
 export async function deleteProducts(req, res){

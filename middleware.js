@@ -69,7 +69,7 @@ const applyMiddlewares = (app) => {
     app.use(sessionHandler);
     app.use(passportInitialize);
     app.use(passportSession);
-    // app.use(isAuthenticated);
+    app.use(isAuthenticated);
 };
 
 export default applyMiddlewares;

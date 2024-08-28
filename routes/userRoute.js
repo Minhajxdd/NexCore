@@ -2,6 +2,8 @@ import express from 'express';
 import noCache,* as authController from '../controllers/authController.js';
 import * as users from '../controllers/usserController.js';
 import * as carts from '../controllers/cartController.js';
+import * as category from '../controllers/categoryController.js';
+
 
 const router = express.Router();
 
@@ -59,7 +61,7 @@ router.route('/product')
     .get(users.productGet);
 
 
-// Cart 
+// Cart Routes
 router.route('/cart')
     .get(carts.cartGet)
 
@@ -75,7 +77,16 @@ router.route('/cart/product/quantity/decrease')
 router.route('/cart/product/delete')
     .post(carts.deleteCartProduct)
 
-// Cart 
+// Cart Routes
+
+// Categories
+
+router.route('/categories/:name')
+    .get(category.categoryGet)
+
+router.route('/api/categories/:name')
+    .get(category.categoryPagenation)
+// Categories
 
 
 router.route('*')

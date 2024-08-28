@@ -53,10 +53,10 @@
                       <th> Action </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="table-body-list">
                     <% products.forEach((val, ind) =>{ %>
                       <tr>
-                        <td><%= ind + 1 %></td>
+                        <td class="list-index"><%= ind + 1 %></td>
                         <td><img class="prod-img" src="/uploads/products/<%= val.images[0] %>" alt="product_image"></td>
                         <td id="tb-description2"><%= val.name %></td>
                         <td id="tb-description1"><%= val.description.substring(0,300)+'...' %></td>
