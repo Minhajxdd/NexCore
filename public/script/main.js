@@ -1,3 +1,5 @@
+import assignPrice from './user/category.js';
+
 (function($) {
 	"use strict"
 
@@ -150,19 +152,25 @@
 	var priceSlider = document.getElementById('price-slider');
 	if (priceSlider) {
 		noUiSlider.create(priceSlider, {
-			start: [1, 999],
+			start: [1, 100000],
 			connect: true,
 			step: 1,
 			range: {
 				'min': 1,
-				'max': 999
+				'max': 100000
 			}
 		});
 
 		priceSlider.noUiSlider.on('update', function( values, handle ) {
 			var value = values[handle];
 			handle ? priceInputMax.value = value : priceInputMin.value = value
+			
 		});
+
+		priceSlider.noUiSlider.on('change', () => {
+			assignPrice(priceInputMin.value, priceInputMax.value);
+		})
+
 	}
 
 })(jQuery);

@@ -1,3 +1,6 @@
+
+
+
 // add to cart button
 (function () {
     const cartContainer = document.querySelector('#product-container');
@@ -24,10 +27,12 @@
 
 
 //  api request handlers
-(function(){
+
     let limit = 3;
     let page = 1;
     let LtH = null;
+    let minPrice = null;
+    let maxPrice = null;
 
     // Pagenation buttons request
     document.querySelectorAll('.pagenation-btns').forEach((button) => {
@@ -81,20 +86,22 @@ document.getElementById('itemSortingSelect').addEventListener('change', () => {
 
 }) 
 
+export default function assignPrice(min, max){
+    minPrice = min;
+    maxPrice = max;
+    PagenationReqSent(limit, page, LtH, minPrice, maxPrice)
+}
 
-
-
-})();
 
 
 // Pagenation api request
-function PagenationReqSent(limit, page, LtH = null){
-    console.log(LtH)
+function PagenationReqSent(limit, page, LtH = null, minPrice = null, maxPrice = null){
+    
     const pathName = window.location.pathname;
     const apiPath = `/api${pathName}`;
 
 
-    axios.get(`${apiPath}?page=${page}&limit=${limit}&LtH=${LtH}`)
+    axios.get(`${apiPath}?page=${page}&limit=${limit}&LtH=${LtH}&minp=${minPrice}&maxp=${maxPrice}`)
     .then((res) => {
         changeProductDetails1(res.data.results);
     })
@@ -186,29 +193,14 @@ document.querySelectorAll('.pagenation-btns').forEach((button) => {
     button.addEventListener('click', () => {
         document.querySelectorAll('.pagenation-btns').forEach(btn => btn.style.backgroundColor = 'white');
         button.style.backgroundColor = '#D10024';
-    })
-})
+    });
+});
 // Pagenation button color change
 
 
+// Price Slider
 (function (){
-    
-    
 
 
+    
 })();
-
-
-
-
-
-
-
-
-
-
-//Set Everything To Default's Value
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     document.getElementById('testing').re
-// });

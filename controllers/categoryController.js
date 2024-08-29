@@ -43,7 +43,10 @@ export async function categoryPagenation(req, res){
     
     let categoryName = req.params.name;
     categoryName = categoryName.replace(/-/g, " ");
-    let lowToHigh = req.query.LtH || null;
+    const lowToHigh = req.query.LtH || null;
+    const minPrice = parseFloat(req.query.minp) || null;
+    const maxPrice = parseFloat(req.query.maxp) || null;
+    
 
     const categoryData = await categoryModel.findOne(
         { name: { $regex: categoryName, $options: 'i' } }
@@ -59,6 +62,12 @@ export async function categoryPagenation(req, res){
     const results = {}
 
     const query = { _id: { $in: categoryData.products_id } };
+
+    if (minPrice !== null && maxPrice !== null) {
+        query.discounted_price = { $gte: minPrice, $lte: maxPrice };
+    }
+
+
     const sortOptions = lowToHigh == 1 ? { discounted_price: 1 } :
                         lowToHigh == 2 ? { discounted_price: -1} :
                         {};
