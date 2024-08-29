@@ -10,7 +10,7 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li><a href="#">Home</a></li>
+						<li><a href="/">Home</a></li>
 						<li><a href="#">Hot Deals</a></li>
 						<li><a href="#">Categories</a></li>
 						<li class="active"><a href="/categories/processors">Processors</a></li>
@@ -244,19 +244,23 @@
 							<div class="store-sort">
 								<label>
 									Sort By:
-									<select class="input-select">
-										<option value="0">Popular</option>
-										<option value="1">Position</option>
+									<select class="input-select" id="itemSortingSelect">
+										<option value="0">Featured</option>
+										<option value="1">Price: Low to High</option>
+                                        <option value="2">Price: High to Low</option>
 									</select>
 								</label>
 
-								<label>
-									Show:
-									<select class="input-select">
-										<option value="0">20</option>
-										<option value="1">50</option>
-									</select>
-								</label>
+									<label>
+										Show:
+										<select class="input-select" id="itemsPerPageSelect">
+											<option value="3">3</option>
+											<option value="6">6</option>
+											<option value="9">9</option>
+											<option value="12">12</option>
+										</select>
+									</label>
+
 							</div>
 							<ul class="store-grid">
 								<li class="active"><i class="fa fa-th"></i></li>
@@ -269,14 +273,15 @@
 						<div class="row">
 
 
-
+				<div id="product-container">
                     <% products.forEach((product) => { %>
                         <% if(!product.isDeleted){ %>
                             <!-- product -->
+
 							<div class="col-md-4 col-xs-6 product-divs">
 								<div class="product">
 									<div class="product-img">
-										<img src="/uploads/products/<%= product.images[0] %>" alt="Product Image!!">
+										<img class="prd-img-align" src="/uploads/products/<%= product.images[0] %>" alt="Product Image!!">
 										<!-- <div class="product-label">
 											<span class="sale">-30%</span>
 											<span class="new">NEW</span>
@@ -286,7 +291,7 @@
 										<p class="product-category"><%= product.category_name %></p>
 										<h3 class="product-name"><a href="/product?id=<%= product._id %>"><%= product.name.substring(0,40)+"..." %></a></h3>
 										<h4 class="product-price">₹ <%= new Intl.NumberFormat('en-IN').format(product.discounted_price) %><del class="product-old-price"><%= new Intl.NumberFormat('en-IN').format(product.original_price) %></del></h4>
-									
+
 										<div class="product-btns">
 											<button class="add-to-wishlist"><i class="fa-regular fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
                                             <button class="quick-view">
@@ -304,8 +309,8 @@
 							</div>
 							<!-- /product -->
                         <% } %>
-                    <% }) %>    
-
+                    <% }) %>
+				</div>
 						</div>
 						<!-- /store products -->
 
@@ -313,7 +318,7 @@
 						<div class="store-filter clearfix">
 							<span class="store-qty">Showing 20-100 products</span>
 							<ul class="store-pagination">
-								<li class="active pagenation-btns">1</li>
+								<li class="active pagenation-btns" style="color: black;">1</li>
 								<li class="pagenation-btns"><a>2</a></li>
 								<li class="pagenation-btns"><a>3</a></li>
 								<li class="pagenation-btns"><a>4</a></li>
@@ -334,6 +339,6 @@
 
 <!-- Custom Js -->
 <script src="/script/user/category.js"></script>
-    
+
 
 <%- include('../../partials/user/footer'); -%>

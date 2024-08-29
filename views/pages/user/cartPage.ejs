@@ -12,7 +12,7 @@
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Hot Deals</a></li>
                 <li><a href="#">Categories</a></li>
-                <li><a href="#">Laptops</a></li>
+                <li><a href="/categories/processors">Processors</a></li>
                 <li><a href="#">Smartphones</a></li>
                 <li><a href="#">Cameras</a></li>
                 <li><a href="#">Accessories</a></li>
@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                             <% }) %>
-                        
+
                         </div>
 
                     </div>
@@ -107,16 +107,16 @@
                             <h3>Checkout</h3>
                             <div class="summary-item"><span class="text">Subtotal</span><span class="price">$360</span></div>
                             <div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div> 
-                            
+                            <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
+
                             <% if(cart){ %>
                                 <div class="summary-item"><span class="text">Total</span><span class="price" id="final-price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice)  %></span></div>
                             <% } %>
 
                             <button type="button" style="background-color: #D10024; color: white;" class="btn btn-lg btn-block">Checkout</button>
-                        </div>  
+                        </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
    </section>
