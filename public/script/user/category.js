@@ -103,13 +103,19 @@ export default function assignPrice(min, max){
 // Pagenation api request
 function PagenationReqSent(limit, page, LtH = null, minPrice = null, maxPrice = null){
     
-    const searchQuery = window.location.search
+    const searchQuery = window.location.pathname
     const apiPath = `/api${searchQuery}`;
     
 
     axios.get(`${apiPath}?page=${page}&limit=${limit}&LtH=${LtH}&minp=${minPrice}&maxp=${maxPrice}`)
     .then((res) => {
         
+        if(res.data.results.length === 0 ){
+            return noItems();
+        }
+        
+        changeProductDetails(res.data.results)
+
     })
     .catch((err) => {
     console.log('error on axios fetch '+err.message);
@@ -161,6 +167,35 @@ function changeProductDetails(data) {
     });
 }
 // Product Details Injection
+
+
+
+// Item Not Found
+function noItems(){
+   
+    const container = document.querySelector('#product-container');
+    container.innerHTML = '';
+
+    const notFoundDiv = document.createElement('div');
+
+    notFoundDiv.innerHTML = `
+    <div class="container">
+        <div class="item-not-found">
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            <h2>Item Not Found</h2>
+            <p>Sorry, we couldn't find the item you're looking for.</p>
+        </div>
+    </div>
+    `
+    container.appendChild(notFoundDiv);
+}
+
+// Item Not Found
+
+
+
+
+
 
 
 // Pagenation button color change

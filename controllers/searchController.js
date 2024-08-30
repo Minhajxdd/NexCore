@@ -10,21 +10,25 @@ export async function searchGet(req, res){
     const searchQuery = req.query.search;
     
     try {
+
+      const categories = await categoryModel.find({},{name:1});
       const products = await productModel.find({
         $and: [
             { isDeleted: { $ne: true } }, 
             {
               $or: [
                 { name: { $regex: searchQuery, $options: 'i' } },
-                { description: { $regex: searchQuery, $options: 'i' } }
+                { description: { $regex: searchQuery, $options: 'i' } },
+                { category_name: {$regex: searchQuery, $options: 'i' }}
               ]
             }
           ]
         })
       .limit(6);
-  
+        
       res.render('pages/user/search', {
-        products
+        products,
+        categories
       });
     } catch (error) {
       console.error(error.message);
@@ -39,6 +43,8 @@ export async function searchGet(req, res){
 
 export async function searchApi(req, res){
     const searchQuery = req.query.search;
+    
+    const categories = req.body.categories;
     
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 3;
@@ -63,6 +69,10 @@ export async function searchApi(req, res){
             }
           ]
         }
+
+    if(categories && categories.length > 0){
+        query.$and.push({ category_name: { $in: categories } });
+    }
 
     if (minPrice !== null && maxPrice !== null) {
         query.discounted_price = { $gte: minPrice, $lte: maxPrice };
@@ -105,5 +115,8 @@ export async function searchApi(req, res){
             limit: limit
         }
     }
-      res.json({result: results });
+
+    results.status = 'success';
+
+    res.json({result: results });
 }

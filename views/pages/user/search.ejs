@@ -42,56 +42,18 @@
 					<div id="aside" class="col-md-3">
 						<!-- aside Widget -->
 						<div class="aside">
-							<h3 class="aside-title">Brand</h3>
+							<h3 class="aside-title">Category</h3>
 							<div class="checkbox-filter">
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-1">
-									<label for="brand-1">
-										<span></span>
-										SAMSUNG
-										<small>(578)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-2">
-									<label for="brand-2">
-										<span></span>
-										LG
-										<small>(125)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-3">
-									<label for="brand-3">
-										<span></span>
-										SONY
-										<small>(755)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-4">
-									<label for="brand-4">
-										<span></span>
-										SAMSUNG
-										<small>(578)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-5">
-									<label for="brand-5">
-										<span></span>
-										LG
-										<small>(125)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-6">
-									<label for="brand-6">
-										<span></span>
-										SONY
-										<small>(755)</small>
-									</label>
-								</div>
+								<% categories.forEach((val, ind) => { %>
+									<div class="input-checkbox">
+										<input type="checkbox" class="category-check-boxes" value="<%= val.name %>" id="brand-<%= ind %>">
+										<label for="brand-<%= ind %>">
+											<span></span>
+											<%= val.name %>
+										</label>
+									</div>
+								<% }) %>
+								
 							</div>
 						</div>
 						<!-- /aside Widget -->
@@ -146,18 +108,16 @@
 									</label>
 
 							</div>
-							<ul class="store-grid">
-								<li class="active"><i class="fa fa-th"></i></li>
-								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
-							</ul>
+					
 						</div>
 						<!-- /store top filter -->
 
 						<!-- store products -->
 						<div class="row">
 
-
+<% if(products.length !== 0){ %>
 				<div id="product-container">
+					
                     <% products.forEach((product) => { %>
                         <% if(!product.isDeleted){ %>
                             <!-- product -->
@@ -195,6 +155,16 @@
                         <% } %>
                     <% }) %>
 				</div>
+
+<% }else{ %>
+	<div class="container">
+        <div class="item-not-found">
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            <h2>Item Not Found</h2>
+            <p>Sorry, we couldn't find the item you're looking for.</p>
+        </div>
+    </div>
+<% } %>
 						</div>
 						<!-- /store products -->
 
@@ -218,7 +188,6 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-
 
 
 <!-- Custom Js -->

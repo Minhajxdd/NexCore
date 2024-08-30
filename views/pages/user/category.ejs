@@ -165,16 +165,13 @@
 									</label>
 
 							</div>
-							<ul class="store-grid">
-								<li class="active"><i class="fa fa-th"></i></li>
-								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
-							</ul>
 						</div>
 						<!-- /store top filter -->
 
 						<!-- store products -->
 						<div class="row">
 
+<% if(products.length !== 0 ){ %>
 
 				<div id="product-container">
                     <% products.forEach((product) => { %>
@@ -214,6 +211,18 @@
                         <% } %>
                     <% }) %>
 				</div>
+
+<% }else{ %>
+	<div id="product-container">
+		<div class="container">
+			<div class="item-not-found">
+				<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+				<h2>Item Not Found</h2>
+				<p>Sorry, we couldn't find the item you're looking for.</p>
+			</div>
+		</div>
+	</div>
+<% } %>
 						</div>
 						<!-- /store products -->
 

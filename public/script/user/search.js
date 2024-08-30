@@ -31,6 +31,7 @@ let page = 1;
 let LtH = null;
 let minPrice = null;
 let maxPrice = null;
+let categories = [];
 
 // Pagenation Buttons
 document.querySelectorAll('.pagenation-btns').forEach((button) => {
@@ -89,7 +90,18 @@ document.getElementById('itemSortingSelect').addEventListener('change', () => {
 
 }) 
 
+document.querySelectorAll('.category-check-boxes').forEach((checkbox) => {
+    checkbox.addEventListener('change', ()=>{
 
+        if (categories.includes(checkbox.value)) {
+            categories = categories.filter(item => item !== checkbox.value);
+        }else{
+            categories.push(checkbox.value);
+        }
+        
+        PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+    });
+});
 
 
 
@@ -103,9 +115,19 @@ function PagenationReqSent(page, limit, LtH = null, minPrice = null, maxPrice = 
     // const category = params.get("category"); 
     const search = params.get("search").replace(/ /g, '+');
 
-    axios.get(`${apiPath}?search=${search}&page=${page}&limit=${limit}&LtH=${LtH}&minp=${minPrice}&maxp=${maxPrice}`)
+    const data = {
+        categories: categories
+    }
+
+
+    axios.post(`${apiPath}?search=${search}&page=${page}&limit=${limit}&LtH=${LtH}&minp=${minPrice}&maxp=${maxPrice}`, data)
     .then((res) => {
-        console.log(res.data.result.results)
+        // console.log(res.data.result.status);
+
+        if(res.data.result.results.length === 0){
+            return noItems();
+        }
+
         changeProductDetails(res.data.result.results);
         
     })
@@ -121,11 +143,11 @@ function PagenationReqSent(page, limit, LtH = null, minPrice = null, maxPrice = 
 
 // Product details injection
 function changeProductDetails(data) {
-    const container = document.querySelector('#product-container'); // Assuming you have a container for the products
-    container.innerHTML = ''; // Clear existing content
+    const container = document.querySelector('#product-container');
+    container.innerHTML = '';
 
     data.forEach((product, index) => {
-        // Create a new div for each product
+        
         const productDiv = document.createElement('div');
         productDiv.classList.add('product-divs', 'col-md-4', 'col-xs-6');
 
@@ -160,6 +182,30 @@ function changeProductDetails(data) {
     });
 }
 // Product details injection
+
+
+
+// Item Not Found
+function noItems(){
+   
+    const container = document.querySelector('#product-container');
+    container.innerHTML = '';
+
+    const notFoundDiv = document.createElement('div');
+
+    notFoundDiv.innerHTML = `
+    <div class="container">
+        <div class="item-not-found">
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            <h2>Item Not Found</h2>
+            <p>Sorry, we couldn't find the item you're looking for.</p>
+        </div>
+    </div>
+    `
+    container.appendChild(notFoundDiv);
+}
+
+// Item Not Found
 
 
 

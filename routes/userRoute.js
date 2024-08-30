@@ -94,7 +94,7 @@ router.route('/search')
     .get(search.searchGet);
 
 router.route('/api/search')
-    .get(search.searchApi);
+    .post(search.searchApi);
 
 // Search
 

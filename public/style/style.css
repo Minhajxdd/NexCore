@@ -2419,3 +2419,26 @@ textarea.input {
   width: 250px !important;
   padding: 10px !important;
 }
+
+
+.item-not-found {
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  color: #b71c1c;
+  margin: 50px auto;
+  max-width: 600px;
+}
+.item-not-found h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+.item-not-found p {
+  font-size: 18px;
+  margin-bottom: 0;
+}
+.item-not-found .fa {
+  font-size: 60px;
+  color: #b71c1c;
+  margin-bottom: 20px;
+}
