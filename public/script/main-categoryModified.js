@@ -1,3 +1,5 @@
+import assignPrice from './user/category.js';
+
 
 (function($) {
 	"use strict"
@@ -166,6 +168,9 @@
 			
 		});
 
+		priceSlider.noUiSlider.on('change', () => {
+			assignPrice(priceInputMin.value, priceInputMax.value);
+		})
 
 	}
 

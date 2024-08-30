@@ -18,6 +18,7 @@ const sessionHandler = session({
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: 'mongodb://localhost/NexCore' }), 
     cookie: { 
+        maxAge: 7 * 24 * 60 * 60 * 1000,
         secure: false
     },
     

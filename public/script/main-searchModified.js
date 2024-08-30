@@ -1,3 +1,5 @@
+import assignPrice from './user/search.js';
+
 
 (function($) {
 	"use strict"
@@ -163,9 +165,12 @@
 		priceSlider.noUiSlider.on('update', function( values, handle ) {
 			var value = values[handle];
 			handle ? priceInputMax.value = value : priceInputMin.value = value
-			
+
 		});
 
+		priceSlider.noUiSlider.on('change', () => {
+			assignPrice(priceInputMin.value, priceInputMax.value);
+		})
 
 	}
 

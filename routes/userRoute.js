@@ -3,7 +3,7 @@ import noCache,* as authController from '../controllers/authController.js';
 import * as users from '../controllers/usserController.js';
 import * as carts from '../controllers/cartController.js';
 import * as category from '../controllers/categoryController.js';
-
+import * as search from '../controllers/searchController.js';
 
 const router = express.Router();
 
@@ -80,13 +80,23 @@ router.route('/cart/product/delete')
 // Cart Routes
 
 // Categories
-
 router.route('/categories/:name')
     .get(category.categoryGet)
 
 router.route('/api/categories/:name')
-    .get(category.categoryPagenation)
+    .get(category.categoryFilter)
 // Categories
+
+
+// Search
+
+router.route('/search')
+    .get(search.searchGet);
+
+router.route('/api/search')
+    .get(search.searchApi);
+
+// Search
 
 
 router.route('*')

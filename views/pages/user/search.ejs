@@ -1,6 +1,6 @@
 <%- include('../../partials/user/nav'); -%>
 
-    <title><%= TITLE %></title>
+    <title>Search</title>
 
 		<!-- NAVIGATION -->
 		<nav id="navigation">
@@ -13,7 +13,7 @@
 						<li><a href="/">Home</a></li>
 						<li><a href="#">Hot Deals</a></li>
 						<li><a href="#">Categories</a></li>
-						<li class="active"><a href="/categories/processors">Processors</a></li>
+						<li><a href="/categories/processors">Processors</a></li>
 						<li><a href="#">Smartphones</a></li>
 						<li><a href="#">Cameras</a></li>
 						<li><a href="#">Accessories</a></li>
@@ -29,25 +29,6 @@
 
 
 
-		<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumb-tree">
-							<li><a href="/">Home</a></li>
-							<li><a href="/categories">All Categories</a></li>
-							<li><a href="/categories/processors">Processors</a></li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
 
 
 
@@ -158,7 +139,7 @@
 										Show:
 										<select class="input-select" id="itemsPerPageSelect">
 											<option value="3">3</option>
-											<option value="6">6</option>
+											<option value="6" selected>6</option>
 											<option value="9">9</option>
 											<option value="12">12</option>
 										</select>
@@ -241,9 +222,9 @@
 
 
 <!-- Custom Js -->
-<script type="module" src="/script/user/category.js"></script>
+<script type="module" src="/script/user/search.js"></script>
 
-<script type="module" src="/script/slick.min-CategoryModified.js"></script>
-<script type="module" src="/script/main-categoryModified.js"></script>
+<script type="module" src="/script/slick.min-searchModified.js"></script>
+<script type="module" src="/script/main-searchModified.js"></script>
 
 <%- include('../../partials/user/footer'); -%>

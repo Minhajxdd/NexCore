@@ -1,6 +1,5 @@
 
 
-
 // add to cart button
 (function () {
     const cartContainer = document.querySelector('#product-container');
@@ -25,27 +24,25 @@
 // add to cart button
 
 
+// Api request Handler's
 
-//  api request handlers
+let limit = 3;
+let page = 1;
+let LtH = null;
+let minPrice = null;
+let maxPrice = null;
 
-    let limit = 3;
-    let page = 1;
-    let LtH = null;
-    let minPrice = null;
-    let maxPrice = null;
+// Pagenation Buttons
+document.querySelectorAll('.pagenation-btns').forEach((button) => {
+    button.addEventListener('click', ()=> {
 
-    // Pagenation buttons request
-    document.querySelectorAll('.pagenation-btns').forEach((button) => {
-        button.addEventListener('click', ()=> {
-
-            page = button.textContent;
-            
-            PagenationReqSent(limit, page, LtH, minPrice, maxPrice);
-            
-        });
+        page = button.textContent;
+        
+        PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+        
     });
-
-// api request handlers
+});
+// Pagenation Buttons
 
 // Show items limit
 document.getElementById('itemsPerPageSelect').addEventListener('change', function(){
@@ -54,22 +51,24 @@ document.getElementById('itemsPerPageSelect').addEventListener('change', functio
         if(btn.style.backgroundColor === '#D10024'){
             page = btn.textContent;
         }
-
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.pagenation-btns').forEach(btn => btn.style.backgroundColor = 'white');
-            btn.style.backgroundColor = '#D10024';
-        });
-
     });
 
     // Get the toggle value
     limit = parseInt(itemsPerPageSelect.value);
 
     // Sent Axios request
-    PagenationReqSent(limit, page, LtH, minPrice, maxPrice);
+    PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
 
 });
 // Show items limit
+
+// Assign toggle values
+export default function assignPrice(min, max){
+    minPrice = min;
+    maxPrice = max;
+    PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+}
+
 
 
 document.getElementById('itemSortingSelect').addEventListener('change', () => {
@@ -78,41 +77,40 @@ document.getElementById('itemSortingSelect').addEventListener('change', () => {
     switch(value){
         case 1:
             LtH = 1;
-            PagenationReqSent(limit, page, LtH, minPrice, maxPrice);
             break;
         case 2:
             LtH = 2;
-            PagenationReqSent(limit, page, LtH, minPrice, maxPrice);
             break;
         default:
             LtH = null;
-            PagenationReqSent(limit, page, LtH, minPrice, maxPrice);
     }
 
+    PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
 
 }) 
 
-export default function assignPrice(min, max){
-    minPrice = min;
-    maxPrice = max;
-    PagenationReqSent(limit, page, LtH, minPrice, maxPrice);
-}
+
 
 
 
 // Pagenation api request
-function PagenationReqSent(limit, page, LtH = null, minPrice = null, maxPrice = null){
+function PagenationReqSent(page, limit, LtH = null, minPrice = null, maxPrice = null){
     
-    const searchQuery = window.location.search
-    const apiPath = `/api${searchQuery}`;
+    const apiPath = `/api/search`;
     
+    const params = new URLSearchParams(window.location.search);
 
-    axios.get(`${apiPath}?page=${page}&limit=${limit}&LtH=${LtH}&minp=${minPrice}&maxp=${maxPrice}`)
+    // const category = params.get("category"); 
+    const search = params.get("search").replace(/ /g, '+');
+
+    axios.get(`${apiPath}?search=${search}&page=${page}&limit=${limit}&LtH=${LtH}&minp=${minPrice}&maxp=${maxPrice}`)
     .then((res) => {
+        console.log(res.data.result.results)
+        changeProductDetails(res.data.result.results);
         
     })
     .catch((err) => {
-    console.log('error on axios fetch '+err.message);
+    console.log("error axios request fetching : "+err.message);
     })
 }
 // Pagenation api request
@@ -120,7 +118,8 @@ function PagenationReqSent(limit, page, LtH = null, minPrice = null, maxPrice = 
 
 
 
-// Product Details Injection
+
+// Product details injection
 function changeProductDetails(data) {
     const container = document.querySelector('#product-container'); // Assuming you have a container for the products
     container.innerHTML = ''; // Clear existing content
@@ -160,7 +159,8 @@ function changeProductDetails(data) {
         container.appendChild(productDiv);
     });
 }
-// Product Details Injection
+// Product details injection
+
 
 
 // Pagenation button color change
@@ -171,4 +171,3 @@ document.querySelectorAll('.pagenation-btns').forEach((button) => {
     });
 });
 // Pagenation button color change
-

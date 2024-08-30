@@ -39,7 +39,7 @@ export async function categoryGet(req, res){
 
 
 
-export async function categoryPagenation(req, res){
+export async function categoryFilter(req, res){
     
     let categoryName = req.params.name;
     categoryName = categoryName.replace(/-/g, " ");
@@ -72,15 +72,17 @@ export async function categoryPagenation(req, res){
                         lowToHigh == 2 ? { discounted_price: -1} :
                         {};
 
-    results.results = await productModel
-    .find(query)
-    .skip(startIndex)
-    .limit(limit)
-    .sort(sortOptions);
+    try{
+        results.results = await productModel
+        .find(query)
+        .skip(startIndex)
+        .limit(limit)
+        .sort(sortOptions);
+    }catch(err){
+        console.log(`Error while category filter or pagination ${err.message}`);
+    }
 
 
-    
-    // results.results = await productModel.find({ _id: { $in: categoryData.products_id}}).skip(startIndex).limit(limit);
 
     if(endIndex < results.results.length){
         results.next = {
