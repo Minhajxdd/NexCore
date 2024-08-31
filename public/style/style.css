@@ -2442,3 +2442,41 @@ textarea.input {
   color: #b71c1c;
   margin-bottom: 20px;
 }
+
+.cpn-div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cpn-prnt-div{
+  margin-top: 20px;
+}
+
+.od-warp.cpn-prnt-div h5 {
+  margin-bottom: 10px;
+}
+
+.od-warp.cpn-prnt-div .cpn-div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.od-warp.cpn-prnt-div .cpn-div button{ 
+  height: 53px;
+  margin-top: -25px;
+  border-radius: 0;
+  border: 0;
+  padding: 0 40px;
+  background-color: rgb(27, 211, 27);
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: white;
+}
+
+.err-msg{
+  color: red; 
+  font-weight: bolder;
+}
+

@@ -34,6 +34,8 @@
     let minPrice = null;
     let maxPrice = null;
 
+PagenationReqSent(limit, page);
+
     // Pagenation buttons request
     document.querySelectorAll('.pagenation-btns').forEach((button) => {
         button.addEventListener('click', ()=> {

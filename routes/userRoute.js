@@ -4,6 +4,8 @@ import * as users from '../controllers/usserController.js';
 import * as carts from '../controllers/cartController.js';
 import * as category from '../controllers/categoryController.js';
 import * as search from '../controllers/searchController.js';
+import * as checkout from '../controllers/checkoutController.js';
+
 
 const router = express.Router();
 
@@ -98,6 +100,13 @@ router.route('/api/search')
 
 // Search
 
+// Checkout
+
+router.route('/checkout')
+    .get(checkout.getCheckout);
+
+
+// Checkout
 
 router.route('*')
     .all(authController.NotFound);

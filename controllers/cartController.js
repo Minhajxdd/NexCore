@@ -101,6 +101,7 @@ export async function addCartProducts(req, res){
                 totalPrice: price,
     
             })
+            
             await userModel.findByIdAndUpdate(
                 userId,
                 {cartId: cartData._id}

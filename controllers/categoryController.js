@@ -21,8 +21,6 @@ export async function categoryGet(req, res){
             return res.redirect('/not-found');
         }
 
-        products = await productModel.find({ _id: { $in: categoryData.products_id}}).limit(3);
-
         
     }catch(err){
         console.log(`Error while fetching data from db on categoryGet on categoryController ${err.message}`);
@@ -32,7 +30,6 @@ export async function categoryGet(req, res){
 
     res.render('pages/user/category',{
         TITLE: categoryName,
-        products
     });
 }
 

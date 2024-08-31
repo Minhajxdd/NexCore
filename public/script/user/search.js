@@ -26,12 +26,15 @@
 
 // Api request Handler's
 
-let limit = 3;
+let limit = 6;
 let page = 1;
 let LtH = null;
 let minPrice = null;
 let maxPrice = null;
 let categories = [];
+
+
+PagenationReqSent(page, limit);
 
 // Pagenation Buttons
 document.querySelectorAll('.pagenation-btns').forEach((button) => {
