@@ -36,7 +36,16 @@ const UsersSchema = new Schema({
 },
   cartId: {
   type: Schema.Types.ObjectId  
-}
+},
+address_id :[
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    unique: true
+  }
+]
+ 
+
 
 });
 

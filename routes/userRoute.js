@@ -105,8 +105,16 @@ router.route('/api/search')
 router.route('/checkout')
     .get(checkout.getCheckout);
 
+router.route('/order/authenticate')
+    .post(checkout.orderAuthenticate);
+
+router.route('/order/successfull')
+    .get(checkout.orderSuccessfullGet);
 
 // Checkout
+
+
+
 
 router.route('*')
     .all(authController.NotFound);

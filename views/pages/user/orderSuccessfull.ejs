@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <title>Order Successful</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Order Successful Page">
+    <meta name="keywords" content="order, successful, eCommerce">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="shortcut icon"/>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/animate.css"/>
+    <link rel="stylesheet" href="css/aos.css"/>
+
+    <style>
+        body {
+            background-color: #F0F0F0;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .order-success-page {
+            background: #f0f0f0;
+            padding: 50px 0;
+        }
+        .checkout-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+        }
+        .order-details {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .order-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .order-table th, .order-table td {
+            padding: 10px;
+            text-align: left;
+        }
+        .order-table th {
+            background: #333;
+            color: #fff;
+        }
+        .order-table tbody tr:nth-child(even) {
+            background: #f1f1f1;
+        }
+        .confetti {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .confetti span {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff0;
+            border-radius: 50%;
+            animation: confetti 2s linear infinite;
+        }
+        @keyframes confetti {
+            0% {
+                top: -50px;
+                opacity: 1;
+                transform: rotate(0deg);
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+                transform: rotate(360deg);
+            }
+        }
+        .site-btn {
+            display: inline-block;
+            padding: 10px 30px;
+            background: #333;
+            color: #fff;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: 700;
+            transition: 0.4s;
+        }
+        .site-btn:hover {
+            background: #555;
+            color: #fff;
+        }
+        @keyframes popper {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .popper {
+            animation: popper 0.5s ease-out forwards;
+        }
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Preloader -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Confetti -->
+    <div class="confetti">
+        <span style="left: 20%; animation-delay: 0s; background-color: #ff5733;"></span>
+        <span style="left: 40%; animation-delay: 0.5s; background-color: #33ff57;"></span>
+        <span style="left: 60%; animation-delay: 1s; background-color: #3357ff;"></span>
+        <span style="left: 80%; animation-delay: 1.5s; background-color: #ff33a5;"></span>
+        <!-- Add more confetti pieces as needed -->
+    </div>
+
+    <!-- Page -->
+    <div class="page-area order-success-page spad">
+        <div class="container text-center">
+            <h2 class="checkout-title" data-aos="zoom-in" style="color: #FF6347;">Order Successful</h2>
+            <p class="mt-5" data-aos="fade-up" style="font-size: 18px; color: #20B2AA;">Thank you for your purchase! Your order has been placed successfully.</p>
+            <div class="popper" data-aos="flip-up">
+                <a href="/" class="site-btn mt-5" data-aos="fade-up" style="background-color: #FF4500; color: #FFF8DC; text-decoration: none;">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+    <!-- Page -->
+
+    <!--====== Javascripts & Jquery ======-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/sly.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function createConfettiPiece() {
+            const confettiElement = document.createElement('span');
+            const size = Math.random() * 10 + 5 + 'px';
+            confettiElement.style.width = size;
+            confettiElement.style.height = size;
+            confettiElement.style.left = Math.random() * 100 + '%';
+            confettiElement.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            confettiElement.style.animationDelay = Math.random() * 2 + 's';
+            document.querySelector('.confetti').appendChild(confettiElement);
+        }
+
+        for (let i = 0; i < 100; i++) {
+            createConfettiPiece();
+        }
+    </script>
+</body>
+</html>

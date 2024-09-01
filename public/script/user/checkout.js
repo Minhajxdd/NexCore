@@ -39,33 +39,49 @@
         }
     
         if (errorMsg) {
-            document.getElementById('error_message').innerHTML = errorMsg;
-        } else {
+            return document.getElementById('error_message').innerHTML = errorMsg;
+        }
             document.getElementById('error_message').innerHTML = "";
            
-            let formData = {
+            const data ={ 
+            formData:{
                 firstName: firstName,
                 lastName: lastName,
-                address1: address1,
-                address2: document.getElementById('address2').value.trim(),
-                landmark: document.getElementById('landmark').value.trim(),
-                optionalMessage: document.getElementById('optionalMessage').value.trim(),
+                company: address1,
+                street: document.getElementById('address2').value.trim(),
+                land_mark: document.getElementById('landmark').value.trim(),
+                optional_message: document.getElementById('optionalMessage').value.trim(),
                 zipcode: zipcode,
-                city: document.getElementById('city').value.trim(),
+                city_town: document.getElementById('city').value.trim(),
                 state: state,
-                phone: phone,
+                phone_no: phone,
                 email: email
-            };
-            console.log(formData);
-            // // Send data using Axios
-            // axios.post('your-endpoint-url', formData)
-            // .then(function (response) {
-            //     alert('Form submitted successfully');
-            // })
-            // .catch(function (error) {
-            //     alert('An error occurred during submission');
-            // });
-        }
+            }
+        };
+
+            const selectedOption = document.querySelector('input[name="pm"]:checked');
+            
+            if(selectedOption.value !== 'cod'){
+                return alert(`Payment Method Currently Unavailable use Cash On Delivery`);
+            }
+            data.paymentMethod = selectedOption.value;
+
+
+            // Send data using Axios
+            axios.post('/order/authenticate', data)
+            .then(function (res) {
+                console.log(res.data);
+                if(res.data.success){
+                    // window.location.href = response.data.redirectUrl;
+                    window.location.href = '/order/successfull'
+                }else{
+                    window.location.href = 'http://localhost:4000/not-found';
+                }
+            })
+            .catch(function (error) {
+                console.log(`An error occurred during axios request ${error.message}`);
+            });
+        
     });
     
 })();
