@@ -1,0 +1,223 @@
+<%- include('../../partials/user/nav'); -%>
+<title>Your Address</title>
+
+<div class="container" id="top-header-address">
+    <button id="new-form-btn" class="btn btn-success">+ Add New Address</button>
+</div>
+
+
+<div class="container address-container">
+    <!-- Address Cards Section -->
+    <div class="row" id="address-container-row">
+
+
+<% addresses.forEach((address, ind) => { %>
+     <!-- Address Card  -->
+     <div class="col-xs-12 col-sm-6 address-cards">
+        <div class="address-card">
+            <div class="button-group">
+                <button class="btn btn-danger dtl-btn" value="<%= address._id %>"><i class="fas fa-trash-alt"></i> Delete</button>
+                <button class="btn btn-primary" id="edit-btn" value="<%= address._id %>"><i class="fas fa-edit"></i> Edit</button>
+            </div>
+            <h4><i class="fas fa-map-marker-alt" style="color: #4caf50; margin-right: 10px;"></i> Address <%= ind + 1 %>:</h4>
+            <dl class="address-details">
+                <p>
+                    <h5 class="d-line key-addr">First Name:</h5>
+                    <p class="d-line" id="addressFirstName"><%= address.first_name %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">Last Name:</h5>
+                    <p class="d-line" id="addressLastName"><%= address.last_name %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">Company:</h5>
+                    <p class="d-line" id="addressCompany"><%= address.company %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">Street:</h5>
+                    <p class="d-line" id="addressStreet"><%= address.street %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">Land Mark:</h5>
+                    <p class="d-line" id="addressLandmark"><%= address.land_mark %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">City / Tow:</h5>
+                    <p class="d-line" id="addressCityTown"><%= address.city_town %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">State:</h5>
+                    <p class="d-line" id="addressState"><%= address.state %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">Zipcode:</h5>
+                    <p class="d-line" id="addressZipCode"><%= address.zipcode %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">Phone Number:</h5>
+                    <p class="d-line" id="addressPhone"><%= address.phone_no %></p>
+                </p>
+                <p>
+                    <h5 class="d-line key-addr">Email:</h5>
+                    <p class="d-line" id="addressEmail"><%= address.email %></p>
+                </p>
+            </dl>
+        </div>
+    </div>
+<% }) %>
+
+    
+
+    </div>
+</div>
+
+
+
+
+
+ <div class="overlay" id="overlay"></div>
+
+ <!-- Pop-Up Form add-->
+ <div class="edit-form-address" id="edit-form">
+     <button type="button" class="close" id="close-form">&times;</button>
+
+         <div class="row">
+             <div class="col-md-6 form-group">
+                 <input type="text" id="firstName" class="form-control" placeholder="First Name *">
+             </div>
+             <div class="col-md-6 form-group">
+                 <input type="text" id="lastName" class="form-control" placeholder="Last Name *">
+             </div>
+             <div class="col-md-12 form-group">
+                 <input type="text" id="address1" class="form-control" placeholder="Flat, House no., Building, Company, Apartment *">
+             </div>
+             <div class="col-md-12 form-group">
+                 <input type="text" id="address2" class="form-control" placeholder="Area, Street, Sector, Village">
+             </div>
+             <div class="col-md-12 form-group">
+                 <input type="text" id="landmark" class="form-control" placeholder="Landmark">
+             </div>
+
+             <div class="col-md-6 form-group">
+                 <input type="text" id="zipcode" class="form-control" placeholder="Zipcode *">
+             </div>
+             <div class="col-md-6 form-group">
+                 <input type="text" id="city" class="form-control" placeholder="Town/City">
+             </div>
+             <div class="col-md-12 form-group">
+                 <select id="state" class="form-control">
+                     <option value="">Select State</option>
+                     <option value="Tamil Nadu">Tamil Nadu</option>
+                     <option value="Kerala">Kerala</option>
+                     <option value="Maharashtra">Maharashtra</option>
+                     <option value="Karnataka">Karnataka</option>
+                     <option value="Gujarat">Gujarat</option>
+                     <option value="Rajasthan">Rajasthan</option>
+                     <option value="Uttar Pradesh">Uttar Pradesh</option>
+                     <option value="West Bengal">West Bengal</option>
+                     <option value="Punjab">Punjab</option>
+                     <option value="Haryana">Haryana</option>
+                 </select>
+             </div>
+             <div class="col-md-6 form-group">
+                 <input type="text" id="phone" class="form-control" placeholder="Phone no *">
+             </div>
+             <div class="col-md-6 form-group">
+                 <input type="email" id="email" class="form-control" placeholder="Email Address *">
+             </div>
+             <div class="col-md-12 form-group">
+                 <span id="error_message" class="err-msg text-danger"></span>
+             </div>
+             <div class="col-md-12 text-center">
+                 <button type="button" id="form-add-btn" class="btn btn-primary">Submit</button>
+             </div>
+         </div>
+ </div>
+ <!-- Pop-Up Form add -->
+
+
+
+
+<!-- Pop-Up Form edit -->
+ <div class="edit-form-address" id="edit-form-edit">
+    <button type="button" class="close" id="close-form-edit">&times;</button>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <input type="text" id="firstName-edit" class="form-control" placeholder="First Name *">
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="lastName-edit" class="form-control" placeholder="Last Name *">
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" id="address1-edit" class="form-control" placeholder="Flat, House no., Building, Company, Apartment *">
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" id="address2-edit" class="form-control" placeholder="Area, Street, Sector, Village">
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" id="landmark-edit" class="form-control" placeholder="Landmark">
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="zipcode-edit" class="form-control" placeholder="Zipcode *">
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="city-edit" class="form-control" placeholder="Town/City">
+            </div>
+            <div class="col-md-12 form-group">
+                <select id="state-edit" class="form-control">
+                    <option value="">Select State</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Haryana">Haryana</option>
+                </select>
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="phone-edit" class="form-control" placeholder="Phone no *">
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="email" id="email-edit" class="form-control" placeholder="Email Address *">
+            </div>
+            <div class="col-md-12 form-group">
+                <span id="error_message-edit" class="err-msg text-danger"></span>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" id="form-add-btn-edit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+</div>
+<!-- Pop-Up Form edit -->
+
+
+
+
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const addressCards = document.querySelectorAll(".address-cards");
+    
+    if (addressCards.length === 1) {
+        addressCards[0].classList.remove("col-sm-6");
+        addressCards[0].classList.add("col-sm-12");
+    }
+});
+
+</script>
+
+<!-- Custom Javascript -->
+ <script src="/script/user/address.js"></script>
+
+
+<%- include('../../partials/user/footer'); -%>

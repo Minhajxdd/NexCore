@@ -72,8 +72,7 @@
             .then(function (res) {
                 console.log(res.data);
                 if(res.data.success){
-                    // window.location.href = response.data.redirectUrl;
-                    window.location.href = '/order/successfull'
+                    window.location.href = res.data.redirectUrl;
                 }else{
                     window.location.href = 'http://localhost:4000/not-found';
                 }

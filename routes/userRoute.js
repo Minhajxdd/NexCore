@@ -5,7 +5,7 @@ import * as carts from '../controllers/cartController.js';
 import * as category from '../controllers/categoryController.js';
 import * as search from '../controllers/searchController.js';
 import * as checkout from '../controllers/checkoutController.js';
-
+import * as profile from '../controllers/profileController.js';
 
 const router = express.Router();
 
@@ -114,6 +114,25 @@ router.route('/order/successfull')
 // Checkout
 
 
+
+// Profile
+
+router.route('/profile')
+    .get(profile.profileGet);
+
+    // Address
+router.route('/address')
+    .get(profile.addressGet)
+
+router.route('/api/address/delete')
+    .delete(profile.deleteAddess)
+
+router.route('/api/address/update')
+    .post(profile.updateAddress)
+    // Address
+
+
+// Profile
 
 
 router.route('*')

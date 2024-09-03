@@ -2480,3 +2480,241 @@ textarea.input {
   font-weight: bolder;
 }
 
+.user-pannel{
+    margin-top: 30px;
+}
+.profile-card {
+    border: 2px solid #ddd;
+    border-radius: 30px;
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.profile-card:hover {
+    background-color: #f8f9fa;
+    border-color: #007bff;
+}
+.profile-card i {
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+.profile-card i.fa-box {
+    color: #ff5722; /* Custom color for the orders icon */
+}
+.profile-card i.fa-map-marker-alt {
+    color: #4caf50; /* Custom color for the address icon */
+}
+.profile-card i.fa-key {
+    color: #f44336; /* Custom color for the password icon */
+}
+.profile-card h4 {
+    font-size: 1.5em;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.profile-card p {
+    font-size: 1.1em;
+}
+
+
+
+
+
+.address-card {
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  padding: 30px;
+  margin-bottom: 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.address-card h4 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+.address-card .address-details {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+.address-card .address-details dt {
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+.address-card .address-details dd {
+  margin-bottom: 15px;
+  color: #333;
+}
+.button-group {
+  text-align: right;
+  margin-bottom: 20px;
+}
+.button-group .btn {
+  margin-left: 10px;
+}
+
+
+.address-row{
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+
+
+
+
+.address-card {
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.button-group {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.address-details{
+  padding: 0 10px;
+}
+
+.address-details dt {
+  font-weight: bold;
+  float: left;
+  clear: left;
+  width: 70px;
+}
+
+.address-details dd {
+  margin: 0 0 10px 80px;
+}
+
+
+.address-container{
+  margin-top: 35px;
+  margin-bottom: 50px;
+}
+
+.d-line{
+  display: inline;
+}
+
+.key-addr{
+  font-size: 16px;
+  color: #007BFF;
+}
+
+.modal-backdrop.in {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+.form-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+
+
+
+
+
+
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1;
+}
+
+.edit-form-address {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-sizing: border-box;
+  border: 2px solid #007bff;
+  z-index: 2;
+  display: none;
+}
+
+.edit-form-address .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #000000;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.edit-form-address .close:hover {
+  color: #ff1c1c;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-control {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn-danger {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn-primary:hover {
+  background-color: #218838;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.err-msg {
+  font-size: 14px;
+  color: red; 
+}
+
+#top-header-address{
+  margin-top: 2.5rem;
+}
+

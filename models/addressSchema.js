@@ -56,6 +56,10 @@ const addressSchema = new mongoose.Schema({
       type: Schema.Types.ObjectId,
       required: true
     },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    }
   });
 
 

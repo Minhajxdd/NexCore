@@ -48,6 +48,10 @@ export async function orderAuthenticate(req, res){
       user_id: req.session.userId,
     });
 
+    if(req.body.formData.optional_message){
+        address.optional_message = req.body.formData.optional_message;
+    }
+
     await userModel.findByIdAndUpdate(
       req.session.userId,
       {
@@ -56,8 +60,9 @@ export async function orderAuthenticate(req, res){
     )
 
     res.json({
-        // success: true,
-        redirectUrl: '/order/successfull'
+        success: true,
+        redirectUrl: '/order/successfull',
+        id: address._id
     });
 }
 
