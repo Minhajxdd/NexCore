@@ -29,7 +29,7 @@ const CategorySchema = new Schema({
         type: Date
     },
   
-  });
+});
   
 
 

@@ -131,6 +131,13 @@ router.route('/api/address/update')
     .post(profile.updateAddress)
     // Address
 
+    // Orders
+router.route('/orders')
+    .get(profile.ordersGet)
+
+
+    // Orders
+
 
 // Profile
 

@@ -1,11 +1,10 @@
 // Importing Services
-import { addressIdRetreve, addressRetrevefromArray, deleteAddress } from '../services/user/profileAddressServices.js';
-
-
+import { addressIdRetreve, addressRetrevefromArray, deleteAddress, updateAddressFun } from '../services/user/profileAddressServices.js';
+import { ordersDetails, getProductDetails } from '../services/user/profileOrdersServices.js';
+ 
 // Importing Model
 import addressModel from '../models/addressSchema.js';
 import userModel from '../models/userSchema.js';
-
 
 
 export function profileGet(req, res){
@@ -52,7 +51,40 @@ export async function deleteAddess(req, res){
 
 
 export async function updateAddress(req, res){
-    console.log(req.body);
+    const { formData, id } = req.body;
+    
+    const result = {}
+    
+    result.data = await updateAddressFun(formData, id);
+
+    result.status = 'success';
+    
+    res.json(result);
 }
 
 // Address
+
+
+// Orders
+
+export async function ordersGet(req, res){
+    const orders = await ordersDetails(req.session.userId);
+
+    const productDetails = [];
+
+    orders.forEach((obj,indx) =>{
+        obj.products.forEach(async (innerObj, ind) => {
+            const temp = await getProductDetails(innerObj.product_id);
+            productDetails.push
+        })
+    });
+
+    console.log(orders);
+    console.log(productDetails);
+
+    res.render('pages/user/orders',{
+        orders
+    });
+}
+
+// Orders

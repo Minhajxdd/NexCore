@@ -22,9 +22,6 @@ const addressSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    optional_message: {
-      type: String
-    },
     zipcode: {
       type: Number,
       required: true

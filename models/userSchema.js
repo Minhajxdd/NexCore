@@ -28,7 +28,8 @@ const UsersSchema = new Schema({
 },
   googleId: {
     type: String,
-    unique: true
+    unique: true,
+    sparse: true
 },
   isBlocked: { 
     type: Boolean, 
@@ -43,10 +44,15 @@ address_id :[
     required: true,
     unique: true
   }
+],
+orders :[
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    unique: true
+  }
 ]
  
-
-
 });
 
 const userModel = mongoose.model('Users', UsersSchema);

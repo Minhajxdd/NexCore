@@ -1,4 +1,4 @@
-
+let card = '';
 // Delete Button Axios Request
 document.getElementById('address-container-row').addEventListener('click', function(event) {
     
@@ -18,12 +18,13 @@ document.getElementById('address-container-row').addEventListener('click', funct
                 console.error('Error deleting address axios', error);
             });
     }
-    else if(event.target && event.target.matches('#edit-btn')){
+    else if(event.target && event.target.matches('.edit-btn')){
+
         const button = event.target;
 
         document.getElementById('form-add-btn-edit').value = button.value; 
 
-        const card = button.closest('.address-card');
+        card = button.closest('.address-card');
 
         document.getElementById('firstName-edit').value = card.querySelector('#addressFirstName').innerHTML;
         document.getElementById('lastName-edit').value = card.querySelector('#addressLastName').innerHTML;
@@ -145,7 +146,6 @@ document.getElementById('close-form-edit').addEventListener('click', function(){
             // Send data using Axios
             axios.post('/order/authenticate', data)
             .then(function (res) {
-                console.log(res.data);
                 if(res.data.success){
                     closeForm();
                     injectAddress(res.data.id);
@@ -227,8 +227,9 @@ function injectAddress(id){
 
 document.getElementById('form-add-btn-edit').addEventListener('click', function(){
     
-    const data ={ 
-        formData:{
+    const data ={};
+    
+    data.formData = {
             firstName: document.getElementById('firstName-edit').value,
             lastName: document.getElementById('lastName-edit').value,
             company: document.getElementById('address1-edit').value,
@@ -240,18 +241,32 @@ document.getElementById('form-add-btn-edit').addEventListener('click', function(
             phone_no: document.getElementById('phone-edit').value,
             email: document.getElementById('email-edit').value
         }
-    };
     data.id = event.target.value;
 
-    console.log(data);
     axios.post('/api/address/update',data)
     .then(function(res){
-        console.log(res.data);
+        if(res.data.status === 'success'){
+            console.log(res.data.status);
+            updateCard(res.data.data);
+        }
     })
     .catch(function(err){
         console.log(`error while updating on axios ${err.message}`);
     });
 
-
+    document.getElementById('edit-form-edit').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
 });
 
+function updateCard(data){
+card.querySelector('#addressFirstName').innerHTML = data.first_name;
+card.querySelector('#addressLastName').innerHTML = data.last_name;
+card.querySelector('#addressCompany').innerHTML = data.company;
+card.querySelector('#addressStreet').innerHTML = data.street;
+card.querySelector('#addressLandmark').innerHTML = data.land_mark;
+card.querySelector('#addressZipCode').innerHTML = data.zipcode;
+card.querySelector('#addressCityTown').innerHTML = data.city_town;
+card.querySelector('#addressState').innerHTML = data.state;
+card.querySelector('#addressPhone').innerHTML = data.phone_no;
+card.querySelector('#addressEmail').innerHTML = data.email;
+}

@@ -4,7 +4,19 @@
     
     document.querySelector('#place-order-btn').addEventListener('click', (e) => {
         e.preventDefault();
-    
+        
+        const data ={};
+
+        const selectedOption = document.querySelector('input[name="pm"]:checked');
+            
+        if(selectedOption.value !== 'Cash on Delivery'){
+            return alert(`Service not available use Cash On Delivery instead please`);
+        }
+        data.paymentMethod = selectedOption.value;
+
+
+    if(document.getElementById('hidden-one').value === '2'){
+
         let errorMsg = document.getElementById('error_message');
         
         errorMsg = "";
@@ -43,39 +55,50 @@
         }
             document.getElementById('error_message').innerHTML = "";
            
-            const data ={ 
-            formData:{
+            
+            data.formData = {
                 firstName: firstName,
                 lastName: lastName,
                 company: address1,
                 street: document.getElementById('address2').value.trim(),
                 land_mark: document.getElementById('landmark').value.trim(),
-                optional_message: document.getElementById('optionalMessage').value.trim(),
                 zipcode: zipcode,
                 city_town: document.getElementById('city').value.trim(),
                 state: state,
                 phone_no: phone,
                 email: email
             }
-        };
 
-            const selectedOption = document.querySelector('input[name="pm"]:checked');
-            
-            if(selectedOption.value !== 'cod'){
-                return alert(`Payment Method Currently Unavailable use Cash On Delivery`);
+            const optionalMessage = document.getElementById('optionalMessage').value.trim();
+            if(optionalMessage){
+                data.optionalMessage = optionalMessage;
             }
-            data.paymentMethod = selectedOption.value;
+        
+    }else{
 
+        document.querySelectorAll('.input-radio').forEach((radio) => {
+            if(radio.checked){
+                data.addressId = radio.value;
+            }
+        });
+
+        const optionalMessage = document.getElementById('optional-message-single').value.trim();
+        if(optionalMessage){
+            data.optionalMessage = optionalMessage;
+        }
+    }
+        console.log(`This is data object`);
+        console.log(data)
 
             // Send data using Axios
             axios.post('/order/authenticate', data)
             .then(function (res) {
                 console.log(res.data);
-                if(res.data.success){
-                    window.location.href = res.data.redirectUrl;
-                }else{
-                    window.location.href = 'http://localhost:4000/not-found';
-                }
+                // if(res.data.success){
+                //     window.location.href = res.data.redirectUrl;
+                // }else{
+                //     window.location.href = 'http://localhost:4000/not-found';
+                // }
             })
             .catch(function (error) {
                 console.log(`An error occurred during axios request ${error.message}`);

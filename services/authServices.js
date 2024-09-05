@@ -134,12 +134,13 @@ export async function createUser(email){
             phone_number: data[0].phoneNumber,
             password: data[0].password,
               
-        })
+        });
+
+        console.log(`User Created Successfully`);
     } catch(err){
-        console.error(`Error while creating a user on createUser ${err.message}`);
+        console.error(`Error while creating a user on createUser : ${err.message}`);
     }
 
-    console.log(`User Created Successfully`);
 }
 
 export async function loginUser(email , password){

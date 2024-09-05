@@ -1,0 +1,276 @@
+<%- include('../../partials/user/nav'); -%>
+<title>Your Orders</title>
+
+
+
+<style>
+    body {
+        background-color: #f1f1f1;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    h2 {
+        font-weight: bold;
+        margin-bottom: 40px;
+        color: #333;
+        text-transform: uppercase;
+    }
+
+    .order-container {
+        background: white;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid #eaeaea;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .order-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .order-header h4 {
+        margin: 0;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .order-header .order-date {
+        color: #888;
+        font-size: 12px;
+    }
+
+    .order-details {
+        margin-top: 15px;
+    }
+
+    .product-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .product-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eaeaea;
+        transition: background-color 0.2s ease;
+    }
+
+    .product-list li:hover {
+        background-color: #f9f9f9;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .product-details {
+        flex: 1;
+        padding-left: 15px;
+    }
+
+    .product-details h5 {
+        margin: 0;
+        font-weight: bold;
+        color: #34495e;
+    }
+
+    .product-details p {
+        margin: 5px 0;
+        color: #7f8c8d;
+        font-size: 14px;
+    }
+
+    .product-quantity-price {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .product-quantity-price i {
+        color: #999;
+    }
+
+    .product-price {
+        font-size: 16px;
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    .product-quantity {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .order-summary {
+        padding-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #eaeaea;
+        margin-top: 20px;
+        color: #2c3e50;
+    }
+
+    .total-price {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .estimated-delivery {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 10px;
+    }
+
+    .delivery-address {
+        margin-top: 15px;
+        background-color: #fafafa;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .delivery-address h5 {
+        font-weight: bold;
+        color: #34495e;
+        margin-bottom: 10px;
+    }
+
+    .order-actions {
+        margin-top: 15px;
+        text-align: right;
+    }
+
+    .btn-custom {
+        background-color: #2980b9;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 8px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        background-color: #21618c;
+    }
+
+    .btn-custom:focus {
+        outline: none;
+    }
+
+    /* Gradients and color enhancements */
+    .order-container {
+        background: linear-gradient(145deg, #ffffff, #f5f5f5);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .order-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-list li {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-image {
+            margin-bottom: 10px;
+        }
+
+        .order-summary {
+            flex-direction: column;
+        }
+
+        .order-actions {
+            text-align: left;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2 class="text-center">Your Orders</h2>
+
+
+<% orders.forEach((val) => { %>
+
+
+    <div class="order-container">
+        <div class="order-header">
+            <h4>Order #<%= val._id %></h4>
+            <span class="order-date"><%= new Date(val.orderedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+        </div>
+    
+        <div class="order-details">
+            <ul class="product-list">
+                <li>
+                    <img src="https://via.placeholder.com/80" alt="Product 1" class="product-image">
+                    <div class="product-details">
+                        <h5>Product 1 Name</h5>
+                        <p>Product description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                    <div class="product-quantity-price">
+                        <span class="product-quantity"><i class="fa fa-cubes"></i> Quantity: 2</span>
+                        <span class="product-price"><i class="fa fa-tag"></i> $25.99</span>
+                    </div>
+                </li>
+                <li>
+                    <img src="https://via.placeholder.com/80" alt="Product 2" class="product-image">
+                    <div class="product-details">
+                        <h5>Product 2 Name</h5>
+                        <p>Another product description here. This is a short description of the item.</p>
+                    </div>
+                    <div class="product-quantity-price">
+                        <span class="product-quantity"><i class="fa fa-cubes"></i> Quantity: 1</span>
+                        <span class="product-price"><i class="fa fa-tag"></i> $40.00</span>
+                    </div>
+                </li>
+            </ul>
+    
+            <div class="order-summary">
+                <div class="order-actions">
+                    <a href="#" class="btn btn-custom">View Details</a>
+                </div>
+                <p class="total-price">Total: $65.99</p>
+            </div>
+    
+           
+    
+           
+        </div>
+    </div>
+
+
+
+<% }) %>
+
+
+
+</div>
+
+
+
+<%- include('../../partials/user/footer'); -%>

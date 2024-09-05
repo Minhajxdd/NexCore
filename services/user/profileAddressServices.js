@@ -36,3 +36,29 @@ export async function deleteAddress(id){
         return 'failed';
     }
 }
+
+export async function updateAddressFun(data,id){
+    
+    try{
+        const val = await addressModel.findByIdAndUpdate(
+            id,
+            {$set:{
+                first_name: data.firstName, 
+                last_name: data.lastName,
+                company: data.company,
+                street: data.street,
+                land_mark: data.land_mark,
+                zipcode: data.zipcode,
+                city_town: data.city_town,
+                state: data.state,
+                phone_no: data.phone_no,
+                email: data.email,
+            }},
+            {new: true}
+        )
+        
+        return val;
+    }catch(err){
+        console.log(`error while updating address : ${err.message}`);
+    }
+}
