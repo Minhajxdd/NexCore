@@ -1,0 +1,296 @@
+<%- include('../../partials/user/nav'); -%>
+<title>Order Details</title>
+
+
+
+
+    <style>
+        body {
+            background-color: #f4f7fa;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        h2 {
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        .order-container {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eaeaea;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .order-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-header h4 {
+            margin: 0;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .order-header .order-date {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .order-status {
+            margin-top: 15px;
+            background-color: #e9f7ef;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #28a745;
+            color: #28a745;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .order-summary {
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eaeaea;
+            margin-top: 20px;
+            color: #2c3e50;
+        }
+
+        .total-price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .estimated-delivery {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+
+        .delivery-address {
+            margin-top: 15px;
+            background-color: #fafafa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .delivery-address h5 {
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+
+        .payment-details {
+            margin-top: 15px;
+            background-color: #fafafa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .order-actions {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .btn-custom {
+            background-color: #B7253E;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #e22242;
+        }
+
+        .product-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-details {
+            flex: 1;
+            padding-left: 15px;
+        }
+
+        .product-details h5 {
+            margin: 0;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .product-price {
+            font-size: 16px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .product-quantity {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .progress {
+            margin-top: 10px;
+            height: 8px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+        }
+
+        .progress-bar {
+            background-color: #28a745;
+        }
+
+        .step {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .step span {
+            font-size: 12px;
+            display: block;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .product-list li {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .product-image {
+                margin-bottom: 10px;
+            }
+
+            .order-summary {
+                flex-direction: column;
+            }
+
+            .order-actions {
+                text-align: left;
+            }
+        }
+    </style>
+
+<div class="container">
+    <h2 class="text-center">Order Details</h2>
+
+    <div class="order-container">
+        <div class="order-header">
+            <h4>Order #123456789</h4>
+            <span class="order-date">August 28, 2023</span>
+        </div>
+
+        <div class="order-status">
+            Status: <span>Shipped</span>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 70%;">
+                <span class="sr-only">70% Complete</span>
+            </div>
+        </div>
+
+
+        <div class="delivery-address">
+            <h5>Delivery Address</h5>
+            <p>John Doe<br>123 Main St, Apt 4B<br>New York, NY 10001<br>USA</p>
+        </div>
+
+        <div class="payment-details">
+            <h5>Payment Method</h5>
+            <p>Credit Card (**** **** **** 1234)</p>
+        </div>
+
+        <div class="order-summary">
+            <div>
+                <h5>Estimated Delivery</h5>
+                <p class="estimated-delivery">September 5, 2023</p>
+            </div>
+            <div>
+                <p class="total-price">Total: ₹4,999</p>
+            </div>
+        </div>
+
+        <h5>Products</h5>
+        <ul class="product-list">
+            <li>
+                <img src="https://via.placeholder.com/80" alt="Product Image" class="product-image">
+                <div class="product-details">
+                    <h5>Product Name 1</h5>
+                    <p>Product description goes here.</p>
+                </div>
+                <div>
+                    <span class="product-quantity">Quantity: 1</span><br>
+                    <span class="product-price">₹2,499</span>
+                </div>
+            </li>
+            <li>
+                <img src="https://via.placeholder.com/80" alt="Product Image" class="product-image">
+                <div class="product-details">
+                    <h5>Product Name 2</h5>
+                    <p>Product description goes here.</p>
+                </div>
+                <div>
+                    <span class="product-quantity">Quantity: 2</span><br>
+                    <span class="product-price">₹1,250</span>
+                </div>
+            </li>
+        </ul>
+
+        <div class="order-actions">
+            <button class="btn btn-custom">Cancel Order</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<%- include('../../partials/user/footer'); -%>

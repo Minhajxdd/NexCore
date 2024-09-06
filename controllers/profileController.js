@@ -72,19 +72,29 @@ export async function ordersGet(req, res){
 
     const productDetails = [];
 
-    orders.forEach((obj,indx) =>{
-        obj.products.forEach(async (innerObj, ind) => {
-            const temp = await getProductDetails(innerObj.product_id);
-            productDetails.push
-        })
-    });
+    await Promise.all(orders.map(async (obj, indx) => {
+        productDetails.push({});
+        
+        const products = await Promise.all(
+            obj.products.map(async (innerObj) => {
+                const temp = await getProductDetails(innerObj.product_id);
+                return temp;
+            })
+        );
+        productDetails[indx].products = products;
+    }));
 
-    console.log(orders);
-    console.log(productDetails);
 
     res.render('pages/user/orders',{
-        orders
+        orders,
+        productDetails
     });
 }
+
+
+export async function orderDetailsGet(req, res){
+    res.render('pages/user/orderDetails');
+}
+
 
 // Orders

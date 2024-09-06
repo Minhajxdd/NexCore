@@ -162,7 +162,7 @@
     }
 
     .btn-custom {
-        background-color: #2980b9;
+        background-color: #B7253E;
         color: white;
         padding: 10px 25px;
         border-radius: 8px;
@@ -171,7 +171,8 @@
     }
 
     .btn-custom:hover {
-        background-color: #21618c;
+        background-color: #e22242;
+        color: white;
     }
 
     .btn-custom:focus {
@@ -215,7 +216,7 @@
 <h2 class="text-center">Your Orders</h2>
 
 
-<% orders.forEach((val) => { %>
+<% orders.forEach((val,parentInd) => { %>
 
 
     <div class="order-container">
@@ -226,35 +227,34 @@
     
         <div class="order-details">
             <ul class="product-list">
+
+            <% val.products.forEach((product,ind) => { %>
+
                 <li>
-                    <img src="https://via.placeholder.com/80" alt="Product 1" class="product-image">
+                    <img src="/uploads/products/<%= productDetails[parentInd].products[ind].images[0] %>" alt="Product 1" class="product-image">
                     <div class="product-details">
-                        <h5>Product 1 Name</h5>
-                        <p>Product description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="/product?id=<%=productDetails[parentInd].products[ind]._id%>" target="_blank">
+                            <h5><%= productDetails[parentInd].products[ind].name %></h5>
+                        </a>
+                        <p><%= productDetails[parentInd].products[ind].description.substring(0,100)+"..." %></p>
                     </div>
                     <div class="product-quantity-price">
-                        <span class="product-quantity"><i class="fa fa-cubes"></i> Quantity: 2</span>
-                        <span class="product-price"><i class="fa fa-tag"></i> $25.99</span>
+                        <span class="product-quantity"><i class="fa fa-cubes"></i> Quantity: <%= product.quantity %></span>
+                        <span class="product-price"><i class="fa fa-tag"></i> ₹<%= new Intl.NumberFormat('en-IN').format(product.price) %></span>
                     </div>
                 </li>
-                <li>
-                    <img src="https://via.placeholder.com/80" alt="Product 2" class="product-image">
-                    <div class="product-details">
-                        <h5>Product 2 Name</h5>
-                        <p>Another product description here. This is a short description of the item.</p>
-                    </div>
-                    <div class="product-quantity-price">
-                        <span class="product-quantity"><i class="fa fa-cubes"></i> Quantity: 1</span>
-                        <span class="product-price"><i class="fa fa-tag"></i> $40.00</span>
-                    </div>
-                </li>
+            
+            <% }) %>    
+
+
+
             </ul>
     
             <div class="order-summary">
                 <div class="order-actions">
                     <a href="#" class="btn btn-custom">View Details</a>
                 </div>
-                <p class="total-price">Total: $65.99</p>
+                <p class="total-price">Total: ₹<%= new Intl.NumberFormat('en-IN').format(val.totalPrice) %></p>
             </div>
     
            
