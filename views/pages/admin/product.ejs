@@ -4,6 +4,85 @@
 <!-- Cropper js -->
 <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet"/>
 
+<style>
+.qty-label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-number {
+    position: relative;
+    display: inline-block;
+}
+
+.input-number input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-number input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.qty-up, .qty-down {
+    display: block;
+    width: 40px;
+    height: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    padding: 4px 0;
+    box-sizing: border-box;
+    position: absolute;
+    right: -40px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.qty-up {
+    top: 0;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+}
+
+.qty-down {
+    bottom: 0;
+    border-radius: 0 0 6px 6px;
+}
+
+.qty-up:hover, .qty-down:hover {
+    background-color: #e9ecef; /* Light gray on hover */
+}
+
+.qty-up:active, .qty-down:active {
+    background-color: #dee2e6; /* Darker gray on active */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Add a subtle transition effect */
+.qty-up, .qty-down {
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+</style>
+
 
 <%- include('../../partials/admin/nav'); -%>
 
@@ -66,7 +145,17 @@
                           <h6>Discounted Price: </h6>
                           <p><%= val.discounted_price %></p>  
                         </td>
-                        <td> <%= val.stock %> </td>
+                        <!-- <td> <%= val.stock %> </td> -->
+                         <td>
+                          <div class="qty-label">
+                            Qty
+                            <div class="input-number">
+                                <input id="input-value" type="number" value="<%= val.stock %>" data-id="<%= val._id%>" name="quantity" disabled>
+                                <span class="qty-up">+</span>
+                                <span class="qty-down">-</span>
+                            </div>
+                        </div>
+                         </td>
                         <td>
                           <button class="badge" data-id="<%= val._id%>" id="btn-action">Delete</button>
                           <button class="badge" data-id="<%= val._id%>" id="btn-edit">Edit</button>
@@ -176,7 +265,9 @@
                 </div>
               </div>
             </div>
-                
+            <div class="form-group">
+              <label class="text-danger" id="err_message_product"></label>
+            </div>    
                 <button type="submit" class="btn btn-primary me-2">Submit</button>
                 <div class="btn btn-dark" id="add-prd-cancel">Cancel</div>
               </form>
@@ -206,7 +297,7 @@
                 </div>
                 <div class="form-group">
                   <label for="edit-usr-category">Category</label>
-                  <select class="selectpicker form-control" id="edit-usr-category" data-style="btn-info" name="category">
+                  <select class="selectpicker form-control" id="edit-form-usr-category" data-style="btn-info" name="category">
                     <optgroup label="Select Category">
 
                       <% categories.forEach(val => { %>
@@ -264,10 +355,10 @@
               <label>Price</label>
               <div class="row">
                 <div class="col-md-6">
-                  <input type="number" class="form-control" placeholder="Original Price" name="og_price">
+                  <input type="number" class="form-control" id="edit-form-original-price"  placeholder="Original Price" name="og_price">
                 </div>
                 <div class="col-md-6">
-                  <input type="number" class="form-control" placeholder="Discounted Price" name="ds_price">
+                  <input type="number" class="form-control" id="edit-form-discounted-price" placeholder="Discounted Price" name="ds_price">
                 </div>
               </div>
             </div>

@@ -44,7 +44,7 @@ export async function updateDeleted(id){
 
 export async function editCategory(data){
     try{
-        const data = await categoryModel.findByIdAndUpdate(
+        const value = await categoryModel.findByIdAndUpdate(
             data.id ,
             {
             name: data.name,
@@ -52,10 +52,21 @@ export async function editCategory(data){
             },
             {new: true});
         
-        data.success = "success"
+        value.success = "success"
 
-        return data;
+        return value;
     }catch(err){
         console.log(`Error while editing category on category editCategory on CategoryServices`, err.message);
+    }
+}
+
+export async function checkDuplicateCategory(name){
+    try{
+        const data = await categoryModel.find({
+            name: { $regex: new RegExp(`^${name}$`, 'i') }
+        });
+        return data.length === 0;
+    }catch(err){
+        console.log(`error while checking duplicate categories: ${err.message}`);
     }
 }

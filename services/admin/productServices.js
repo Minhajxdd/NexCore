@@ -97,3 +97,29 @@ export async function updateDeletedProduct(id){
         console.error("Error updating isDeleted category on updateDeleted on categoryServices:", error.message);
       }
 }
+
+
+export async function updateProductStock(id , val){
+    const num = val;
+    try{
+        await productModel.findByIdAndUpdate(
+            id,
+            {
+                $inc: {
+                    stock: num
+                }
+            }
+        )
+    }catch(err){
+        console.log(`error while incrementing product stock: ${err.message}`);
+    }
+}
+
+export async function oneProductDetails(id){
+    try{
+        const data = await productModel.findById(id);
+        return data;
+    }catch(err){
+        console.log(`error while fetching product using id: ${err.message}`);
+    }
+}

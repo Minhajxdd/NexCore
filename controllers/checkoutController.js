@@ -10,6 +10,7 @@ import productModel from '../models/productSchems.js';
 import addressModel from '../models/addressSchema.js';
 import userModel from '../models/userSchema.js';
 import orderModel from '../models/orderSchema.js';
+import address from '../models/addressSchema.js';
 
 
 export async function getCheckout(req, res){
@@ -99,7 +100,7 @@ export async function orderAuthenticate(req, res){
 
     }catch(err){
         console.log(`error while fetching data from cart on checkout: ${err.message}`);
-    }
+    };
 
     const order = {
         user_id: req.session.userId,
@@ -107,29 +108,42 @@ export async function orderAuthenticate(req, res){
         totalPrice: cartData.totalPrice,
         addressId: Addressid,
         paymentMethod: paymentMethod,
-    }
+    };
 
     if(optionalMessage){
         order.note = optionalMessage;
-    }
+    };
 
     try{
         const orderData = await orderModel.create(
             order
         )
-        console.log(orderData);
 
     }catch(err){
         console.log(`error while creating order : ${err.message}`);
+    };
+
+    try{
+        await cartModel.findByIdAndUpdate(
+            req.session.cartId,
+            {
+                $set: {
+                    items: [],
+                    totalPrice: 0
+                }
+            }
+        )
+
+    }catch(err){
+        cosnole.og(`error while clearing cart: ${err.message}`);
     }
 
-
-    // res.json({
-    //     success: true,
-    //     redirectUrl: '/order/successfull',
-    //     id: address._id
-    // });
-}
+    res.json({
+        status: 'success',
+        redirectUrl: '/order/successfull',
+        id: address._id
+    });
+};
 
 
 export async function orderSuccessfullGet(req, res){

@@ -1,8 +1,11 @@
 
 // Importing Services functions
 import { createUser, getUsers, axiosIdFetch, userEdit, updateIsBlocked } from '../services/admin/usersServices.js';
-import { createCategory, getCategory, updateDeleted, editCategory } from '../services/admin/categoryServices.js';
-import { getCategoryDetails, createProduct, getProducts, updateDeletedProduct } from '../services/admin/productServices.js';
+import { createCategory, getCategory, updateDeleted, editCategory, checkDuplicateCategory } from '../services/admin/categoryServices.js';
+import { getCategoryDetails, createProduct, getProducts, 
+    updateDeletedProduct, updateProductStock, oneProductDetails } from '../services/admin/productServices.js';
+import { getAllOrders, getUsersData, updateOrderStatus } from '../services/admin/orderServices.js';
+
 
 export const loginGet = (req, res) => {
 
@@ -44,20 +47,17 @@ export const usersGet = async (req, res) => {
 }
 
 export const usersPost = async (req, res) => {
-
     await createUser(req.body);
     res.redirect('/admin/users');
 }
 
 export const edituser = async (req, res) => {
-
     const data = await axiosIdFetch(req.query.id);
     res.json(data)
 }
 
 export const editPost = async(req, res) => {
     await userEdit(req.body)
-
     res.redirect('/admin/users')
 }
 
@@ -79,9 +79,21 @@ export async function categoriesGet (req, res){
 }
 
 export async function addCategoryPost(req, res){
-    await createCategory(req.body);
-    const data = await getCategory();
-    res.json({data});
+
+    if(await checkDuplicateCategory(req.body.name)){
+
+        await createCategory(req.body);
+        const data = await getCategory();
+        return res.json({data});
+    }
+
+    return res.json(
+        {
+        data:{
+        status: 'failed',
+        message: 'something went wrong',
+        dupe: 'Duplicate Name Found'
+    }})
 }
 
 export async function deleteCategory(req, res){
@@ -93,8 +105,18 @@ export async function deleteCategory(req, res){
 }
 
 export async function editCategoryPost(req, res){
-    const data = await editCategory(req.body);
-    res.json(data);
+    if(await checkDuplicateCategory(req.body.name)){
+        const data = await editCategory(req.body);
+        return res.json(data);
+    }
+
+    return res.json(
+        {
+        data:{
+        status: 'failed',
+        message: 'something went wrong',
+        dupe: 'Duplicate Name Found'
+    }})
 }
 
 // Admin Categories Dashboard Controllers
@@ -126,12 +148,75 @@ export async function deleteProducts(req, res){
     res.json({status: "success"});
 }
 
+export async function updateStock(req, res){
+    const { action, id } = req.query;
+    if(action == 'add'){
+        updateProductStock(id, 1)
+        return res.json({
+            status: 'success',
+            message: 'stock incremented successfully'
+        });
+    };
+
+    updateProductStock(id, -1)
+    return res.json({
+        status: 'success',
+        message: 'stock decremented successfully'
+    })
+
+
+}
+
+export async function getProductDetails(req, res){
+    const productData = await oneProductDetails(req.query.id);
+    res.json(productData);
+}
+
 // Admin Product Dashboard Controllers
 
 
-export const ordersGet = (req, res) => {
-    res.render(`pages/admin/orders`);
+// Admin Orders Dashboard Controllers
+export const ordersGet = async (req, res) => {
+    const orders = await getAllOrders(req.session.userId);
+
+    if(orders.length === 0){
+        return res.json({
+            status: 'failed',
+            message: 'fetching order error'
+        });
+    };
+
+    const users = await Promise.all(
+        orders.map(async (order) => {
+            return await getUsersData(order.user_id);
+        })
+    );
+
+    console.log(await getUsersData(orders[0].user_id));
+
+    res.render(`pages/admin/orders`,{
+        orders,
+        users
+    });
 }
+
+export async function orderUpdateStatus(req, res){
+
+    if(updateOrderStatus(req.body.id, req.body.status)){
+        return res.json({
+            status: 'succes',
+            message: "status updated successfully"
+        })
+    }
+    return res.json({
+        status: 'failed',
+        message: 'error while updating successfully'
+    })
+}
+
+
+// Admin Orders Dashboard Controllers
+
 
 export const couponsGet = (req, res) => {
     res.render(`pages/admin/coupons`);
@@ -140,6 +225,11 @@ export const couponsGet = (req, res) => {
 export const salesReportGet = (req, res) => {
     res.render(`pages/admin/s-report`);
 }
+
+
+
+
+
 
 function authenticate(req, res, next){
     if(req.session.admin){

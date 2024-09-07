@@ -55,9 +55,23 @@ adminRouter.route('/products/add')
 adminRouter.route('/product/delete')
     .get(authenticate, adminContoller.deleteProducts)
 
+adminRouter.route('/api/admin/product/stock')
+    .get(adminContoller.updateStock)
+
+adminRouter.route('/api/product/get-product')
+    .get(adminContoller.getProductDetails)
+// Products dashboard routes
+
+// Products order routes
 
 adminRouter.route('/orders')
     .get(authenticate, adminContoller.ordersGet)
+
+adminRouter.route('/api/orders/status-update')
+    .post(adminContoller.orderUpdateStatus);
+
+// Products order routes
+
 
 adminRouter.route('/coupons')
     .get(authenticate, adminContoller.couponsGet)

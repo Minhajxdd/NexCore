@@ -214,6 +214,71 @@
                 text-align: left;
             }
         }
+
+        .popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#yesBtn {
+  background-color: #28a745;
+  color: white;
+}
+
+#yesBtn:hover {
+  background-color: #218838;
+}
+
+#noBtn {
+  background-color: #ff5f5f;
+  color: white;
+}
+
+#noBtn:hover {
+  background-color: #ff3b3b;
+}
+
+/* Hide popup by default */
+.hidden {
+  display: none;
+}
+
     </style>
 
 <div class="container">
@@ -221,76 +286,113 @@
 
     <div class="order-container">
         <div class="order-header">
-            <h4>Order #123456789</h4>
-            <span class="order-date">August 28, 2023</span>
+            <h4>Order #<%= orders._id %></h4>
+            <span class="order-date"><%= new Date(orders.orderedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
         </div>
 
         <div class="order-status">
-            Status: <span>Shipped</span>
+            Status: <span id="status-bar"><%= orders.orderStatus %></span>
         </div>
 
         <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 70%;">
+            <div class="progress-bar" id="progress-bar-div" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" 
+            style="width: <%= orders.orderStatus === 'pending' ? 20 : orders.orderStatus === 'processed' ? 40 : orders.orderStatus === 'shipped' ? 70 : orders.orderStatus === 'delivered' ? 100 : orders.orderStatus === 'cancelled' ? 0 : 100 %>%; background-color: <%= orders.orderStatus === 'pending' ? '#f0ad4e' : orders.orderStatus === 'processed' ? '#5bc0de' : orders.orderStatus === 'shipped' ? '#f0ad4e' : orders.orderStatus === 'delivered' ? '#5cb85c' : orders.orderStatus === 'cancelled' ? '#d9534f' : '#5cb85c' %>;">
                 <span class="sr-only">70% Complete</span>
             </div>
         </div>
 
 
         <div class="delivery-address">
-            <h5>Delivery Address</h5>
-            <p>John Doe<br>123 Main St, Apt 4B<br>New York, NY 10001<br>USA</p>
+            <h4>Delivery Address</h4>
+            <p> <strong>Name: </strong>
+                <%= address.first_name %>
+                <%= address.last_name %>
+                <br>
+                <% if(address.company){ %>
+                    <strong>Company: </strong>
+                    <%= address.company %> <br>
+                <% } %>
+                <strong>Street: </strong>
+                <%= address.street %> <br>
+                <strong>Land Mark: </strong>
+                <%= address.land_mark %> <br>
+                <strong>City / Town: </strong>
+                <%= address.city_town %> <br>
+                <strong>State: </strong>
+                <%= address.state %> <br>
+                <strong>Zipcode: </strong>
+                <%= address.zipcode %> <br>
+                <strong>Phone no: </strong>
+                <%= address.phone_no %> <br>
+                <strong>Email: </strong>
+                <%= address.email %> <br>
+
+            </p>
         </div>
 
         <div class="payment-details">
             <h5>Payment Method</h5>
-            <p>Credit Card (**** **** **** 1234)</p>
+            <p><%= orders.paymentMethod %></p>
         </div>
 
         <div class="order-summary">
             <div>
                 <h5>Estimated Delivery</h5>
-                <p class="estimated-delivery">September 5, 2023</p>
+                <%
+                const orderedDate = new Date(orders.orderedAt);
+                orderedDate.setDate(orderedDate.getDate() + 10);
+                %>
+                <p class="estimated-delivery"><%= orderedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+
+
             </div>
             <div>
-                <p class="total-price">Total: ₹4,999</p>
+                <p class="total-price">Total: ₹<%= new Intl.NumberFormat('en-IN').format(orders.totalPrice) %></p>
             </div>
         </div>
 
         <h5>Products</h5>
         <ul class="product-list">
-            <li>
-                <img src="https://via.placeholder.com/80" alt="Product Image" class="product-image">
-                <div class="product-details">
-                    <h5>Product Name 1</h5>
-                    <p>Product description goes here.</p>
-                </div>
-                <div>
-                    <span class="product-quantity">Quantity: 1</span><br>
-                    <span class="product-price">₹2,499</span>
-                </div>
-            </li>
-            <li>
-                <img src="https://via.placeholder.com/80" alt="Product Image" class="product-image">
-                <div class="product-details">
-                    <h5>Product Name 2</h5>
-                    <p>Product description goes here.</p>
-                </div>
-                <div>
-                    <span class="product-quantity">Quantity: 2</span><br>
-                    <span class="product-price">₹1,250</span>
-                </div>
-            </li>
+            <% orders.products.forEach((value,i) => { %>
+
+                <li>
+                    <img src="/uploads/products/<%= products[i].images[0]%>" alt="Product Image" class="product-image">
+                    <div class="product-details">
+                        <h5><%= products[i].name %></h5>
+                        <p><%= products[i].description.substring(0,120)+"..." %></p>
+                    </div>
+                    <div>
+                        <span class="product-quantity">Quantity: <%= value.quantity %></span><br>
+                        <span class="product-price">₹<%= new Intl.NumberFormat('en-IN').format(value.price) %></span>
+                    </div>
+                </li>
+            <% }); %>
+        
         </ul>
 
-        <div class="order-actions">
-            <button class="btn btn-custom">Cancel Order</button>
-        </div>
+<% if(orders.orderStatus !== 'cancelled' || orders.orderStatus !== 'delivered'){ %>
+    <div class="order-actions">
+        <button class="btn btn-danger" id="order-cancel" value="<%= orders._id %>">Cancel Order</button>
+    </div>
+<% } %>
+
     </div>
 </div>
 
 
+<div id="popupContainer" class="popup hidden">
+    <div class="popup-content">
+      <h2>Are you sure you want to cancel the order?</h2>
+      <div class="popup-buttons">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+      </div>
+    </div>
+  </div>
 
 
 
+<!-- Custom Js -->
+ <script src="/script/user/orderDetails.js"></script>
 
 <%- include('../../partials/user/footer'); -%>

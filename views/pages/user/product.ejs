@@ -96,7 +96,7 @@
                     </div>
                     <div>
                         <h3 class="product-price"><%= product.discounted_price %><del class="product-old-price"><%= product.original_price %></del></h3>
-                        <span class="product-available"><%= product.stock ? 'Stock' : 'Unavailable' %></span>
+                        <span class="product-available" id="product-stock"><%= product.stock ? 'Stock :  '+product.stock : 'Unavailable' %></span>
                     </div>
                     <p><%= product.description %></p>
 
@@ -114,6 +114,7 @@
 
                     </div>
 
+            <% if(product.stock){ %>
                 <form id="cart-form">
                     <div class="add-to-cart">
                         <div class="qty-label">
@@ -128,6 +129,7 @@
                         <button type="submit" class="add-to-cart-btn" id="add-to-cart-btn-id" onclick="cartAddedPopup()"><i class="fa fa-shopping-cart"></i>add to cart</button>
                     </div>
                 </form>
+            <% } %>
 
                 <!-- Popup message -->
                 <div id="cart-popup" class="popup">Item added to cart successfully!</div>

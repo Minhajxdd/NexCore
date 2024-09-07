@@ -63,6 +63,25 @@ export async function addCartProducts(req, res){
         const productData = await productModel.findById(productId);
         const userData = await userModel.findById(userId);
         
+        const stockCount = await productModel.findById( productId, {_id: 0, stock: 1});
+
+        if(!stockCount || stockCount.stock < 0){
+            return res.json({
+                status: 'failed',
+                message: 'no stock availble',
+                noStock: 'No Stock Available'
+            })
+        }
+
+        await productModel.findByIdAndUpdate(
+            productId,
+            {
+                $inc: {
+                    stock: -1
+                }
+            }
+        )
+
         if(userData.cartId){
             const cartData = await cartModel.findById(userData.cartId);
       
@@ -152,6 +171,15 @@ export async function productQuantityInc(req, res){
             }
         );
 
+        await productModel.findByIdAndUpdate(
+            productId,
+            {
+                $inc: {
+                    stock: -1
+                }
+            }
+        );
+
         if (!updateResult) {
             return res.status(400).json({ status: "failed", message: "Quantity could not be increased" });
         }
@@ -200,6 +228,16 @@ export async function productQuantityDec(req, res) {
                 new: true
             }
         );
+
+        await productModel.findByIdAndUpdate(
+            productId,
+            {
+                $inc: {
+                    stock: 1
+                }
+            }
+        );
+
 
         if (!updateResult) {
             return res.status(400).json({ status: "failed", message: "Quantity could not be decremented" });
@@ -268,6 +306,25 @@ export async function deleteCartProduct(req, res){
 
         const SubPrice = cart.items.find(item => item.product_id.equals(productId)).price;
         
+        const product = await productModel.findById(productId);
+
+        let deletedQuantity = '';
+        cart.items.forEach((val) => {
+            if (val.product_id.toString() === productId.toString()) {
+                deletedQuantity = val.quantity;
+            }
+        });
+        
+        await productModel.findByIdAndUpdate(
+            productId,
+            {
+                $inc: {
+                    stock: deletedQuantity
+                }
+            }
+        )
+
+
         const cartData =  await cartModel.findByIdAndUpdate(
             cartId,
             {
@@ -276,6 +333,10 @@ export async function deleteCartProduct(req, res){
             },
             {new: true}
         );
+
+
+
+
 
         if(cartData.items.length === 0){
             return res.json({

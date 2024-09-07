@@ -94,11 +94,11 @@
             axios.post('/order/authenticate', data)
             .then(function (res) {
                 console.log(res.data);
-                // if(res.data.success){
-                //     window.location.href = res.data.redirectUrl;
-                // }else{
-                //     window.location.href = 'http://localhost:4000/not-found';
-                // }
+                if(res.data.status === 'success'){
+                    window.location.href = res.data.redirectUrl;
+                }else{
+                    window.location.href = 'http://localhost:4000/not-found';
+                }
             })
             .catch(function (error) {
                 console.log(`An error occurred during axios request ${error.message}`);

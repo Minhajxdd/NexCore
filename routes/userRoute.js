@@ -138,6 +138,8 @@ router.route('/orders')
 router.route('/orders/overview')
     .get(profile.orderDetailsGet)
 
+router.route('/api/orders/cancel')
+    .get(profile.cancelOrderApi)
     // Orders
 
 

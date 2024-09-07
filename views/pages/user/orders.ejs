@@ -252,7 +252,7 @@
     
             <div class="order-summary">
                 <div class="order-actions">
-                    <a href="#" class="btn btn-custom">View Details</a>
+                    <a href="/orders/overview?id=<%= val._id %>" class="btn btn-custom">View Details</a>
                 </div>
                 <p class="total-price">Total: ₹<%= new Intl.NumberFormat('en-IN').format(val.totalPrice) %></p>
             </div>

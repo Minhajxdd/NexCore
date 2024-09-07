@@ -9,8 +9,8 @@ updateDom();
     const button = document.getElementById('add-button');
     const form = document.getElementById('add-category-form');
     const cancelButton = document.getElementById('add-form-cancel');
-    const submitButton = document.getElementById('add-form-submit');
     const formFiled = document.getElementById('add-form-field');
+
 
     button.addEventListener('click', () => {
         form.style.display = 'block';
@@ -21,17 +21,41 @@ updateDom();
         formFiled.reset();
     });
 
-    submitButton.addEventListener('click', () => {
-        form.style.display = 'none';
-    })
+
 
 })();
 // Form add Category toggeler
 
 // Axios category added post
 (function (){
+    const form = document.getElementById('add-category-form');
+
     document.getElementById('add-form-field').addEventListener('submit' , (event) => {
         event.preventDefault();
+
+
+        const errMessage = document.getElementById('err-message-add-form');
+        errMessage.textContent = '';
+
+        const name = document.getElementById('exampleInputName1-add').value.trim();
+        const description = document.getElementById('exampleInputName2-add').value.trim();
+        
+        const nameRegex = /^[a-zA-Z\s-]+$/;
+        if (!name) {
+            errMessage.textContent = 'Name is required.';
+            return;
+        } else if (!nameRegex.test(name)) {
+            errMessage.innerHTML = 'Name can only contain letters, spaces, and hyphens. No numbers or special characters allowed.';
+            return;
+        }
+        if (!description) {
+            errMessage.textContent = 'Description is required.';
+            return;
+        } else if (description.length < 10) {
+            errMessage.textContent = 'Description must be at least 10 characters long.';
+            return;
+        }
+        
 
         const form = event.target;
         const formData = new FormData(form); 
@@ -43,13 +67,19 @@ updateDom();
 
         axios.post('/admin/add/categories', data)
         .then((res) => {
-            const data = res.data.data; 
+            const data = res.data.data;
+            if(data.dupe){
+                return errMessage.textContent = data.dupe;
+            }
+            
+            document.getElementById('add-form-field').reset();
+            
+            form.style.display = 'none';
+
 
             renderNewPage(data);
-
             // const data = JSON.stringify(response.data, null, 2)
-            // console.log(data);
-           document.getElementById('add-form-field').reset();
+            console.log(data);
         })
         .catch(function (error) {
             console.log('Error message axios add category posting');
@@ -218,6 +248,33 @@ async function sendDeleteRequest(element){
 document.getElementById('edit-form-field').addEventListener('submit' , (event) => {
         event.preventDefault();
 
+
+
+        const errMessage = document.getElementById('err-message-edit');
+        errMessage.textContent = '';
+
+        const name = document.getElementById('edit-category-name').value.trim();
+        const description = document.getElementById('edit-category-description').value.trim();
+        
+        const nameRegex = /^[a-zA-Z\s-]+$/;
+        if (!name) {
+            errMessage.textContent = 'Name is required.';
+            return;
+        } else if (!nameRegex.test(name)) {
+            errMessage.innerHTML = 'Name can only contain letters, spaces, and hyphens. No numbers or special characters allowed.';
+            return;
+        }
+        if (!description) {
+            errMessage.textContent = 'Description is required.';
+            return;
+        } else if (description.length < 10) {
+            errMessage.textContent = 'Description must be at least 10 characters long.';
+            return;
+        }
+
+
+
+
         const form = event.target;
         const formData = new FormData(form); 
 
@@ -228,13 +285,17 @@ document.getElementById('edit-form-field').addEventListener('submit' , (event) =
 
         axios.post('/admin/categories/add', data)
         .then((res) => {
-            
+            const data = res.data.data;
+            if(data.dupe){
+                return errMessage.textContent = data.dupe;
+            }
+
+            document.getElementById('edit-category-form').style.display = 'none';
         })
         .catch(function (error) {
             console.log(`Error message axios edit category post ${error.message}`);
         });
 
-        document.getElementById('edit-category-form').style.display = 'none';
 
     });     
 

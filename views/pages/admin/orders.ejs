@@ -1,5 +1,5 @@
 <%- include('../../partials/admin/head'); -%>
-
+<title>Orders Admin</title>
 
 
 <%- include('../../partials/admin/nav'); -%>
@@ -23,9 +23,96 @@
               </div>
             </div>
           </div>
+
+
+             <div class="content-wrapper">
+    <div class="row ">
+      <div class="col-12 grid-margin">
+        <div class="card">
+          <div class="card-body">
+            <div id="card-title">
+              <h4 class="card-title">Users</h4>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th> NO:</th>
+                    <th> User Name </th>
+                    <th> Order Id </th>
+                    <th> Order Date </th>
+                    <th> Total Amount </th>
+                    <th> Payment Method </th>
+                    <th> Order Status </th>
+                    <th> Details </th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                  <% users.forEach( (user , ind) => { %>
+                    <tr>
+                      <td><%= ind+1  %></td>
+                      <td><%= user.full_name %></td>
+                      <td>#<%= orders[ind]._id %></td>
+                      <td><%= new Date(orders[ind].orderedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                      <td>₹<%= new Intl.NumberFormat('en-IN').format(orders[ind].totalPrice) %></td>
+                      <td><%= orders[ind].paymentMethod %></td>
+                       <td>
+                        <select class="form-control order-status-dropdown" value="<%= orders[ind].orderStatus %>" data-id="<%= orders[ind]._id %>">
+
+                        <% if(orders[ind].orderStatus === 'pending'){ %>
+                          <option selected value="pending">pending</option>
+                          <option value="cancelled">cancelled</option>
+                          <option value="processed">processed</option>
+                          <option value="shipped">shipped</option>
+                          <option value="delivered">delivered</option>
+                        <% }  else if(orders[ind].orderStatus === 'processed'){ %>
+                          <option value="cancelled">cancelled</option>
+                          <option selected value="processed">processed</option>
+                          <option value="shipped">shipped</option>
+                          <option value="delivered">delivered</option>
+                        <% } else if(orders[ind].orderStatus === 'shipped'){ %>
+                            <option value="cancelled">cancelled</option>
+                            <option selected value="shipped">shipped</option>
+                            <option value="delivered">delivered</option>    
+                        <% } else if(orders[ind].orderStatus === 'delivered'){ %>
+                            <option selected value="delivered">delivered</option> 
+                        <% } else if(orders[ind].orderStatus === 'cancelled'){ %>
+                            <option selected value="cancelled">cancelled</option>
+                        <% }; %>
+                        </select>
+
+                       </td>
+                      <td>
+                        <button class="badge btn-success"  id="btn-action" value="<%= orders[ind]._id %>">More Details..</button>
+                        
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
     </div>
 
+
+    
 </div> 
+
+
+
+<!-- Custom Script -->
+<script src="/script/admin/order.js"></script>
+
+<!-- Cdn -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+
 
 <%- include('../../partials/admin/body'); -%>
 

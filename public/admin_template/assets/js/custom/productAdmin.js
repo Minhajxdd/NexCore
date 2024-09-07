@@ -98,6 +98,46 @@
     const form = document.getElementById('product-add-form'); 
     form.addEventListener('submit', function(event) {
         event.preventDefault(); 
+
+
+
+        const errMessage = document.getElementById('err_message_product');
+    errMessage.textContent = ''; 
+
+    const name = document.getElementById('product-name-add').value.trim();
+    const ogPrice = parseFloat(document.querySelector('input[name="og_price"]').value);
+    const dsPrice = parseFloat(document.querySelector('input[name="ds_price"]').value);
+    const stock = parseInt(document.getElementById('add-product-stock').value, 10);
+    const image1 = document.getElementById('imageInput1').files[0];
+    const image2 = document.getElementById('imageInput2').files[0];
+    const image3 = document.getElementById('imageInput3').files[0];
+
+    if (!name) {
+        errMessage.textContent = 'Product name is required.';
+        return;
+    }
+
+    if (isNaN(ogPrice) || ogPrice <= 0) {
+        errMessage.textContent = 'Original price must be a positive number.';
+        return;
+    }
+
+    if (!isNaN(dsPrice) && dsPrice >= ogPrice) {
+        errMessage.textContent = 'Discounted price must be less than the original price.';
+        return;
+    }
+
+    if (isNaN(stock) || stock <= 0) {
+        errMessage.textContent = 'Stock must be a valid number greater than 0.';
+        return;
+    }
+
+    if (!image1 || !image2 || !image3) {
+        errMessage.textContent = 'Please upload all three images.';
+        return;
+    }
+
+
         let formData = new FormData(this);
         
         const dropDown = document.getElementById('add-usr-category');
@@ -207,17 +247,26 @@ function insertNewElement(data){
     buttons.forEach(button => {
         button.addEventListener('click', () => {
 
-            const row = button.closest('tr');
-            const cells = row.getElementsByTagName('td');
-            const name = cells[1].textContent.trim(); 
-            const description = cells[2].textContent.trim();
-            const id = row.querySelector('#btn-edit').getAttribute('category-id');
+            // const row = button.closest('tr');
+            // const cells = row.getElementsByTagName('td');
+            // const name = cells[1].textContent.trim(); 
+            // const description = cells[2].textContent.trim();
+            // const id = row.querySelector('#btn-edit').getAttribute('category-id');
 
-            const nameInput = document.getElementById('edit-category-name');
-            const descriptionInput = document.getElementById('edit-category-description');
-            const emptyInput = document.getElementById('edit-category-empty');
+            // const nameInput = document.getElementById('edit-category-name');
+            // const descriptionInput = document.getElementById('edit-category-description');
+            // const emptyInput = document.getElementById('edit-category-empty');
 
+            const id = button.getAttribute('data-id');
 
+            axios.get(`/admin/api/product/get-product?id=${id}`)
+            .then((res) => {
+                console.log(res.data);
+                updateEditForm(res.data);
+            })
+            .catch((err) => {
+                console.log(`error while edit product details data fetching : ${err.message}`);
+            });
 
             form.style.display = 'block';
         })
@@ -228,3 +277,69 @@ function insertNewElement(data){
     })
 
 })();
+
+function updateEditForm(data){
+    document.getElementById('product-name-edit').value = data.name;
+    document.getElementById('description-form-edit').value = data.description;
+    const categoryDrop =  document.getElementById('edit-form-usr-category');
+
+    Array.from(categoryDrop.options).forEach(option => {
+        if (option.getAttribute('data-id') === data.category) {      
+            option.selected = true;
+        }
+    });
+
+    document.getElementById('edit-form-original-price').value = data.original_price;
+    document.getElementById('edit-form-discounted-price').value = data.discounted_price;
+    document.getElementById('edit-product-stock').value = data.stock;
+}
+
+
+
+
+
+
+
+// Admin Stock Update Axios 
+document.querySelectorAll('.qty-up').forEach((element, ind) => {
+    let inputs = document.querySelectorAll('input[id^="input-value"]');
+    element.addEventListener('click', function() {
+        let currentInput = inputs[ind];
+        let value = parseInt(currentInput.value, 10);
+        currentInput.value = value + 1;
+
+        const id = currentInput.getAttribute('data-id');
+
+        axios.get(`/admin/api/admin/product/stock?action=add&id=${id}`)
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(`error while sending axios requests: ${err.message}`);
+        })
+
+    });
+});
+
+document.querySelectorAll('.qty-down').forEach((element, ind) => {
+    let inputs = document.querySelectorAll('input[id^="input-value"]');
+    element.addEventListener('click', function() {
+        let currentInput = inputs[ind];
+        let value = parseInt(currentInput.value, 10);
+        if (value >= 1) {
+            currentInput.value = value - 1;
+
+        const id = currentInput.getAttribute('data-id');
+
+        axios.get(`/admin/api/admin/product/stock?action=sub&id=${id}`)
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(`error while sending axios requests: ${err.message}`);
+        })
+
+        }
+    });
+});
+// Admin Stock Update Axios 

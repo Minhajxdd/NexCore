@@ -78,11 +78,14 @@
           <label id="error-message" style="color: red; font-weight: bolder;"></label>
           <div class="form-group">
             <label for="exampleInputName1">Name</label>
-            <input type="text" class="form-control" id="exampleInputName1" placeholder="Name" name="name" required style="color: #fff;">
+            <input type="text" class="form-control" id="exampleInputName1-add" placeholder="Name" name="name" required style="color: #fff;">
           </div>
           <div class="form-group">
             <label for="exampleInputName2">Description</label>
-            <textarea class="form-control" id="exampleInputName2" placeholder="Description..." name="description" style="color: #fff;"></textarea>
+            <textarea class="form-control" id="exampleInputName2-add" placeholder="Description..." name="description" style="color: #fff;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="text-danger" id="err-message-add-form"></label>
           </div>
           <button id="add-form-submit" type="submit" class="btn btn-primary me-2">Submit</button>
           <div id="add-form-cancel" class="btn btn-dark">Cancel</div>
@@ -108,6 +111,9 @@
             <div class="form-group">
               <label for="exampleInputName2">Description</label>
               <textarea class="form-control" id="edit-category-description" placeholder="Description..." name="description" style="color: #fff;"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="text-danger" id="err-message-edit"></label>
             </div>
             <button id="add-form-submit" type="submit" class="btn btn-primary me-2">Submit</button>
             <div id="edit-form-cancel" class="btn btn-dark">Cancel</div>
