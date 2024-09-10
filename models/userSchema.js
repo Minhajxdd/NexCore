@@ -10,7 +10,7 @@ const UsersSchema = new Schema({
     },
   full_name: { 
     type: String, 
-    required: true 
+    required: true
 },
   phone_number: { 
     type: String 
@@ -41,15 +41,15 @@ const UsersSchema = new Schema({
 address_id :[
   {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    unique: true
+    unique: true,
+    sparse: true
   }
 ],
 orders :[
   {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    unique: true
+    unique: true,
+    sparse: true
   }
 ]
  

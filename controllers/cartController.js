@@ -44,20 +44,93 @@ export async function cartGet(req, res){
 export async function addCartProducts(req, res){
     const {id: productId, quantity: quantityString} = req.body;
     const quantity = quantityString !== undefined ? Number(quantityString) : undefined;
-    const { userId } = req.session;
+    const userId = req.session.userId || req.session.passport.user;
 
     if(!productId){
+        console.log('productId not found');
         return res.status(404).json({status: "failed", message: "productId not found"});
     }
 
     if (quantity && (typeof quantity !== 'number' || quantity <= 0)) {
+        console.log('Invalid Quantity');
         return res.status(400).json({ status: 'failed', message: 'Invalid quantity' });
     }
     
     if(!userId){
+        console.log('User Id not found')
         return res.status(404).json({status: "failed", message: "userId not found"});
     }
 
+    if(quantity > 5){
+        return res.json({
+            status: 'failed',
+            error_message: 'Limit reached: Only 5 items allowed'
+        })
+    }
+
+
+    if(!quantity){
+        try{
+            const { stock } = await productModel.findById(
+                productId,
+                {
+                    _id:0,
+                    stock:1
+                }
+            );
+    
+            if(stock <= 0){
+                return res.json({
+                    status: 'failed',
+                    error_message: 'out of stock'
+                })
+            }
+    
+        }catch(err){
+            console.log(`error while checking the stock count : ${err.message}`);
+        }
+    }else{
+        try{
+            const { stock } = await productModel.findById(
+                productId,
+                {
+                    _id:0,
+                    stock:1
+                }
+            );
+    
+            if(stock < quantity && stock <= 0){
+                return res.json({
+                    status: 'failed',
+                    error_message: 'no stock left'
+                });
+            };
+
+
+        }catch(err){
+            console.log(`error while checkign out of stock : ${err.message}`);
+        };
+    }
+
+    try{
+        const cartStock = await cartModel.findOne({
+            _id: req.session.cartId,
+            items: {
+              $elemMatch: { product_id: productId }
+            }
+          });
+
+        if(cartStock && cartStock.items[0].quantity > 4){
+            
+            return res.json({
+               status: 'failed',
+               error_message: 'Limit reached: Only 5 items allowed'
+            });
+        };
+
+    }catch(err){
+        console.log(`error while checkign maximum stock for one user: ${err.message}`);
+    }
 
     try{
         const productData = await productModel.findById(productId);
@@ -77,7 +150,7 @@ export async function addCartProducts(req, res){
             productId,
             {
                 $inc: {
-                    stock: -1
+                    stock: quantity ? -quantity : -1
                 }
             }
         )
@@ -130,7 +203,7 @@ export async function addCartProducts(req, res){
 
         return res.status(200).json({status:'success', message:'Successfull'});
     }catch(err){
-        console.log(`Error on addCartProducts on cartcontroller ${err}`);
+        console.log(`Error on addCartProducts on cartcontroller: ${err}`);
         return res.status(500).json({status:"failed", message:'Something went wrong', err : err.message});
     }
 }  
@@ -146,7 +219,37 @@ export async function productQuantityInc(req, res){
     const cartId = req.session.cartId;
     const { id: productId, inputValue } = req.body;
 
+
+    try{
+        const  { stock } = await productModel.findById(
+            productId,
+            {
+                stock:1,
+                _id: 0
+            }
+        );
+
+        if(stock <= 0){
+            return res.json({
+                status: 'failed',
+                error_message: 'Out of Stock'
+            })
+        }
+
+    }catch(err){
+        console.log(`error while checkign stocks: ${err.message}`);
+    }
+
+
+    if(inputValue > 5){
+        return res.json({
+            status: 'failed',
+            error_message: 'Limit reached: Only 5 items allowed'
+        })
+    }
+
     try {
+
         const cart = await cartModel.findById(cartId);
         if (!cart) {
             return res.status(404).json({ status: "failed", message: "Cart not found" });

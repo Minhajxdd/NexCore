@@ -121,37 +121,84 @@
                                 <!-- product -->
                                 <% products.forEach((val) => { %>
                                     <% if(!val.isDeleted){ %>
-                                        <div class="product">
-                                            <div class="product-img">
-                                                <img style="padding: 10px;" src="/uploads/products/<%= val.images[0] %>" alt="Product Images">
-                                                <div class="product-label">
+                                        <% if(val.stock > 0){ %>
+                                            <div class="product">
+                                                <div class="product-img">
+                                                    <img style="padding: 10px;" src="/uploads/products/<%= val.images[0] %>" alt="Product Images">
+                                                    <div class="product-label">
+                                                    </div>
+                                                </div>
+                                                <div class="product-body">
+                                                    <p class="product-category"><%= val.category_name %></p>
+                                                    <h3 class="product-name"><a href="/product?id=<%= val._id %>"><%= val.name.substring(0,42)+"..." %></a></h3>
+                                                    <h4 class="product-price"><%= val.discounted_price %> <del class="product-old-price"><%= val.original_price %></del></h4>
+                                                    <div class="product-rating">
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                    </div>
+                                                    <div class="product-btns">
+                                                        <button class="add-to-wishlist"><i class="fa-regular fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+                                                        <button class="quick-view">
+                                                            <a href="/product?id=<%= val._id %>" target="_blank">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                            <span class="tooltipp">quick view</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="add-to-cart">
+                                                    <button  class="add-to-cart-btn" data-id="<%= val._id %>"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                                </div>
+                                            
+                                            </div>
+                                        <% }else{ %>
+                                            <div class="col-md-4 col-xs-6">
+                                                <div class="product out-of-stock-product">
+                                                    <div class="product-img">
+                                                        <img src="/uploads/products/<%= val.images[0] %>" alt="Out of stock image">
+                                                        <div class="out-of-stock-overlay">
+                                                            <p class="out-of-stock-text">Out of Stock</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-body">
+                                                        <p class="product-category"><%= val.category_name %></p>
+                                                        <h3 class="product-name">
+                                                            <a href="/product?id=<%= val._id %>"><%= val.name.substring(0,42) + "..." %></a>
+                                                        </h3>
+                                                        <h4 class="product-price">
+                                                            <%= val.discounted_price %> 
+                                                            <del class="product-old-price"><%= val.original_price %></del>
+                                                        </h4>
+                                                        <div class="product-rating">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                        <div class="product-btns">
+                                                            <button class="add-to-wishlist">
+                                                                <i class="fa-regular fa-heart"></i>
+                                                                <span class="tooltipp">add to wishlist</span>
+                                                            </button>
+                                                            <button class="quick-view">
+                                                                <i class="fa fa-eye"></i>
+                                                                <span class="tooltipp">quick view</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="add-to-cart">
+                                                        <button class="add-to-cart-btn out-of-stock-btn" disabled>
+                                                            <i class="fa fa-ban"></i> Out of Stock
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="product-body">
-                                                <p class="product-category"><%= val.category_name %></p>
-                                                <h3 class="product-name"><a href="/product?id=<%= val._id %>"><%= val.name.substring(0,42)+"..." %></a></h3>
-                                                <h4 class="product-price"><%= val.discounted_price %> <del class="product-old-price"><%= val.original_price %></del></h4>
-                                                <div class="product-rating">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                                <div class="product-btns">
-                                                    <button class="add-to-wishlist"><i class="fa-regular fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
-                                                    <button class="quick-view">
-                                                        <a href="/product?id=<%= val._id %>" target="_blank">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                        <span class="tooltipp">quick view</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="add-to-cart">
-                                                <button  class="add-to-cart-btn" data-id="<%= val._id %>"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                            </div>
-                                        </div>
+                                            
+                                        <% } %>
                                     <% } %>
                                 <% }) %>
                                 <!-- /product -->
@@ -170,6 +217,10 @@
     <!-- /container -->
 </div>
 <!-- /SECTION -->
+
+<!-- Popup -->
+<div id="popup" class="err-popup hidden"></div>
+
 
 <!-- Custom Js -->
  <script src="/script/user/homePage.js"></script>

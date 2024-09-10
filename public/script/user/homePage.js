@@ -8,12 +8,26 @@
             data.id = button.getAttribute('data-id');
             axios.post('/cart/product/add', data)
             .then((res) => {
-                console.log(res.data);
+                if(res.data.error_message === 'no stock'){
+                  popup(res.data.error_message);
+                }
               })
               .catch((err) => {
-                console.log(err.message);
+                console.log(`axios add to cart error: ${err}`);
               });
         })
     })
 })();
 // add to cart button
+
+function popup(error_message) {
+  const popup = document.getElementById('popup');
+  popup.classList.remove('hidden');
+  popup.innerHTML = error_message;
+  popup.classList.add('show');
+
+  setTimeout(() => {
+      popup.classList.remove('show');
+      popup.classList.add('hidden');
+  }, 3000);
+}

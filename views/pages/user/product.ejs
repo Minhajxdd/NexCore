@@ -96,7 +96,7 @@
                     </div>
                     <div>
                         <h3 class="product-price"><%= product.discounted_price %><del class="product-old-price"><%= product.original_price %></del></h3>
-                        <span class="product-available" id="product-stock"><%= product.stock ? 'Stock :  '+product.stock : 'Unavailable' %></span>
+                        <span class="product-available" id="product-stock-count"><%= product.stock ? 'Stock :  '+product.stock : 'Unavailable' %></span>
                     </div>
                     <p><%= product.description %></p>
 
@@ -126,7 +126,7 @@
                             </div>
                         </div>
                         <input type="text" value="<%= product._id %>" name="id" class="hidden">
-                        <button type="submit" class="add-to-cart-btn" id="add-to-cart-btn-id" onclick="cartAddedPopup()"><i class="fa fa-shopping-cart"></i>add to cart</button>
+                        <button type="submit" class="add-to-cart-btn" id="add-to-cart-btn-id"><i class="fa fa-shopping-cart"></i>add to cart</button>
                     </div>
                 </form>
             <% } %>
@@ -428,7 +428,7 @@
                                             </div>
                                         </div>
                                         <div class="add-to-cart">
-                                            <button class="add-to-cart-btn" data-id="<%= val._id %>"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                            <button class="add-to-cart-btn-btm" data-id="<%= val._id %>"><i class="fa fa-shopping-cart"></i> add to cart</button>
                                         </div>
                                     </div>
                                 <% }) %>
@@ -449,6 +449,11 @@
     <!-- /container -->
 </div>
 <!-- /Section -->
+
+<!-- Error Popup -->
+<div id="popup" class="err-popup hidden"></div>
+
+
 
 <!-- Custom Script -->
 <script src="/script/user/productPage.js"></script>

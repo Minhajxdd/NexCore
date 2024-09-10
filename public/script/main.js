@@ -110,9 +110,13 @@
 		up = $this.find('.qty-up'),
 		down = $this.find('.qty-down');
 
+		// Update limits
+		const minQuantity = 1;
+		const maxQuantity = 5;
+
 		down.on('click', function () {
 			var value = parseInt($input.val()) - 1;
-			value = value < 1 ? 1 : value;
+			value = value < minQuantity ? minQuantity : value;
 			$input.val(value);
 			$input.change();
 			updatePriceSlider($this , value)
@@ -120,6 +124,7 @@
 
 		up.on('click', function () {
 			var value = parseInt($input.val()) + 1;
+			value = value > maxQuantity ? maxQuantity : value;
 			$input.val(value);
 			$input.change();
 			updatePriceSlider($this , value)

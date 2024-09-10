@@ -179,20 +179,11 @@ export async function getProductDetails(req, res){
 export const ordersGet = async (req, res) => {
     const orders = await getAllOrders(req.session.userId);
 
-    if(orders.length === 0){
-        return res.json({
-            status: 'failed',
-            message: 'fetching order error'
-        });
-    };
-
     const users = await Promise.all(
         orders.map(async (order) => {
             return await getUsersData(order.user_id);
         })
     );
-
-    console.log(await getUsersData(orders[0].user_id));
 
     res.render(`pages/admin/orders`,{
         orders,

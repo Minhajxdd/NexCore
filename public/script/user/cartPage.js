@@ -5,16 +5,25 @@
         button.addEventListener('click', () => {
 
             let inputElement = Number(button.closest('div').querySelector('input').value);
+            
+            if(inputElement + 1 > 5){
+                return popup('reached: Only 5 items allowed');
+            }
 
             const data = {
                 id: button.getAttribute('data-id'),
                 inputValue: inputElement + 1
             }
             const priceSpan = button.closest('.quantity').nextElementSibling.querySelector('span');
-            
 
             axios.post('/cart/product/quantity/increase',data)
             .then(res => {
+
+                if(res.data.error_message){
+                    console.log(`Status: ${res.data.status}`);
+                    return popup(res.data.error_message);
+                }
+
                 console.log(`Status: ${res.data.status}`);
                 priceSpan.innerHTML = `₹ ${new Intl.NumberFormat('en-IN').format(res.data.updatedPrice)}`;
                 updateTotalPrice(res.data.totalPrice);
@@ -55,6 +64,7 @@ function updateTotalPrice(price){
 
             axios.post('/cart/product/quantity/decrease',data)
             .then(res => {
+
                 console.log(`Status: ${res.data.status}`);
                 priceSpan.innerHTML = `₹ ${new Intl.NumberFormat('en-IN').format(res.data.updatedPrice)}`; 
             
@@ -68,6 +78,23 @@ function updateTotalPrice(price){
     })
 })();
 //Cart Quantity descrease
+
+
+
+function popup(error_message) {
+    const popup = document.getElementById('popup');
+    popup.classList.remove('hidden');
+    popup.innerHTML = error_message;
+    popup.classList.add('show');
+  
+    setTimeout(() => {
+        popup.classList.remove('show');
+        popup.classList.add('hidden');
+    }, 3000);
+}
+
+
+
 
 // Cart Items Delete
 (function (){

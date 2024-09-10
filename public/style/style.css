@@ -1083,17 +1083,8 @@ textarea.input {
   transition: 0.2s all;
 }
 
-.product .add-to-cart .add-to-cart-btn>i {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 40px;
-  height: 40px;
-  line-height: 38px;
-  color: #D10024;
-  opacity: 0;
-  visibility: hidden;
-}
+
+
 
 .product .add-to-cart .add-to-cart-btn:hover {
   background-color: #FFF;
@@ -1106,6 +1097,50 @@ textarea.input {
   opacity: 1;
   visibility: visible;
 }
+
+
+.product .add-to-cart .out-of-stock-btn {
+  position: relative;
+  border: 2px solid transparent;
+  height: 40px;
+  padding: 0 30px;
+  background-color: #FFF;
+  color: #230b0e;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 40px;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+}
+
+.product .add-to-cart .out-of-stock-btn>i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 38px;
+  color: #230b0e;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.product .add-to-cart .out-of-stock-btn:hover {
+  background-color: #FFF;
+  color: #230b0e;
+  border-color: #230b0e;
+  padding: 0px 30px 0px 50px;
+}
+
+.product .add-to-cart .out-of-stock-btn:hover>i {
+  color: 230b0e;
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+
 
 /*----------------------------*\
 	Widget product
@@ -2745,4 +2780,81 @@ textarea.input {
 
 .mb-3{
   margin-bottom: 5px;
+}
+
+.out-of-stock-product {
+  position: relative;
+  opacity: 0.6; /* Grays out the entire product card */
+}
+
+.out-of-stock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.out-of-stock-text {
+  text-align: center;
+}
+
+.product-btns .add-to-compare {
+  display: none;
+}
+
+.out-of-stock-btn {
+  background-color: #333;
+  border: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.product-btns button {
+  pointer-events: auto;
+}
+
+.product-name a {
+  color: #333;
+  text-decoration: none;
+}
+.product-name a:hover {
+  color: #ff523b;
+}
+
+
+.err-popup {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 30px;
+  background-color: #ff3860;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 1000;
+}
+
+.err-popup.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.err-popup.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
 }
