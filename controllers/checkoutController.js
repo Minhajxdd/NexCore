@@ -6,7 +6,7 @@ import { addressIdRetreve, addressRetrevefromArray } from '../services/user/prof
 
 // Importing Models
 import cartModel from '../models/cartSchema.js';
-import productModel from '../models/productSchems.js';
+import productModel from '../models/productSchema.js';
 import addressModel from '../models/addressSchema.js';
 import userModel from '../models/userSchema.js';
 import orderModel from '../models/orderSchema.js';
@@ -16,8 +16,10 @@ import address from '../models/addressSchema.js';
 export async function getCheckout(req, res){
     const cartId = req.session.cartId;
     let addresses = [];
+    const userId = req.session.userId || req.session.passport.user;
 
-    const addressId = await addressIdRetreve(req.session.userId);
+
+    const addressId = await addressIdRetreve(userId);
     if(addressId.address_id.length !== 0){
         addresses = await addressRetrevefromArray(addressId);
     }
@@ -46,6 +48,7 @@ export async function getCheckout(req, res){
 
 
 export async function orderAuthenticate(req, res){
+    const userId = req.session.userId || req.session.passport.user;
 
     const paymentMethod = req.body.paymentMethod;
     const optionalMessage = req.body.optionalMessage || null;
@@ -66,13 +69,13 @@ export async function orderAuthenticate(req, res){
                 state: req.body.formData.state,
                 phone_no: req.body.formData.phone_no,
                 email: req.body.formData.email,
-                user_id: req.session.userId,
+                user_id: userId,
               }
 
             const addressData = await addressModel.create(address);
             Addressid = addressData._id;
             await userModel.findByIdAndUpdate(
-            req.session.userId,
+            userId,
             {
                 $push: {address_id: Addressid}
             }
@@ -103,7 +106,7 @@ export async function orderAuthenticate(req, res){
     };
 
     const order = {
-        user_id: req.session.userId,
+        user_id: userId,
         products: cartData.items,
         totalPrice: cartData.totalPrice,
         addressId: Addressid,

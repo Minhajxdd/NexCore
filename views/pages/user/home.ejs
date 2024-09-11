@@ -140,7 +140,7 @@
                                                         <i class="fa fa-star"></i>
                                                     </div>
                                                     <div class="product-btns">
-                                                        <button class="add-to-wishlist"><i class="fa-regular fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+                                                        <button class="add-to-wishlist add-to-wishlist-btn" data-id="<%= val._id %>"><i class="fa-regular fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
                                                         <button class="quick-view">
                                                             <a href="/product?id=<%= val._id %>" target="_blank">
                                                                 <i class="fa fa-eye"></i>
@@ -184,7 +184,7 @@
                                                                 <i class="fa-regular fa-heart"></i>
                                                                 <span class="tooltipp">add to wishlist</span>
                                                             </button>
-                                                            <button class="quick-view">
+                                                            <button class="quick-view add-to-wishlist-btn" data-id="<%= val._id %>">
                                                                 <i class="fa fa-eye"></i>
                                                                 <span class="tooltipp">quick view</span>
                                                             </button>
@@ -223,7 +223,7 @@
 
 
 <!-- Custom Js -->
- <script src="/script/user/homePage.js"></script>
+ <script src="/script/user/homePage.js" defer></script>
 
  
  

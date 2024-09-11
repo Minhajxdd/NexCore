@@ -1,7 +1,7 @@
 
 // Importing Models
 import orderModel from "../../models/orderSchema.js";
-import productModel from "../../models/productSchems.js";
+import productModel from "../../models/productSchema.js";
 import addressModel from "../../models/addressSchema.js";
 
 export async function ordersDetails(id){

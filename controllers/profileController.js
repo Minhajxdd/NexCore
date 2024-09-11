@@ -4,10 +4,6 @@ import { ordersDetails, getProductDetails, getAddressIdAndUser, addressDetailsGe
     orderCancel
  } from '../services/user/profileOrdersServices.js';
  
-// Importing Model
-import addressModel from '../models/addressSchema.js';
-import userModel from '../models/userSchema.js';
-
 
 export function profileGet(req, res){
     res.render('pages/user/profile.ejs');
@@ -17,9 +13,11 @@ export function profileGet(req, res){
 // Addresss
 
 export async function addressGet(req, res){
+    
+    const userId = req.session.userId || req.session.passport.user;
 
     try{
-        const addressId = await addressIdRetreve(req.session.userId);
+        const addressId = await addressIdRetreve(userId);
         const addresses = await addressRetrevefromArray(addressId);
         res.render('pages/user/address', {
             addresses
@@ -70,7 +68,10 @@ export async function updateAddress(req, res){
 // Orders
 
 export async function ordersGet(req, res){
-    const orders = await ordersDetails(req.session.userId);
+    const userId = req.session.userId || req.session.passport.user;
+    try{
+
+        const orders = await ordersDetails(userId);
 
     const productDetails = [];
 
@@ -83,6 +84,7 @@ export async function ordersGet(req, res){
                 return temp;
             })
         );
+        
         productDetails[indx].products = products;
     }));
 
@@ -91,16 +93,22 @@ export async function ordersGet(req, res){
         orders,
         productDetails
     });
+    }catch(err){
+        console.log(`error while rendering address`);
+    }
+    
 }
 
 
 export async function orderDetailsGet(req, res){
 
+    const userId = req.session.userId || req.session.passport.user;
+
     if(!req.query.id){
         return res.redirect('/not-found');
     }
 
-    const [orders] = await getAddressIdAndUser(req.query.id, req.session.userId);
+    const [orders] = await getAddressIdAndUser(req.query.id, userId);
 
     if(Object.keys(orders).length === 0){
         return res.redirect('/not-found');
@@ -114,7 +122,6 @@ export async function orderDetailsGet(req, res){
     );
 
     const address = await addressDetailsGet(orders.addressId);
-    console.log(products);
 
     res.render('pages/user/orderDetails',{
         orders,

@@ -6,6 +6,8 @@ import * as category from '../controllers/categoryController.js';
 import * as search from '../controllers/searchController.js';
 import * as checkout from '../controllers/checkoutController.js';
 import * as profile from '../controllers/profileController.js';
+import * as wishlist from '../controllers/wishlistController.js';
+
 
 const router = express.Router();
 
@@ -114,6 +116,16 @@ router.route('/order/successfull')
 // Checkout
 
 
+// WishList
+router.route('/wishlist')
+    .get(wishlist.wishListGet)
+
+router.route('/api/wishlist/add')
+    .get(wishlist.addtoWishlist)
+
+router.route('/api/wishlist/remove')
+    .get(wishlist.wishlistRemove)
+// WishList
 
 // Profile
 

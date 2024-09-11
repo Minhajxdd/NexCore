@@ -1,7 +1,7 @@
 
 
 // Importing Models
-import productModel from '../models/productSchems.js';
+import productModel from '../models/productSchema.js';
 import categoryModel from '../models/categorySchema.js';
 
 

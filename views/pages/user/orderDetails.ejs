@@ -367,14 +367,13 @@
                     </div>
                 </li>
             <% }); %>
-        
         </ul>
 
-<% if(orders.orderStatus !== 'cancelled' || orders.orderStatus !== 'delivered'){ %>
-    <div class="order-actions">
-        <button class="btn btn-danger" id="order-cancel" value="<%= orders._id %>">Cancel Order</button>
-    </div>
-<% } %>
+        <% if(orders.orderStatus !== 'cancelled' && orders.orderStatus !== 'delivered'){ %>
+            <div class="order-actions">
+                <button class="btn btn-danger" id="order-cancel" value="<%= orders._id %>">Cancel Order</button>
+            </div>
+        <% } %>
 
     </div>
 </div>

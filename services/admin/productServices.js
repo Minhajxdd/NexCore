@@ -2,7 +2,7 @@ import multer from 'multer';
 
 // Importing Schemas
 import categoryModel from '../../models/categorySchema.js';
-import productModel from '../../models/productSchems.js';
+import productModel from '../../models/productSchema.js';
 
 export async function getCategoryDetails(){
     try{
