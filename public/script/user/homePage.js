@@ -21,6 +21,8 @@
 })();
 // add to cart button
 
+
+// add to wishlist 
 document.querySelectorAll('.add-to-wishlist-btn').forEach(function (button){
   button.addEventListener('click' , function(){
     const productId = this.getAttribute('data-id');
@@ -34,6 +36,7 @@ document.querySelectorAll('.add-to-wishlist-btn').forEach(function (button){
     })
   })
 });
+// add to wishlist 
 
 
 

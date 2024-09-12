@@ -9,7 +9,6 @@ const wishlistSchmea = new Schema({
     },
     products: [{
         type: Schema.Types.ObjectId,
-        unique: true,
         sparse: true
     }],
     created_at: {

@@ -15,7 +15,7 @@ export async function getAllOrders(userId){
 
 export async function getUsersData(userId){
     try{
-        return await userModel.findById(userId);
+        return await userModel.find();
     }catch(err){
         console.log(`error while fetching user data on orderServices: ${err.message}`);
     }

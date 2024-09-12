@@ -41,18 +41,16 @@ const UsersSchema = new Schema({
 address_id :[
   {
     type: mongoose.Schema.Types.ObjectId,
-    unique: true,
     sparse: true
   }
 ],
 orders :[
   {
     type: mongoose.Schema.Types.ObjectId,
-    unique: true,
     sparse: true
   }
-]
- 
+]},{
+  minimize: false
 });
 
 const userModel = mongoose.model('Users', UsersSchema);

@@ -177,9 +177,7 @@ export async function getProductDetails(req, res){
 
 // Admin Orders Dashboard Controllers
 export const ordersGet = async (req, res) => {
-    const userId = req.session.userId || req.session.passport.user;
-
-    const orders = await getAllOrders(userId);
+    const orders = await getAllOrders();
 
     const users = await Promise.all(
         orders.map(async (order) => {
