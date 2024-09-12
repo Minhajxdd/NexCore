@@ -1,10 +1,16 @@
 
 // Importing Services functions
+
 import { createUser, getUsers, axiosIdFetch, userEdit, updateIsBlocked } from '../services/admin/usersServices.js';
+
 import { createCategory, getCategory, updateDeleted, editCategory, checkDuplicateCategory } from '../services/admin/categoryServices.js';
+
 import { getCategoryDetails, createProduct, getProducts, 
     updateDeletedProduct, updateProductStock, oneProductDetails } from '../services/admin/productServices.js';
+
 import { getAllOrders, getUsersData, updateOrderStatus } from '../services/admin/orderServices.js';
+
+import { createCoupon, checkDupeCoupon, getAllCoupons } from '../services/admin/couponServices.js';
 
 
 export const loginGet = (req, res) => {
@@ -208,10 +214,37 @@ export async function orderUpdateStatus(req, res){
 
 // Admin Orders Dashboard Controllers
 
+// Admin Coupons Dashboard Controllers
 
-export const couponsGet = (req, res) => {
-    res.render(`pages/admin/coupons`);
+export const couponsGet = async (req, res) => {
+    const coupons = await getAllCoupons();
+
+    res.render(`pages/admin/coupons`, {
+        coupons
+    });
 }
+
+export const apiAddCoupon = async (req, res) => {
+    console.log(req.body)
+
+    // if(!await checkDupeCoupon(req.body.cpCode)){
+    //     return res.json({
+    //         status: 'failed',
+    //         err_message: 'Coupon Code Already Exists!'
+    //     })
+    // }
+    
+    // await createCoupon(req.body);
+
+    // return res.json({
+    //     status: 'success',
+    //     message: 'new coupon successfully created'
+    // })
+
+}
+
+
+// Admin Coupons Dashboard Controllers
 
 export const salesReportGet = (req, res) => {
     res.render(`pages/admin/s-report`);

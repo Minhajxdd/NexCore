@@ -72,9 +72,16 @@ adminRouter.route('/api/orders/status-update')
 
 // Products order routes
 
+// Coupon Dashboard routes
 
 adminRouter.route('/coupons')
     .get(authenticate, adminContoller.couponsGet)
+
+adminRouter.route('/api/coupon/add')
+    .post(authenticate, adminContoller.apiAddCoupon)
+
+// Coupon Dashboard routes
+
 
 adminRouter.route('/sales-report')
     .get(authenticate, adminContoller.salesReportGet)
