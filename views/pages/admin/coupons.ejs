@@ -42,18 +42,31 @@
                         <th> Coupon Code </th>
                         <th> Discount Price </th>
                         <th> Minimum Price </th>
+                        <th> Expiration Date </th>
+                        <th> Limit </th>
+                        <th> Action </th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="table-body">
 
 
-                    <% coupons.forEach((val) => { %>
+                    <% coupons.forEach((val , ind) => { %>
                       
                       <tr>
-                        <td> 1 </td>
-                        <td> Herman Beck </td>
-                        <td> $ 77.99 </td>
-                        <td> May 15, 2015 </td>
+                        <td> <%= ind + 1 %> </td>
+                        <td id="couponCode-body"> <%= val.couponCode %> </td>
+                        <td id="discount-body"> <%= val.discountPrice %> </td>
+                        <td id="minimum-body"> <%= val.minimumPrice %> </td>
+                        <td id="date-body" value="<%= val.expirationDate %>"> <%= new Date(val.expirationDate).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) %> </td>
+                        <td id="date-limit"> <%= val.limit %> </td>
+                        <td>
+                          <% if(!val.isDeleted){ %>
+                            <button style="background-color: red;" data-id="<%= val._id %>" type="button"  id="delete-btn" class="btn btn-danger btn-md">Delete</button>
+                          <% }else{ %>
+                            <button style="background-color: #90EE90;" data-id="<%= val._id %>" type="button"  id="delete-btn" class="btn btn-danger btn-md">Enable</button>
+                          <% } %>
+                          <button data-id="<%= val._id %>" type="button" id="edit-btn" class="btn btn-primary btn-md edit-btn">Edit</button>
+                        </td>
                       </tr>
 
                     <% }) %>  
@@ -114,7 +127,57 @@
     </form>
   </div>
 </div>
-<!-- coupon add form -->        
+<!-- coupon add form -->    
+ 
+
+
+
+
+
+<!-- coupon edit form -->
+<div class="card" id="edit-coupon-div">
+  <div class="card-body">
+    <h4 class="card-title">Edit Coupon</h4>
+    <form class="forms-sample" id="edit-coupon-form">
+
+      <input type="hidden" id="edit-coupon-id" name="couponId"> 
+      <div class="form-group">
+        <label for="edit-coupon-code">Coupon Code</label>
+        <input type="text" class="form-control" id="edit-coupon-code"  name="cpCode" placeholder="coupon code..">
+      </div>
+
+
+      <div class="form-group">
+        <label for="edit-discount-price">Discount Price</label>
+        <input type="number" class="form-control" id="edit-discount-price" name="dscPrice" placeholder="discount price..">
+      </div>
+
+      <div class="form-group">
+        <label for="edit-minimum-value">Minimum Value</label>
+        <input type="number" class="form-control" id="edit-minimum-value" name="minPrice" placeholder="minimum value..">
+      </div>
+
+
+      <div class="form-group">
+        <label for="edit-expiration-date">Expiration Date</label>
+        <input type="date" class="form-control" id="edit-expiration-date" name="expDate" placeholder="coupon expiration date">
+      </div>
+
+      <div class="form-group">
+        <label for="edit-limit">Limit</label>
+        <input type="number" class="form-control" id="edit-limit" name="limit" placeholder="Limit">
+      </div>
+      
+      <div class="form-group">
+        <p style="color: red;" id="edit-form-err-message"></p>
+      </div>
+
+      <button type="submit" id="edit-coupon-submit" class="btn btn-primary mr-2">Submit</button>
+      <button type="button" id="edit-coupon-cancel" class="btn btn-dark">Cancel</button>
+    </form>
+  </div>
+</div>
+<!-- coupon edit form -->    
 
 
 
@@ -124,7 +187,8 @@
 
 
 <style>
-  #add-coupon-div{
+  #add-coupon-div,
+  #edit-coupon-div{
     position: fixed;
     top: 0;
     width: 81%;

@@ -80,6 +80,12 @@ adminRouter.route('/coupons')
 adminRouter.route('/api/coupon/add')
     .post(authenticate, adminContoller.apiAddCoupon)
 
+adminRouter.route('/api/coupon/edit')
+    .post(authenticate, adminContoller.apiEditCoupon)
+
+adminRouter.route('/api/coupon/delete')
+    .get(authenticate, adminContoller.apiDeleteCoupon)
+
 // Coupon Dashboard routes
 
 

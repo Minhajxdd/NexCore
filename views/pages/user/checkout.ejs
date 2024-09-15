@@ -1,198 +1,215 @@
 <%- include('../../partials/user/nav'); -%>
 
-<link rel="stylesheet" href="style/css/checkout.css">
+<link rel="stylesheet" href="style/css/checkout.css" />
 
 <title>Checkout</title>
 
-		<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<h3 class="breadcrumb-header">Checkout</h3>
-						<ul class="breadcrumb-tree">
-							<li><a href="/">Home</a></li>
-							<li class="active">Checkout</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+  <!-- container -->
+  <div class="container">
+    <!-- row -->
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="breadcrumb-header">Checkout</h3>
+        <ul class="breadcrumb-tree">
+          <li><a href="/">Home</a></li>
+          <li class="active">Checkout</li>
+        </ul>
+      </div>
+    </div>
+    <!-- /row -->
+  </div>
+  <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
 
+<!-- Page -->
+<div class="page-area cart-page spad">
+  <div class="container">
+    <form class="checkout-form">
+      <div class="row">
+        <% if(addresses.length !== 0) { %>
+        <input type="hidden" value="1" id="hidden-one" />
+        <h4 class="mb-3">Pick a Address:</h4>
+        <div class="col-lg-6 address-main-div">
+          <% addresses.forEach((val) => { %>
 
+          <label>
+            <div class="address-card-checkout col-xl-1">
+              <input
+                class="input-radio"
+                type="radio"
+                name="address"
+                value="<%= val._id %>"
+                checked
+              />
+              <br />
+              First Name: <%= val.first_name %> <br />
+              Last Name : <%= val.last_name %> <br />
+              Company: <%= val.company %> <br />
+              Street: <%= val.street %> <br />
+              Land Mark: <%= val.land_mark %> <br />
+              Zipcode: <%= val.zipcode %> <br />
+              City / Town: <%= val.city_town %> <br />
+              State: <%= val.state %> <br />
+              Phone Number: <%= val.phone_no %> <br />
+              Email: <%= val.email %>
+            </div>
+          </label>
 
+          <% }) %>
 
+          <div class="col-lg-12">
+            <textarea
+              name=""
+              class="form-control"
+              id="optional-message-single"
+              placeholder="Optional Message"
+            ></textarea>
+          </div>
+        </div>
 
+        <% }else{ %>
+        <input type="hidden" value="2" id="hidden-one" />
+        <div class="col-lg-6">
+          <h4 class="checkout-title">Create a address</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <input type="text" id="firstName" placeholder="First Name *" />
+            </div>
+            <div class="col-md-6">
+              <input type="text" id="lastName" placeholder="Last Name *" />
+            </div>
+            <div class="col-md-12">
+              <input
+                type="text"
+                id="address1"
+                placeholder="Flat, House no., Building, Company, Apartment *"
+              />
+              <input
+                type="text"
+                id="address2"
+                placeholder="Area, Street, Sector, Village"
+              />
+              <input type="text" id="landmark" placeholder="Landmark" />
+              <input
+                type="text"
+                id="optionalMessage"
+                placeholder="Optional Message"
+              />
+              <input type="text" id="zipcode" placeholder="Zipcode *" />
+              <input type="text" id="city" placeholder="Town/City" />
+              <select id="state">
+                <option value="">Select State</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="West Bengal">West Bengal</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Haryana">Haryana</option>
+              </select>
+              <input type="text" id="phone" placeholder="Phone no *" />
+              <input type="email" id="email" placeholder="Email Address *" />
+              <span id="error_message" class="err-msg"></span>
+            </div>
+          </div>
+        </div>
 
-    <!-- Page -->
-	<div class="page-area cart-page spad">
-		<div class="container">
-			<form class="checkout-form">
-				<div class="row">
+        <% } %>
 
-				<% if(addresses.length !== 0) { %>
-					<input type="hidden" value="1" id="hidden-one">
-					<h4 class="mb-3">Pick a Address:</h4>
-					<div class="col-lg-6 address-main-div">
-	
+        <div class="col-lg-6">
+          <div class="order-card">
+            <div class="order-details">
+              <div class="od-warp">
+                <h4 class="checkout-title">Your Products</h4>
+                <table class="order-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% products.forEach((val, ind) =>{ %>
+                    <tr>
+                      <td><%= val.name.substring(0,40)+"..." %></td>
+                      <td>
+                        ₹<%= new
+                        Intl.NumberFormat('en-IN').format(cartData.items[ind].price)
+                        %>
+                      </td>
+                    </tr>
+                    <% }) %>
+                    <tr>
+                      <td>SubTotal</td>
+                      <td>
+                        ₹<%= new
+                        Intl.NumberFormat('en-IN').format(cartData.totalPrice)
+                        %>
+                      </td>
+                    </tr>
+                    <tr class="cart-subtotal">
+                      <td>Shipping</td>
+                      <td>Free</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr class="order-total">
+                      <th>Total</th>
+                      <th>
+                        ₹<%= new
+                        Intl.NumberFormat('en-IN').format(cartData.totalPrice)
+                        %>
+                      </th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
 
-					<% addresses.forEach((val) => { %>
+              <div class="od-warp cpn-prnt-div">
+                <h5>Apply Coupon</h5>
+                <div class="cpn-div">
+                  <input type="text" name="coupon" />
+                  <button type="button">Apply</button>
+                </div>
+              </div>
 
-						<label>
-							<div class="address-card-checkout col-xl-1">
-									<input class="input-radio" type="radio" name="address" value="<%= val._id %>" checked>
-									<br> First Name: <%= val.first_name %> <br>
-									Last Name : <%= val.last_name %> <br>
-									Company: <%= val.company %> <br>
-									Street: <%= val.street %> <br>
-									Land Mark: <%= val.land_mark %> <br>
-									Zipcode: <%= val.zipcode %> <br>
-									City / Town: <%= val.city_town %> <br>
-									State: <%= val.state %> <br>
-									Phone Number: <%= val.phone_no %> <br>
-									Email: <%= val.email %>
-								</div>
-							</label>
-
-
-					<% }) %>
-
-
-						
-					<div class="col-lg-12">
-						<textarea name="" class="form-control" id="optional-message-single" placeholder="Optional Message"></textarea>
-					  </div>
-					</div>
-
-
-				<% }else{ %>
-					<input type="hidden" value="2" id="hidden-one">
-					<div class="col-lg-6">
-						<h4 class="checkout-title">Create a address</h4>
-						<div class="row">
-	
-								<div class="col-md-6">
-									<input type="text" id="firstName" placeholder="First Name *">
-								</div>
-								<div class="col-md-6">
-									<input type="text" id="lastName" placeholder="Last Name *">
-								</div>
-								<div class="col-md-12">
-									<input type="text" id="address1" placeholder="Flat, House no., Building, Company, Apartment *">
-									<input type="text" id="address2" placeholder="Area, Street, Sector, Village">
-									<input type="text" id="landmark" placeholder="Landmark">
-									<input type="text" id="optionalMessage" placeholder="Optional Message">
-									<input type="text" id="zipcode" placeholder="Zipcode *">
-									<input type="text" id="city" placeholder="Town/City">
-									<select id="state">
-										<option value="">Select State</option>
-										<option value="Tamil Nadu">Tamil Nadu</option>
-										<option value="Kerala">Kerala</option>
-										<option value="Maharashtra">Maharashtra</option>
-										<option value="Karnataka">Karnataka</option>
-										<option value="Gujarat">Gujarat</option>
-										<option value="Rajasthan">Rajasthan</option>
-										<option value="Uttar Pradesh">Uttar Pradesh</option>
-										<option value="West Bengal">West Bengal</option>
-										<option value="Punjab">Punjab</option>
-										<option value="Haryana">Haryana</option>
-									</select>
-									<input type="text" id="phone" placeholder="Phone no *">
-									<input type="email" id="email" placeholder="Email Address *">
-									<span id="error_message" class="err-msg"></span>
-								</div>
-								
-							
-						</div>
-					</div>
-					
-				<% } %>
-
-
-					<div class="col-lg-6">
-						<div class="order-card">
-							<div class="order-details">
-								<div class="od-warp">
-									<h4 class="checkout-title">Your Products</h4>
-									<table class="order-table">
-										<thead>
-											<tr>
-												<th>Product</th>
-												<th>Total</th>
-											</tr>
-										</thead>
-										<tbody>
-									<% products.forEach((val, ind) =>{ %>
-											<tr>
-												<td><%= val.name.substring(0,40)+"..." %></td>
-												<td>₹<%=  new Intl.NumberFormat('en-IN').format(cartData.items[ind].price) %></td>
-											</tr>
-									<% }) %>
-											<tr>
-												<td>SubTotal</td>
-												<td>₹<%=  new Intl.NumberFormat('en-IN').format(cartData.totalPrice) %></td>
-											</tr>
-											<tr class="cart-subtotal">
-												<td>Shipping</td>
-												<td>Free</td>
-											</tr>
-										</tbody>
-										<tfoot>
-											<tr class="order-total">
-												<th>Total</th>
-												<th>₹<%=  new Intl.NumberFormat('en-IN').format(cartData.totalPrice) %></th>
-											</tr>
-										</tfoot>
-									</table>
-								</div>
-
-								<div class="od-warp cpn-prnt-div">
-									<h5>Apply Coupon</h5>
-									<div class="cpn-div">
-										<input type="text" name="coupon">
-										<button type="button">Apply</button>
-									</div>
-								</div>
-
-
-								<div class="payment-method">
-									<div class="pm-item">
-										<input value="paypal" type="radio" name="pm" id="one">
-										<label for="one">Paypal</label>
-									</div>
-									<div class="pm-item">
-										<input value="Cash on Delivery" type="radio" name="pm" id="two">
-										<label for="two">Cash on delievery</label>
-									</div>
-									<div class="pm-item">
-										<input value="crt_card" type="radio" name="pm" id="three">
-										<label for="three">Credit card</label>
-									</div>
-									<div class="pm-item">
-										<input value="bnk_tranfer" type="radio" name="pm" id="four" checked>
-										<label for="four">Direct bank transfer</label>
-									</div>
-								</div>
-							</div>
-							<button class="site-btn btn-full" id="place-order-btn">Place Order</button>
-						</div>
-					</div>
-
-
-
-				</div>
-			</form>
-		</div>
-	</div>
-	<!-- Page -->
-
+              <div class="payment-method">
+                <div class="pm-item">
+                  <input value="Razer Pay" type="radio" name="pm" id="three" />
+                  <label for="three">Razor Pay</label>
+                </div>
+                <div class="pm-item">
+                  <input
+                    value="Cash on Delivery"
+                    type="radio"
+                    name="pm"
+                    id="two"
+                  />
+                  <label for="two">Cash on delievery</label>
+                </div>
+              </div>
+            </div>
+            <button class="site-btn btn-full" id="place-order-btn">
+              Place Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Page -->
 
 <!-- Custome js -->
 <script src="/script/user/checkout.js"></script>
+
+<!-- Razor Pay cdn -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <%- include('../../partials/user/footer'); -%>

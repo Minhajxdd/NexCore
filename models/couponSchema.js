@@ -25,10 +25,18 @@ const CouponSchema = new mongoose.Schema({
     required: true,
     default: 1,
   },
+  isDeleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date
+  }
 });
 
 const couponModel = mongoose.model("Coupon", CouponSchema);

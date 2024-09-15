@@ -14,7 +14,7 @@ export const signupPost = async (req , res) => {
     const { email } = req.body;
     const otp = await generateOTP();
 
-
+    console.log(email , otp)
     // Send OTP via email
     await sendOTP(email, otp , req.body.fullname);
 

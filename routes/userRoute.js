@@ -113,6 +113,12 @@ router.route('/order/authenticate')
 router.route('/order/successfull')
     .get(checkout.orderSuccessfullGet);
 
+router.route('/api/order/razorpay/create')
+    .get(checkout.razorPayCreateOrder)
+
+router.route('/api/order/razorpay/conform')
+    .post(checkout.conformPaymentRazorPay)
+
 // Checkout
 
 
