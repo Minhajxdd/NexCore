@@ -126,7 +126,7 @@
           <div class="order-card">
             <div class="order-details">
               <div class="od-warp">
-                <h4 class="checkout-title">Your Products</h4>
+                <h4 class="checkout-title">Order Summary</h4>
                 <table class="order-table">
                   <thead>
                     <tr>
@@ -157,16 +157,23 @@
                       <td>Shipping</td>
                       <td>Free</td>
                     </tr>
+
+                    <tr>
+                      <td>Coupon</td>
+                      <td id="coupon-td-amount" style="color: red;">none</td>
+                    </tr>
+
                   </tbody>
                   <tfoot>
                     <tr class="order-total">
                       <th>Total</th>
-                      <th>
+                      <th id="coupon-th-total">
                         ₹<%= new
                         Intl.NumberFormat('en-IN').format(cartData.totalPrice)
                         %>
                       </th>
                     </tr>
+                  
                   </tfoot>
                 </table>
               </div>
@@ -174,9 +181,10 @@
               <div class="od-warp cpn-prnt-div">
                 <h5>Apply Coupon</h5>
                 <div class="cpn-div">
-                  <input type="text" name="coupon" />
-                  <button type="button">Apply</button>
+                  <input id="coupon-input" type="text" name="coupon" />
+                  <button id="apply-coupon-btn" type="button">Apply</button>
                 </div>
+                <span id="coupon-err-msg" class="text-danger"></span>
               </div>
 
               <div class="payment-method">

@@ -4,9 +4,8 @@ import userModel from '../../models/userSchema.js';
 
 export async function getAllOrders(userId){
     try{
-        const data = await ordersModel.find({
-            user_id: userId
-        })
+        const data = await ordersModel.find()
+
         return data;
     }catch(err){
         console.log(`error while fetching all orders: ${err.message}`);

@@ -1,3 +1,5 @@
+let couponId = null;
+
 // Validation and axios of address
 (function () {
   document.querySelector("#place-order-btn").addEventListener("click", (e) => {
@@ -7,7 +9,7 @@
 
     const selectedOption = document.querySelector('input[name="pm"]:checked');
 
-    if (!selectedOption.value) {
+    if (!selectedOption) {
       return alert("Select Payment Method");
     }
 
@@ -91,6 +93,10 @@
       }
     }
 
+    if (couponId) {
+      data.couponId = couponId;
+    }
+
     if (data.paymentMethod === "Razer Pay") {
       axios
         .get("/api/order/razorpay/create")
@@ -125,7 +131,7 @@
 
               // Send data using Axios
               axios
-                .post("/order/authenticate", data)
+                .post("/order/create", data)
                 .then(function (res) {
                   console.log(res.data);
                   if (res.data.status === "success") {
@@ -157,7 +163,7 @@
     } else if (data.paymentMethod === "Cash on Delivery") {
       // Send data using Axios
       axios
-        .post("/order/authenticate", data)
+        .post("/order/create", data)
         .then(function (res) {
           console.log(res.data);
           if (res.data.status === "success") {
@@ -174,3 +180,50 @@
     }
   });
 })();
+
+// Apply Coupon
+document
+  .getElementById("apply-coupon-btn")
+  .addEventListener("click", function () {
+    const coupon = document.getElementById("coupon-input").value.trim();
+    const err = document.getElementById("coupon-err-msg");
+
+    if (!coupon) {
+      return (err.innerHTML = "Enter a valid coupon");
+    }
+
+    axios
+      .post("/api/coupon/auth", {
+        coupon: coupon,
+      })
+      .then(function (res) {
+        if (res.data.err_message) {
+          return (err.innerHTML = res.data.err_message);
+        }
+
+        updateAmount(res.data.couponResponse);
+      })
+      .catch(function (err) {
+        console.log(`error while sending coupon request: ${err.message}`);
+      });
+
+    err.innerHTML = "";
+  });
+
+// update the dom of coupon
+function updateAmount(data) {
+  const couponAmount = document.getElementById("coupon-td-amount");
+  const finalTotal = document.getElementById("coupon-th-total");
+
+  couponId = data.id;
+
+  couponAmount.innerHTML = `-₹${new Intl.NumberFormat("en-IN").format(
+    data.discountPrice
+  )}`;
+  finalTotal.innerHTML = `₹${new Intl.NumberFormat("en-IN").format(
+    data.couponPrice
+  )}`;
+}
+// update the dom of coupon
+
+// updateAmount(data)

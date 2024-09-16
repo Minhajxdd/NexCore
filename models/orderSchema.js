@@ -46,7 +46,10 @@ const orderSchmea = new Schema({
         default: 'pending',
         required: true
     },
-    note: String
+    couponId: {
+      type: Schema.Types.ObjectId
+    },
+    note: String,
 
 });
 

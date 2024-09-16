@@ -29,6 +29,9 @@ const cartSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  couponPrice: {
+    type: Number
+  },
   createdAt: {
     type: Date,
     default: Date.now,

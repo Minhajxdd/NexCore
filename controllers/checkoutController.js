@@ -15,6 +15,7 @@ import addressModel from "../models/addressSchema.js";
 import userModel from "../models/userSchema.js";
 import orderModel from "../models/orderSchema.js";
 import address from "../models/addressSchema.js";
+import couponModel from "../models/couponSchema.js";
 
 export async function getCheckout(req, res) {
   const cartId = req.session.cartId;
@@ -34,6 +35,10 @@ export async function getCheckout(req, res) {
       _id: { $in: productsId },
     });
 
+    if (cartData.items.length === 0) {
+      return res.redirect("/not-found");
+    }
+
     res.render("pages/user/checkout.ejs", {
       products,
       cartData,
@@ -44,10 +49,10 @@ export async function getCheckout(req, res) {
   }
 }
 
-export async function orderAuthenticate(req, res) {
+export async function orderCreate(req, res) {
   const userId = req.session.userId || req.session.passport.user;
 
-  const { paymentMethod } = req.body;
+  const { paymentMethod, couponId } = req.body;
   const optionalMessage = req.body.optionalMessage || null;
   let cartData = null;
 
@@ -88,11 +93,47 @@ export async function orderAuthenticate(req, res) {
 
   try {
     cartData = await cartModel.findById(req.session.cartId);
-    console.log(cartData);
   } catch (err) {
     console.log(
       `error while fetching data from cart on checkout: ${err.message}`
     );
+  }
+
+  if (couponId) {
+    try {
+      const couponData = await couponModel.findById(couponId);
+
+      if (!couponData) {
+        return res.json({
+          status: false,
+          message: "coupon id not found",
+        });
+      }
+
+      if (cartData.totalPrice < couponData.minimumPrice) {
+        return res.json({
+          status: false,
+          err_message: `Coupon Can be only applied for more than ${couponData.minimumPrice}`,
+        });
+      }
+
+      if (couponData.limit <= 0) {
+        return res.json({
+          status: false,
+          err_message: `Coupon limit reached`,
+        });
+      }
+
+      cartData.totalPrice = cartData.totalPrice - couponData.discountPrice;
+
+      await couponModel.findByIdAndUpdate(couponId, {
+        $inc: {
+          limit: -1,
+        },
+      });
+    } catch (err) {
+      console.log(`error whle applying coupon coupon : ${err.message}`);
+    }
   }
 
   const order = {
@@ -101,6 +142,7 @@ export async function orderAuthenticate(req, res) {
     totalPrice: cartData.totalPrice,
     addressId: Addressid,
     paymentMethod: paymentMethod,
+    couponId: couponId,
   };
 
   if (optionalMessage) {
@@ -198,4 +240,61 @@ export const conformPaymentRazorPay = (req, res) => {
 
 export async function orderSuccessfullGet(req, res) {
   res.render("pages/user/orderSuccessfull.ejs");
+}
+
+export async function authCoupon(req, res) {
+  const { coupon } = req.body;
+  const cartId = req.session.cartId;
+
+  if (!coupon) {
+    return res.json({
+      status: false,
+      err_message: "Enter Valid Coupon!",
+    });
+  }
+
+  try {
+    const couponData = await couponModel.findOne({ couponCode: coupon });
+
+    if (!couponData) {
+      return res.json({
+        status: false,
+        err_message: "No coupon Found!",
+      });
+    }
+
+    const cartData = await cartModel.findById(cartId);
+
+    if (cartData.totalPrice < couponData.minimumPrice) {
+      return res.json({
+        status: false,
+        err_message: `Coupon Can be only applied for more than ${couponData.minimumPrice}`,
+      });
+    }
+
+    if (couponData.limit <= 0) {
+      return res.json({
+        status: false,
+        err_message: `Coupon limit reached`,
+      });
+    }
+
+    const couponResponse = {
+      id: couponData._id,
+      discountPrice: couponData.discountPrice,
+    };
+
+    couponResponse.couponPrice = cartData.totalPrice - couponData.discountPrice;
+
+    return res.json({
+      status: true,
+      couponResponse,
+    });
+  } catch (err) {
+    console.log(`error while applying coupon: ${err.message}`);
+    return res.json({
+      status: false,
+      message: "something went wrong",
+    });
+  }
 }

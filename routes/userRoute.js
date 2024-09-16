@@ -107,8 +107,8 @@ router.route('/api/search')
 router.route('/checkout')
     .get(checkout.getCheckout);
 
-router.route('/order/authenticate')
-    .post(checkout.orderAuthenticate);
+router.route('/order/create')
+    .post(checkout.orderCreate);
 
 router.route('/order/successfull')
     .get(checkout.orderSuccessfullGet);
@@ -118,6 +118,9 @@ router.route('/api/order/razorpay/create')
 
 router.route('/api/order/razorpay/conform')
     .post(checkout.conformPaymentRazorPay)
+
+router.route('/api/coupon/auth')
+    .post(checkout.authCoupon)
 
 // Checkout
 
