@@ -59,3 +59,37 @@ export async function orderCancel(id) {
     return false;
   }
 }
+
+export async function validateOrder(id){
+  try{
+    const order = await orderModel.findById(id);
+    
+    if(!order){
+      return false;
+    }
+    return true;
+
+  }catch(err){
+    console.log(`error while validating order: ${err.message}`);
+    return false;
+  }
+}
+
+export async function sendReturnRequest(data){
+  try{
+    await orderModel.findByIdAndUpdate(data.id, 
+      {
+        $set: {
+          'returnRequest.request': 'requested',
+          'returnRequest.reason': data.reason,
+          'returnRequest.note': data.note,
+        }
+      }
+    )
+    
+    return true;
+  }catch(err){
+    console.log(`error while sending return request : ${err.message}`);
+    return false;
+  }
+}

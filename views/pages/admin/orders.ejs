@@ -1,119 +1,309 @@
 <%- include('../../partials/admin/head'); -%>
-<title>Orders Admin</title>
+  <title>Orders Admin</title>
+
+  <%- include('../../partials/admin/nav'); -%>
+
+    <!-- Font awsome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 
-<%- include('../../partials/admin/nav'); -%>
+    <style>
+      .notification {
+        position: relative;
+        display: inline-block;
+      }
+
+      .fa-envelope {
+        font-size: 30px;
+        color: #c4b0b0;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .fa-envelope:hover {
+        color: #ff9800;
+      }
+
+      .badge1 {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 10px;
+        font-size: 10px;
+        font-weight: bold;
+      }
+
+
+      .popup {
+        display: none;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        width: 320px;
+        max-height: 450px;
+        background-color: #000000;
+        border-radius: 10px;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.6);
+        overflow-y: auto;
+        animation: slideDown 0.3s ease;
+      }
+
+      .popup h4 {
+        margin: 15px;
+        color: #ffffff;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .order {
+        background-color: #191C24;
+        padding: 15px;
+        margin: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .order h5 {
+        margin: 0;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        color: #ff9800;
+      }
+
+      .order p {
+        font-size: 0.9rem;
+        color: #ccc;
+        margin-bottom: 12px;
+      }
+
+      .order button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-right: 10px;
+      }
+
+      .order button.reject {
+        background-color: #dc3545;
+      }
+
+      .order button:hover {
+        background-color: #0056b3;
+      }
+
+      .order button.reject:hover {
+        background-color: #c82333;
+      }
+
+      /* Slide-down animation */
+      @keyframes slideDown {
+        0% {
+          transform: translateY(-20%);
+          opacity: 0;
+        }
+
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Scrollbar Styling */
+      .popup::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      .popup::-webkit-scrollbar-thumb {
+        background-color: #ff9800;
+        border-radius: 10px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .popup {
+          width: 270px;
+        }
+
+        .fa-envelope {
+          font-size: 40px;
+        }
+      }
+    </style>
+
+
 
     <!-- partial -->
     <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-12 grid-margin stretch-card">
-              <div class="card corona-gradient-card">
-                <div class="card-body py-0 px-0 px-sm-3 title-div">
-                  <div class="row align-items-center ">
-                    <div class="col-4 col-sm-3 col-xl-2">
-                      <img src="/admin_template/assets/images/dashboard/Group126@2x1.png" class="gradient-corona-img img-fluid" alt="">
-                    </div>
-                    <div class="col-5 col-sm-7 col-xl-8 p-0 title">
-                      <h2 class="mb-1 mb-sm-0">Orders Dashboard</h2>
-                    </div>
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-12 grid-margin stretch-card">
+            <div class="card corona-gradient-card">
+              <div class="card-body py-0 px-0 px-sm-3 title-div">
+                <div class="row align-items-center">
+                  <div class="col-4 col-sm-3 col-xl-2">
+                    <img src="/admin_template/assets/images/dashboard/Group126@2x1.png"
+                      class="gradient-corona-img img-fluid" alt="" />
+                  </div>
+                  <div class="col-5 col-sm-7 col-xl-8 p-0 title">
+                    <h2 class="mb-1 mb-sm-0">Orders Dashboard</h2>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="content-wrapper">
+
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <div id="card-title">
+                    <h4 class="card-title">Users</h4>
+
+                    <div class="notification">
+                      <i class="fas fa-envelope" onclick="togglePopup()"></i>
+                      <% let msgCount=0 %>
+                        <span class="badge1" id="messageCounter-return">
+                          <%= msgCount %>
+                        </span>
+
+                        <!-- Popup for message details -->
+                        <div class="popup" id="messagePopup">
+                          <h4>Return Requests</h4>
 
 
-             <div class="content-wrapper">
-    <div class="row ">
-      <div class="col-12 grid-margin">
-        <div class="card">
-          <div class="card-body">
-            <div id="card-title">
-              <h4 class="card-title">Users</h4>
-            </div>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th> NO:</th>
-                    <th> User Name </th>
-                    <th> Order Id </th>
-                    <th> Order Date </th>
-                    <th> Total Amount </th>
-                    <th> Payment Method </th>
-                    <th> Order Status </th>
-                    <th> Details </th>
-                  </tr>
-                </thead>
-                <tbody id="table-body">
-                  <% %>
-                  <% users.forEach( (user , ind) => { %>
-                    <tr>
-                      <td><%= ind+1  %></td>
-                      <td><%= user.full_name %></td>
-                      <td>#<%= orders[ind]._id %></td>
-                      <td><%= new Date(orders[ind].orderedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
-                      <td>₹<%= new Intl.NumberFormat('en-IN').format(orders[ind].totalPrice) %></td>
-                      <td><%= orders[ind].paymentMethod %></td>
-                       <td>
-                        <select class="form-control order-status-dropdown" value="<%= orders[ind].orderStatus %>" data-id="<%= orders[ind]._id %>">
+                          <% orders.forEach((order)=> { %>
 
-                        <% if(orders[ind].orderStatus === 'pending'){ %>
-                          <option selected value="pending">pending</option>
-                          <option value="cancelled">cancelled</option>
-                          <option value="processed">processed</option>
-                          <option value="shipped">shipped</option>
-                          <option value="delivered">delivered</option>
-                        <% }  else if(orders[ind].orderStatus === 'processed'){ %>
-                          <option value="cancelled">cancelled</option>
-                          <option selected value="processed">processed</option>
-                          <option value="shipped">shipped</option>
-                          <option value="delivered">delivered</option>
-                        <% } else if(orders[ind].orderStatus === 'shipped'){ %>
-                            <option value="cancelled">cancelled</option>
-                            <option selected value="shipped">shipped</option>
-                            <option value="delivered">delivered</option>    
-                        <% } else if(orders[ind].orderStatus === 'delivered'){ %>
-                            <option selected value="delivered">delivered</option> 
-                        <% } else if(orders[ind].orderStatus === 'cancelled'){ %>
-                            <option selected value="cancelled">cancelled</option>
-                        <% }; %>
-                        </select>
+                            <% if(order.returnRequest.request==='requested' ){ %>
+                              <% msgCount++ %>
 
-                       </td>
-                      <td>
-                        <button class="badge btn-success"  id="btn-action" value="<%= orders[ind]._id %>">More Details..</button>
-                        
-                      </td>
-                    </tr>
-                  <% }); %>
-                </tbody>
-              </table>
+                                <div class="order">
+                                  <h5>Order #<%= order._id %>
+                                  </h5>
+                                  <% const reason=order.returnRequest.reason %>
+                                    <p><strong>Reason:</strong>
+                                      <%= reason==='wrong_item' ? 'Wrong Item' : reason==='damaged_item'
+                                        ? 'Damaged Item' : reason==='late_delivery' ? 'Late Delivery' :
+                                        reason==='changed_mind' ? 'Changed Mind' : reason==='other' ? 'Other' : 'Other'
+                                        %>
+                                    </p>
+                                    <p><strong>Additional Message:</strong>
+                                      <%= order.returnRequest.note %>
+                                    </p>
+                                    <button class="return-accept" data-id="<%= order._id %>">Accept</button>
+                                    <button class="return-reject reject" data-id="<%= order._id %>">Reject</button>
+                                </div>
+                                <% } %>
+
+                                  <% }); %>
+                                    <span id="HiddenMessageCountReview" class="hidden" style="display: none;">
+                                      <%= msgCount %>
+                                    </span>
+                        </div>
+
+                    </div>
+
+
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>NO:</th>
+                          <th>User Name</th>
+                          <th>Order Id</th>
+                          <th>Order Date</th>
+                          <th>Total Amount</th>
+                          <th>Payment Method</th>
+                          <th>Order Status</th>
+                          <th>Details</th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-body">
+                        <% %>
+                          <% users.forEach( (user , ind)=> { %>
+                            <tr>
+                              <td>
+                                <%= ind+1 %>
+                              </td>
+
+
+                              <td>
+                                <%= user.full_name %>
+                              </td>
+                              <td>#<%= orders[ind]._id %>
+                              </td>
+                              <td>
+                                <%= new Date(orders[ind].orderedAt).toLocaleDateString('en-US', { year: 'numeric' ,
+                                  month: 'long' , day: 'numeric' }) %>
+                              </td>
+                              <td>
+                                ₹<%= new Intl.NumberFormat('en-IN').format(orders[ind].totalPrice) %>
+                              </td>
+                              <td>
+                                <%= orders[ind].paymentMethod %>
+                              </td>
+                              <td>
+                                <select id="<%= orders[ind]._id %>" class="form-control order-status-dropdown"
+                                  value="<%= orders[ind].orderStatus %>" data-id="<%= orders[ind]._id %>">
+                                  <% if(orders[ind].orderStatus==='pending' ){ %>
+                                    <option selected value="pending">pending</option>
+                                    <option value="cancelled">cancelled</option>
+                                    <option value="processed">processed</option>
+                                    <option value="shipped">shipped</option>
+                                    <option value="delivered">delivered</option>
+                                    <% } else if(orders[ind].orderStatus==='processed' ){ %>
+                                      <option value="cancelled">cancelled</option>
+                                      <option selected value="processed">processed</option>
+                                      <option value="shipped">shipped</option>
+                                      <option value="delivered">delivered</option>
+                                      <% } else if(orders[ind].orderStatus==='shipped' ){ %>
+                                        <option value="cancelled">cancelled</option>
+                                        <option selected value="shipped">shipped</option>
+                                        <option value="delivered">delivered</option>
+                                        <% } else if(orders[ind].orderStatus==='delivered' ){ %>
+                                            <option selected value="returned">returned</option>
+                                          <option selected id="return-delivery-option" value="delivered">delivered
+                                          </option>
+                                          <% } else if(orders[ind].orderStatus==='cancelled' ){ %>
+                                            <option selected value="cancelled">cancelled</option>
+                                            <% } else if(orders[ind].orderStatus==='returned' ){ %>
+                                              <option selected value="returned">returned</option>
+                                              <% } %>
+                                </select>
+                              </td>
+                              <td>
+                                <button class="badge btn-success" id="btn-action" value="<%= orders[ind]._id %>">
+                                  More Details..
+                                </button>
+                              </td>
+                            </tr>
+                            <% }); %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
+    <!-- Custom Script -->
+    <script src="/script/admin/order.js"></script>
 
+    <!-- Cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
 
-    </div>
-
-
-    
-</div> 
-
-
-
-<!-- Custom Script -->
-<script src="/script/admin/order.js"></script>
-
-<!-- Cdn -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
-
-
-<%- include('../../partials/admin/body'); -%>
-
+    <%- include('../../partials/admin/body'); -%>

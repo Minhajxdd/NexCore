@@ -70,6 +70,11 @@ adminRouter.route('/orders')
 adminRouter.route('/api/orders/status-update')
     .post(adminContoller.orderUpdateStatus);
 
+adminRouter.route('/api/orders/return/:action')
+    .post(adminContoller.adminOrderAction)
+
+
+
 // Products order routes
 
 // Coupon Dashboard routes

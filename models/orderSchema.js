@@ -36,7 +36,7 @@ const orderSchmea = new Schema({
     },
     orderStatus: {
         type: String,
-        enum: ['pending', 'processed','shipped', 'delivered', 'cancelled'], 
+        enum: ['pending', 'processed','shipped', 'delivered', 'cancelled', 'returned'], 
         default: 'pending',
         required: true
     },
@@ -48,6 +48,11 @@ const orderSchmea = new Schema({
     },
     couponId: {
       type: Schema.Types.ObjectId
+    },
+    returnRequest: {
+      request: { type: String, enum: ['requested', 'accepted', 'rejected'] },
+      reason: { type: String, default: '' },
+      note: { type: String, default: '' }
     },
     note: String,
 

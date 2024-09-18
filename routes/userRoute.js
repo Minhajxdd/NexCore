@@ -161,6 +161,9 @@ router.route('/orders/overview')
 
 router.route('/api/orders/cancel')
     .get(profile.cancelOrderApi)
+
+router.route('/api/orders/return')
+    .post(profile.returnRequestOrderApi)
     // Orders
 
 

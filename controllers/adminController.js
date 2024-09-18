@@ -29,6 +29,7 @@ import {
   getAllOrders,
   getUsersData,
   updateOrderStatus,
+  acceptOrderRequest,
 } from "../services/admin/orderServices.js";
 
 import {
@@ -36,7 +37,7 @@ import {
   checkDupeCoupon,
   getAllCoupons,
   editCoupon,
-  deleteCoupon
+  deleteCoupon,
 } from "../services/admin/couponServices.js";
 
 export const loginGet = (req, res) => {
@@ -230,6 +231,40 @@ export async function orderUpdateStatus(req, res) {
   });
 }
 
+export async function adminOrderAction(req, res) {
+  try {
+    const { id } = req.body;
+    const { action } = req.params;
+
+    if(!id){
+      return res.json({
+        status: false,
+        message: `order id not found`
+      })
+    }
+    
+    if(action === 'accept'){
+      await acceptOrderRequest(id, 'accepted');
+    } else if(action === 'reject'){
+      await acceptOrderRequest(id, 'rejected');
+    }
+    
+
+    return res.json({
+      status: true,
+      message: "request accepted successfully",
+    });
+  } catch (err) {
+    console.log(`Error while acceptingOrderReturn : ${err.message}`);
+    return res.json({
+      status: false,
+      message: "error while accepting return order",
+    });
+  }
+}
+
+
+
 // Admin Orders Dashboard Controllers
 
 // Admin Coupons Dashboard Controllers
@@ -261,32 +296,29 @@ export const apiAddCoupon = async (req, res) => {
 };
 
 export const apiEditCoupon = async (req, res) => {
-  
-  if(await editCoupon(req.body)){
+  if (await editCoupon(req.body)) {
     return res.json({
-      status: 'success',
-      message: 'successfully edited Coupon'
-    })
+      status: "success",
+      message: "successfully edited Coupon",
+    });
   }
 
   return res.json({
-    status: 'failed',
-    message: 'error wile editing coupon'
-  })
-
+    status: "failed",
+    message: "error wile editing coupon",
+  });
 };
 
 export const apiDeleteCoupon = async (req, res) => {
-  if(req.query.id){
-    await deleteCoupon(req.query.id)
+  if (req.query.id) {
+    await deleteCoupon(req.query.id);
   }
 
   return res.json({
-    status: 'success',
-    message: 'Update Successfully'
-  })
-}
-
+    status: "success",
+    message: "Update Successfully",
+  });
+};
 
 // Admin Coupons Dashboard Controllers
 
