@@ -169,3 +169,11 @@ export async function returnRequestOrderApi(req, res) {
 }
 
 // Orders
+
+// Wallet
+
+export async function getWallet(req, res){
+  res.render("pages/user/wallet.ejs");
+}
+
+// Wallet

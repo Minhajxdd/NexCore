@@ -1,0 +1,133 @@
+<%- include('../../partials/user/nav'); -%>
+
+<title>Wallet</title>
+
+<style>
+    /* Wallet Section Styling */
+    .wallet-section {
+      margin-top: 50px;
+    }
+    .wallet-balance {
+      padding: 30px;
+      background-color: #f7f7f7;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+    .wallet-balance:hover {
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    .balance-amount {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #4CAF50;
+      margin: 15px 0;
+    }
+    .transaction-btn {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+    }
+    .add-funds-btn {
+      background-color: #5bc0de;
+      border-color: #46b8da;
+    }
+    .transaction-history {
+      margin-top: 40px;
+    }
+    .transaction-filters {
+      margin-bottom: 20px;
+    }
+    .transaction-filters button {
+      margin-right: 10px;
+    }
+    .transaction-item {
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+      transition: all 0.2s ease;
+    }
+    .transaction-item:hover {
+      background-color: #f1f1f1;
+    }
+    .transaction-date, .transaction-amount {
+      font-size: 1.2rem;
+      margin-bottom: 0;
+    }
+    .transaction-details {
+      font-size: 0.9rem;
+      color: #888;
+    }
+    .notification-badge {
+      background-color: red;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .wallet-balance {
+        font-size: 1.5rem;
+      }
+      .transaction-item {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container wallet-section">
+  <!-- Wallet Balance and Overview -->
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="wallet-balance">
+        <h3>Wallet Balance</h3>
+        <div class="balance-amount">$150.00</div>
+        <div class="notification-badge">3</div>
+        <button class="btn btn-primary transaction-btn">View Transactions</button>
+        <button class="btn btn-info transaction-btn add-funds-btn">Add Funds</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transaction History and Filters -->
+  <div class="row transaction-history">
+    <div class="col-md-8 col-md-offset-2">
+      <h3>Transaction History</h3>
+      
+      <!-- Filters -->
+      <div class="transaction-filters">
+        <button class="btn btn-default">All</button>
+        <button class="btn btn-success">Credits</button>
+        <button class="btn btn-danger">Debits</button>
+      </div>
+
+      <!-- Transaction Item -->
+      <div class="transaction-item">
+        <p class="transaction-date"><strong>Date:</strong> 2024-09-15</p>
+        <p class="transaction-amount"><strong>Amount:</strong> - $50.00</p>
+        <p class="transaction-details"><strong>Details:</strong> Purchased Product A</p>
+      </div>
+
+      <div class="transaction-item">
+        <p class="transaction-date"><strong>Date:</strong> 2024-09-10</p>
+        <p class="transaction-amount"><strong>Amount:</strong> + $200.00</p>
+        <p class="transaction-details"><strong>Details:</strong> Added Funds</p>
+      </div>
+
+      <div class="transaction-item">
+        <p class="transaction-date"><strong>Date:</strong> 2024-09-05</p>
+        <p class="transaction-amount"><strong>Amount:</strong> - $100.00</p>
+        <p class="transaction-details"><strong>Details:</strong> Purchased Product B</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%- include('../../partials/user/footer'); -%>

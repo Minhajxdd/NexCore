@@ -167,6 +167,13 @@ router.route('/api/orders/return')
     // Orders
 
 
+    // Wallet
+router.route('/wallet')
+    .get(profile.getWallet)
+
+    // Wallet
+
+
 // Profile
 
 
