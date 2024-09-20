@@ -263,6 +263,13 @@ export async function authCoupon(req, res) {
       });
     }
 
+    if(couponData.isDeleted){
+      return res.json({
+        status: false,
+        err_message: 'Coupon Not Found'
+      })
+    }
+
     const cartData = await cartModel.findById(cartId);
 
     if (cartData.totalPrice < couponData.minimumPrice) {

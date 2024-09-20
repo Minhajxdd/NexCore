@@ -1,7 +1,10 @@
 //Cart Quantity increase
 (function(){
     const buttons = document.querySelectorAll('.qty-up');
-    buttons.forEach(button => {
+    const qtyBtn = document.querySelectorAll('.qty-inpt-count');
+    console.log(qtyBtn[0].value);
+
+    buttons.forEach((button, indx) => {
         button.addEventListener('click', () => {
 
             let inputElement = Number(button.closest('div').querySelector('input').value);
@@ -21,6 +24,8 @@
 
                 if(res.data.error_message){
                     console.log(`Status: ${res.data.status}`);
+                    let count =  qtyBtn[indx].value;
+                    qtyBtn[indx].value = --count;
                     return popup(res.data.error_message);
                 }
 

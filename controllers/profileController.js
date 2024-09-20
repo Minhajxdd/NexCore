@@ -144,12 +144,12 @@ export async function cancelOrderApi(req, res) {
 
 export async function returnRequestOrderApi(req, res) {
   const { id } = req.body;
-  if(!await validateOrder(id)){
+  if (!(await validateOrder(id))) {
     return res.json({
       status: false,
-      message: 'Order not found'
-    })
-  };
+      message: "Order not found",
+    });
+  }
 
   try {
     await sendReturnRequest(req.body);
@@ -158,7 +158,6 @@ export async function returnRequestOrderApi(req, res) {
       status: true,
       message: "successfully request sent",
     });
-
   } catch (err) {
     console.log(`error while sending request on order api: ${err.message}`);
     return res.json({
@@ -168,11 +167,56 @@ export async function returnRequestOrderApi(req, res) {
   }
 }
 
+export async function getInvoiceData(req, res) {
+  const userId = req.session.userId || req.session.passport.user;
+
+  if (!req.query.id) {
+    return res.json({
+      status: false,
+      message: "no id found",
+    });
+  }
+
+  const [orders] = await getAddressIdAndUser(req.query.id, userId);
+
+  if (Object.keys(orders).length === 0) {
+    return res.json({
+      status: false,
+      message: "no order found",
+    });
+  }
+
+  const products = await Promise.all(
+    orders.products.map(async (val) => {
+      return await getProductDetails(val.product_id);
+    })
+  );
+
+  const address = await addressDetailsGet(orders.addressId);
+
+  if (!address) {
+    return res.json({
+      status: false,
+      message: "address not found",
+    });
+  }
+
+  return res.json({
+    status: true,
+    message: "successfully fetched data",
+    data:{
+      orders,
+      products,
+      address,
+    }
+  });
+}
+
 // Orders
 
 // Wallet
 
-export async function getWallet(req, res){
+export async function getWallet(req, res) {
   res.render("pages/user/wallet.ejs");
 }
 

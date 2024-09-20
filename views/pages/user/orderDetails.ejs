@@ -1,286 +1,282 @@
 <%- include('../../partials/user/nav'); -%>
 <title>Order Details</title>
 
+<style>
+  body {
+    background-color: #f4f7fa;
+    font-family: "Helvetica Neue", sans-serif;
+  }
 
+  .container {
+    margin-top: 30px;
+  }
 
+  h2 {
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #333;
+    text-transform: uppercase;
+  }
 
-    <style>
-        body {
-            background-color: #f4f7fa;
-            font-family: 'Helvetica Neue', sans-serif;
-        }
+  .order-container {
+    background: white;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eaeaea;
+    transition: all 0.3s ease-in-out;
+  }
 
-        .container {
-            margin-top: 30px;
-        }
+  .order-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
 
-        h2 {
-            font-weight: bold;
-            margin-bottom: 40px;
-            color: #333;
-            text-transform: uppercase;
-        }
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
 
-        .order-container {
-            background: white;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid #eaeaea;
-            transition: all 0.3s ease-in-out;
-        }
+  .order-header h4 {
+    margin: 0;
+    font-weight: bold;
+    color: #34495e;
+  }
 
-        .order-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-        }
+  .order-header .order-date {
+    color: #999;
+    font-size: 12px;
+  }
 
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-        }
+  .order-status {
+    margin-top: 15px;
+    background-color: #e9f7ef;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #28a745;
+    color: #28a745;
+    font-weight: bold;
+    text-align: center;
+  }
 
-        .order-header h4 {
-            margin: 0;
-            font-weight: bold;
-            color: #34495e;
-        }
+  .order-summary {
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eaeaea;
+    margin-top: 20px;
+    color: #2c3e50;
+  }
 
-        .order-header .order-date {
-            color: #999;
-            font-size: 12px;
-        }
+  .total-price {
+    font-size: 20px;
+    font-weight: bold;
+  }
 
-        .order-status {
-            margin-top: 15px;
-            background-color: #e9f7ef;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #28a745;
-            color: #28a745;
-            font-weight: bold;
-            text-align: center;
-        }
+  .estimated-delivery {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 10px;
+  }
 
-        .order-summary {
-            padding-top: 15px;
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid #eaeaea;
-            margin-top: 20px;
-            color: #2c3e50;
-        }
+  .delivery-address {
+    margin-top: 15px;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
 
-        .total-price {
-            font-size: 20px;
-            font-weight: bold;
-        }
+  .delivery-address h5 {
+    font-weight: bold;
+    color: #34495e;
+    margin-bottom: 10px;
+  }
 
-        .estimated-delivery {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin-top: 10px;
-        }
+  .payment-details {
+    margin-top: 15px;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
 
-        .delivery-address {
-            margin-top: 15px;
-            background-color: #fafafa;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
+  .order-actions {
+    margin-top: 15px;
+    text-align: right;
+  }
 
-        .delivery-address h5 {
-            font-weight: bold;
-            color: #34495e;
-            margin-bottom: 10px;
-        }
+  .btn-custom {
+    background-color: #b7253e;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
 
-        .payment-details {
-            margin-top: 15px;
-            background-color: #fafafa;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
+  .btn-custom:hover {
+    background-color: #e22242;
+  }
 
-        .order-actions {
-            margin-top: 15px;
-            text-align: right;
-        }
+  .product-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
 
-        .btn-custom {
-            background-color: #B7253E;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 8px;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
+  .product-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eaeaea;
+  }
 
-        .btn-custom:hover {
-            background-color: #e22242;
-        }
+  .product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
 
-        .product-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+  .product-details {
+    flex: 1;
+    padding-left: 15px;
+  }
 
-        .product-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eaeaea;
-        }
+  .product-details h5 {
+    margin: 0;
+    font-weight: bold;
+    color: #34495e;
+  }
 
-        .product-image {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
+  .product-price {
+    font-size: 16px;
+    color: #e74c3c;
+    font-weight: bold;
+  }
 
-        .product-details {
-            flex: 1;
-            padding-left: 15px;
-        }
+  .product-quantity {
+    font-size: 14px;
+    color: #555;
+  }
 
-        .product-details h5 {
-            margin: 0;
-            font-weight: bold;
-            color: #34495e;
-        }
+  .progress {
+    margin-top: 10px;
+    height: 8px;
+    border-radius: 5px;
+    background-color: #e9ecef;
+  }
 
-        .product-price {
-            font-size: 16px;
-            color: #e74c3c;
-            font-weight: bold;
-        }
+  .progress-bar {
+    background-color: #28a745;
+  }
 
-        .product-quantity {
-            font-size: 14px;
-            color: #555;
-        }
+  .step {
+    margin-top: 15px;
+    text-align: center;
+  }
 
-        .progress {
-            margin-top: 10px;
-            height: 8px;
-            border-radius: 5px;
-            background-color: #e9ecef;
-        }
+  .step span {
+    font-size: 12px;
+    display: block;
+    color: #7f8c8d;
+  }
 
-        .progress-bar {
-            background-color: #28a745;
-        }
+  @media (max-width: 768px) {
+    .order-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
-        .step {
-            margin-top: 15px;
-            text-align: center;
-        }
+    .product-list li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
-        .step span {
-            font-size: 12px;
-            display: block;
-            color: #7f8c8d;
-        }
+    .product-image {
+      margin-bottom: 10px;
+    }
 
-        @media (max-width: 768px) {
-            .order-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+    .order-summary {
+      flex-direction: column;
+    }
 
-            .product-list li {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+    .order-actions {
+      text-align: left;
+    }
+  }
 
-            .product-image {
-                margin-bottom: 10px;
-            }
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+  }
 
-            .order-summary {
-                flex-direction: column;
-            }
+  .popup-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
 
-            .order-actions {
-                text-align: left;
-            }
-        }
+  .popup-content h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
 
-        .popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-}
+  .popup-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
 
-.popup-content {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  max-width: 400px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
+  .popup-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
 
-.popup-content h2 {
-  font-size: 22px;
-  margin-bottom: 20px;
-}
+  .yesBtn {
+    background-color: #28a745;
+    color: white;
+  }
 
-.popup-buttons {
-  display: flex;
-  justify-content: space-between;
-}
+  .yesBtn:hover {
+    background-color: #218838;
+  }
 
-.popup-buttons button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+  .noBtn {
+    background-color: #ff5f5f;
+    color: white;
+  }
 
-.yesBtn {
-  background-color: #28a745;
-  color: white;
-}
+  .noBtn:hover {
+    background-color: #ff3b3b;
+  }
 
-.yesBtn:hover {
-  background-color: #218838;
-}
+  /* Hide popup by default */
+  .hidden {
+    display: none;
+  }
 
-.noBtn {
-  background-color: #ff5f5f;
-  color: white;
-}
-
-.noBtn:hover {
-  background-color: #ff3b3b;
-}
-
-/* Hide popup by default */
-.hidden {
-  display: none;
-}
-
-
-<!-- /* Styling for the popup container */ -->
+  <!-- /* Styling for the popup container */ -->
 #popupReturnContainer {
     position: fixed;
     top: 0;
@@ -291,18 +287,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+  }
 
-.popup-content {
+  .popup-content {
     background: white;
     padding: 20px;
     border-radius: 8px;
     width: 350px;
     text-align: center;
-}
+  }
 
-/* Styling for the dropdown */
-#reasonSelect {
+  /* Styling for the dropdown */
+  #reasonSelect {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -310,10 +306,10 @@
     margin-top: 10px;
     margin-bottom: 20px;
     font-size: 14px;
-}
+  }
 
-/* Styling for the textarea */
-#noteInput {
+  /* Styling for the textarea */
+  #noteInput {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -322,15 +318,16 @@
     margin-bottom: 20px;
     min-height: 80px;
     resize: vertical;
-}
+  }
 
-/* Popup buttons styling */
-.popup-buttons {
+  /* Popup buttons styling */
+  .popup-buttons {
     display: flex;
     justify-content: space-between;
-}
+  }
 
-.yesBtn, .noBtn {
+  .yesBtn,
+  .noBtn {
     background-color: #007bff;
     color: white;
     padding: 10px 20px;
@@ -339,180 +336,255 @@
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
-}
+  }
 
-.noBtn {
+  .noBtn {
     background-color: #6c757d;
-}
+  }
 
-.yesBtn:hover {
+  .yesBtn:hover {
     background-color: #0056b3;
-}
+  }
 
-.noBtn:hover {
+  .noBtn:hover {
     background-color: #5a6268;
-}
+  }
 
+  .invoice-download-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .invoice-btn-download {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff; /* Primary color */
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .invoice-btn-download:hover {
+    background-color: #0056b3; /* Darker shade for hover */
+    transform: translateY(-2px);
+  }
+  .invoice-btn-download:active {
+    background-color: #004085; /* Even darker on click */
+    transform: translateY(0);
+  }
 </style>
 
 <div class="container">
-    <h2 class="text-center">Order Details</h2>
+  <h2 class="text-center">Order Details</h2>
 
-    <div class="order-container">
-        <div class="order-header">
-            <h4>Order #<%= orders._id %></h4>
-            <span class="order-date"><%= new Date(orders.orderedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
-        </div>
-
-        <div class="order-status">
-            <% if(orders.returnRequest.request){ %>
-                Status: <span id="status-bar"><%= orders.returnRequest.request === 'requested' ? 'Return Requested' : orders.returnRequest.request === 'accepted' ? 'Returned' : orders.returnRequest.request === 'rejected' ? 'Delivered' : 0 %></span>
-            <% }else{ %>
-                Status: <span id="status-bar"><%= orders.orderStatus %></span>
-            <% } %>
-        </div>
-
-        <% if(orders.returnRequest.request){ %> 
-            <div class="progress">
-                <div class="progress-bar" id="progress-bar-div" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" 
-                style="width: 50%; background-color:'#5cb85c';">
-                    <span class="sr-only">70% Complete</span>
-                </div>
-            </div>  
-        <% }else{ %>
-
-            <div class="progress">
-                <div class="progress-bar" id="progress-bar-div" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" 
-                style="width: <%= orders.orderStatus === 'pending' ? 20 : orders.orderStatus === 'processed' ? 40 : orders.orderStatus === 'shipped' ? 70 : orders.orderStatus === 'delivered' ? 100 : orders.orderStatus === 'cancelled' ? 0 : 100  %>%; background-color: <%= orders.orderStatus === 'pending' ? '#f0ad4e' : orders.orderStatus === 'processed' ? '#5bc0de' : orders.orderStatus === 'shipped' ? '#f0ad4e' : orders.orderStatus === 'delivered' ? '#5cb85c' : orders.orderStatus === 'cancelled' ? '#d9534f' : '#5cb85c' %>;">
-                    <span class="sr-only">70% Complete</span>
-                </div>
-            </div>
-        <% } %>
-
-
-        <div class="delivery-address">
-            <h4>Delivery Address</h4>
-            <p> <strong>Name: </strong>
-                <%= address.first_name %>
-                <%= address.last_name %>
-                <br>
-                <% if(address.company){ %>
-                    <strong>Company: </strong>
-                    <%= address.company %> <br>
-                <% } %>
-                <strong>Street: </strong>
-                <%= address.street %> <br>
-                <strong>Land Mark: </strong>
-                <%= address.land_mark %> <br>
-                <strong>City / Town: </strong>
-                <%= address.city_town %> <br>
-                <strong>State: </strong>
-                <%= address.state %> <br>
-                <strong>Zipcode: </strong>
-                <%= address.zipcode %> <br>
-                <strong>Phone no: </strong>
-                <%= address.phone_no %> <br>
-                <strong>Email: </strong>
-                <%= address.email %> <br>
-
-            </p>
-        </div>
-
-        <div class="payment-details">
-            <h5>Payment Method</h5>
-            <p><%= orders.paymentMethod %></p>
-        </div>
-
-        <div class="order-summary">
-            <div>
-                <h5>Estimated Delivery</h5>
-                <%
-                const orderedDate = new Date(orders.orderedAt);
-                orderedDate.setDate(orderedDate.getDate() + 10);
-                %>
-                <p class="estimated-delivery"><%= orderedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
-
-
-            </div>
-            <div>
-                <p class="total-price">Total: ₹<%= new Intl.NumberFormat('en-IN').format(orders.totalPrice) %></p>
-            </div>
-        </div>
-
-        <h5>Products</h5>
-        <ul class="product-list">
-            <% orders.products.forEach((value,i) => { %>
-
-                <li>
-                    <img src="/uploads/products/<%= products[i].images[0]%>" alt="Product Image" class="product-image">
-                    <div class="product-details">
-                        <h5><%= products[i].name %></h5>
-                        <p><%= products[i].description.substring(0,120)+"..." %></p>
-                    </div>
-                    <div>
-                        <span class="product-quantity">Quantity: <%= value.quantity %></span><br>
-                        <span class="product-price">₹<%= new Intl.NumberFormat('en-IN').format(value.price) %></span>
-                    </div>
-                </li>
-            <% }); %>
-        </ul>
-
-        <% if(orders.orderStatus !== 'cancelled' && orders.orderStatus !== 'delivered' && orders.orderStatus !== 'returned' && !orders.returnRequest){ %>
-            <div class="order-actions">
-                <button class="btn btn-danger" id="order-cancel" value="<%= orders._id %>">Cancel Order</button>
-            </div>
-        <% }else if(orders.orderStatus === 'delivered' && !orders.returnRequest.request && orders.orderStatus !== 'returned'){ %>
-                    <div class="order-actions">
-                            <button class="btn btn-default" id="order-return" value="<%= orders._id %>">Return Order</button>
-                    </div>
-        <% } %>
+  <div class="order-container">
+    <div class="order-header">
+      <h4>Order #<%= orders._id %></h4>
+      <span class="order-date"
+        ><%= new Date(orders.orderedAt).toLocaleDateString('en-US', { year:
+        'numeric', month: 'long', day: 'numeric' }) %></span
+      >
     </div>
+
+    <div class="order-status">
+      <% if(orders.returnRequest.request){ %> Status:
+      <span id="status-bar"
+        ><%= orders.returnRequest.request === 'requested' ? 'Return Requested' :
+        orders.returnRequest.request === 'accepted' ? 'Returned' :
+        orders.returnRequest.request === 'rejected' ? 'Delivered' : 0 %></span
+      >
+      <% }else{ %> Status:
+      <span id="status-bar"><%= orders.orderStatus %></span>
+      <% } %>
+    </div>
+
+    <% if(orders.returnRequest.request){ %>
+    <div class="progress">
+      <div
+        class="progress-bar"
+        id="progress-bar-div"
+        role="progressbar"
+        aria-valuenow="10"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        style="width: 50%; background-color: '#5cb85c'"
+      >
+        <span class="sr-only">70% Complete</span>
+      </div>
+    </div>
+    <% }else{ %>
+
+    <div class="progress">
+      <div
+        class="progress-bar"
+        id="progress-bar-div"
+        role="progressbar"
+        aria-valuenow="10"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        style="width: <%= orders.orderStatus === 'pending' ? 20 : orders.orderStatus === 'processed' ? 40 : orders.orderStatus === 'shipped' ? 70 : orders.orderStatus === 'delivered' ? 100 : orders.orderStatus === 'cancelled' ? 0 : 100  %>%; background-color: <%= orders.orderStatus === 'pending' ? '#f0ad4e' : orders.orderStatus === 'processed' ? '#5bc0de' : orders.orderStatus === 'shipped' ? '#f0ad4e' : orders.orderStatus === 'delivered' ? '#5cb85c' : orders.orderStatus === 'cancelled' ? '#d9534f' : '#5cb85c' %>;"
+      >
+        <span class="sr-only">70% Complete</span>
+      </div>
+    </div>
+    <% } %>
+
+    <div class="delivery-address">
+      <h4>Delivery Address</h4>
+      <p>
+        <strong>Name: </strong>
+        <%= address.first_name %> <%= address.last_name %>
+        <br />
+        <% if(address.company){ %>
+        <strong>Company: </strong>
+        <%= address.company %> <br />
+        <% } %>
+        <strong>Street: </strong>
+        <%= address.street %> <br />
+        <strong>Land Mark: </strong>
+        <%= address.land_mark %> <br />
+        <strong>City / Town: </strong>
+        <%= address.city_town %> <br />
+        <strong>State: </strong>
+        <%= address.state %> <br />
+        <strong>Zipcode: </strong>
+        <%= address.zipcode %> <br />
+        <strong>Phone no: </strong>
+        <%= address.phone_no %> <br />
+        <strong>Email: </strong>
+        <%= address.email %> <br />
+      </p>
+    </div>
+
+    <div class="payment-details">
+      <h5>Payment Method</h5>
+      <p><%= orders.paymentMethod %></p>
+    </div>
+
+    <div class="order-summary">
+      <div>
+        <h5>Estimated Delivery</h5>
+        <% const orderedDate = new Date(orders.orderedAt);
+        orderedDate.setDate(orderedDate.getDate() + 10); %>
+        <p class="estimated-delivery">
+          <%= orderedDate.toLocaleDateString('en-US', { year: 'numeric', month:
+          'long', day: 'numeric' }) %>
+        </p>
+      </div>
+      <div>
+        <p class="total-price">
+          Total: ₹<%= new Intl.NumberFormat('en-IN').format(orders.totalPrice)
+          %>
+        </p>
+      </div>
+    </div>
+
+    <h5>Products</h5>
+    <ul class="product-list">
+      <% orders.products.forEach((value,i) => { %>
+
+      <li>
+        <img
+          src="/uploads/products/<%= products[i].images[0]%>"
+          alt="Product Image"
+          class="product-image"
+        />
+        <div class="product-details">
+          <h5><%= products[i].name %></h5>
+          <p><%= products[i].description.substring(0,120)+"..." %></p>
+        </div>
+        <div>
+          <span class="product-quantity">Quantity: <%= value.quantity %></span
+          ><br />
+          <span class="product-price"
+            >₹<%= new Intl.NumberFormat('en-IN').format(value.price) %></span
+          >
+        </div>
+      </li>
+      <% }); %>
+    </ul>
+
+    <% if(orders.orderStatus !== 'cancelled' && orders.orderStatus !==
+    'delivered' && orders.orderStatus !== 'returned' && !orders.returnRequest){
+    %>
+    <div class="order-actions">
+      <button
+        class="btn btn-danger"
+        id="order-cancel"
+        value="<%= orders._id %>"
+      >
+        Cancel Order
+      </button>
+    </div>
+    <% }else if(orders.orderStatus === 'delivered' &&
+    !orders.returnRequest.request && orders.orderStatus !== 'returned'){ %>
+    <div class="order-actions">
+      <button
+        class="btn btn-default"
+        id="order-return"
+        value="<%= orders._id %>"
+      >
+        Return Order
+      </button>
+    </div>
+    <% } %>
+    
+    <div class="invoice-download-container" >
+      <button class="invoice-btn-download" id="invoice-download-btn" value="<%= orders._id %>"> Download Invoice </button>
+    </div>
+  </div>
 </div>
 
-
 <div id="popupContainer" class="popup hidden">
-    <div class="popup-content">
-      <h2>Are you sure you want to cancel the order?</h2>
-      <div class="popup-buttons">
-        <button id="yesBtn-cancel" class="yesBtn">Yes</button>
-        <button id="noBtn-cancel" class="noBtn">No</button>
-      </div>
+  <div class="popup-content">
+    <h2>Are you sure you want to cancel the order?</h2>
+    <div class="popup-buttons">
+      <button id="yesBtn-cancel" class="yesBtn">Yes</button>
+      <button id="noBtn-cancel" class="noBtn">No</button>
     </div>
   </div>
+</div>
 
-  
-  <div id="popupReturnContainer" class="popup hidden">
-      <div class="popup-content">
-          <h2>Are you sure you want to cancel the order?</h2>
-          <p>Please provide a reason for cancellation:</p>
-  
-          <!-- Dropdown for common return reasons -->
-          <label for="reasonSelect">Reason for Cancellation:</label>
-          <select id="reasonSelect" name="reasonSelect">
-              <option value="">--Select a Reason--</option>
-              <option value="wrong_item">Received Wrong Item</option>
-              <option value="damaged_item">Item was Damaged</option>
-              <option value="late_delivery">Late Delivery</option>
-              <option value="changed_mind">Changed My Mind</option>
-              <option value="other">Other</option>
-          </select>
-  
-          <!-- Input for additional note -->
-          <label for="noteInput">Additional Note (optional):</label>
-          <textarea id="noteInput" name="noteInput" placeholder="Add any additional details here..."></textarea>
-  
-          <!-- Popup buttons -->
-          <div class="popup-buttons">
-              <button id="yesBtn-return" class="yesBtn">Yes</button>
-              <button id="noBtn-return" class="noBtn">No</button>
-          </div>
-      </div>
+<div id="popupReturnContainer" class="popup hidden">
+  <div class="popup-content">
+    <h2>Are you sure you want to cancel the order?</h2>
+    <p>Please provide a reason for cancellation:</p>
+
+    <!-- Dropdown for common return reasons -->
+    <label for="reasonSelect">Reason for Cancellation:</label>
+    <select id="reasonSelect" name="reasonSelect">
+      <option value="">--Select a Reason--</option>
+      <option value="wrong_item">Received Wrong Item</option>
+      <option value="damaged_item">Item was Damaged</option>
+      <option value="late_delivery">Late Delivery</option>
+      <option value="changed_mind">Changed My Mind</option>
+      <option value="other">Other</option>
+    </select>
+
+    <!-- Input for additional note -->
+    <label for="noteInput">Additional Note (optional):</label>
+    <textarea
+      id="noteInput"
+      name="noteInput"
+      placeholder="Add any additional details here..."
+    ></textarea>
+
+    <!-- Popup buttons -->
+    <div class="popup-buttons">
+      <button id="yesBtn-return" class="yesBtn">Yes</button>
+      <button id="noBtn-return" class="noBtn">No</button>
+    </div>
   </div>
-  
+</div>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
 
 
 <!-- Custom Js -->
- <script src="/script/user/orderDetails.js"></script>
+<script src="/script/user/orderDetails.js"></script>
 
 <%- include('../../partials/user/footer'); -%>

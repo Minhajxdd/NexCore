@@ -74,7 +74,11 @@ export const loginGet = (req, res) => {
         switch(errorCode){
             case 1:
                 return res.render('pages/user/login' , {alertMessage : `User or password not found!`});
-        }
+                break;
+            case 2:
+                return res.render('pages/user/login' , {alertMessage : `User is Blocked!`});
+                
+            }
     }
 
     res.render('pages/user/login' , {alertMessage : null});
@@ -86,8 +90,10 @@ export const loginPost = async (req, res) => {
 
     const [ userData ] = await loginUser(email, password);
 
-    if(!userData ||  Object.entries(userData).length === 0 && userData.constructor === Object || userData.isBlocked){
-            return res.redirect('/login?err=1')
+    if(!userData ||  Object.entries(userData).length === 0 && userData.constructor === Object ){
+        return res.redirect('/login?err=1');
+    }else if(userData.isBlocked){
+        return res.redirect('/login?err=2');
     }
 
     if(userData.cartId){
