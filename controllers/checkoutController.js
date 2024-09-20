@@ -99,6 +99,7 @@ export async function orderCreate(req, res) {
     );
   }
 
+  let couponDiscount = 0;
   if (couponId) {
     try {
       const couponData = await couponModel.findById(couponId);
@@ -131,6 +132,8 @@ export async function orderCreate(req, res) {
           limit: -1,
         },
       });
+
+      couponDiscount = couponData.discountPrice;
     } catch (err) {
       console.log(`error whle applying coupon coupon : ${err.message}`);
     }
@@ -142,7 +145,7 @@ export async function orderCreate(req, res) {
     totalPrice: cartData.totalPrice,
     addressId: Addressid,
     paymentMethod: paymentMethod,
-    couponId: couponId,
+    coupon: couponDiscount,
   };
 
   if (optionalMessage) {

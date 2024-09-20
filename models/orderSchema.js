@@ -46,8 +46,8 @@ const orderSchmea = new Schema({
         default: 'pending',
         required: true
     },
-    couponId: {
-      type: Schema.Types.ObjectId
+    coupon: {
+      type: Number
     },
     returnRequest: {
       request: { type: String, enum: ['requested', 'accepted', 'rejected'] },

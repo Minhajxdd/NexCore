@@ -93,9 +93,16 @@ adminRouter.route('/api/coupon/delete')
 
 // Coupon Dashboard routes
 
+// Sales Report routes
 
 adminRouter.route('/sales-report')
     .get(authenticate, adminContoller.salesReportGet)
+
+adminRouter.route('/api/sales-report')
+    .post(authenticate, adminContoller.salesReportApi)
+
+// Sales Report routes
+
 
 
 // adminRouter.route('*')

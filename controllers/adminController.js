@@ -40,6 +40,12 @@ import {
   deleteCoupon,
 } from "../services/admin/couponServices.js";
 
+
+import {
+  sreportFilter,
+} from '../services/admin/s-reportServices.js';
+
+
 export const loginGet = (req, res) => {
   if (req.query) {
     const err = Number(req.query.err);
@@ -322,9 +328,31 @@ export const apiDeleteCoupon = async (req, res) => {
 
 // Admin Coupons Dashboard Controllers
 
+// Admin Sales Report Dashboard Controllers
+
 export const salesReportGet = (req, res) => {
   res.render(`pages/admin/s-report`);
 };
+
+export const salesReportApi = async function(req, res){
+  const data = await sreportFilter(req.body);
+
+  if(!data){
+    return res.json({
+      status: false,
+      message: `Data not found`
+    });
+  }
+
+  return res.json({
+    status: true,
+    message: `successfuly fetched data`,
+    data
+  })
+
+}
+
+// Admin Sales Report Dashboard Controllers
 
 function authenticate(req, res, next) {
   if (req.session.admin) {
