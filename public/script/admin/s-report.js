@@ -1,136 +1,120 @@
+let fieldData = null;
 // Sort by date
-document.getElementById('sort-date').addEventListener('change', function(){
-    console.log(this.value);
-    // Custom Drop Toggle Date
-    if(this.value === 'Custom'){
-        document.getElementById('custom-date-div').style.display = 'flex';
-    }else{
-        document.getElementById('custom-date-div').style.display = 'none';
-    }
+document.getElementById("sort-date").addEventListener("change", function () {
 
-    const data = {
-        by: this.value,
-    }
+  // Custom Drop Toggle Date
+  if (this.value === "custom") {
+    document.getElementById("custom-date-div").style.display = "flex";
+    return;
+  } else {
+    document.getElementById("custom-date-div").style.display = "none";
+  }
 
-    axios.post(`/admin/api/sales-report`, data)
-    .then(function(res){
-        
-        if(!res.data.status){
-            return console.log('failed');
-        }
+  const data = {
+    by: this.value,
+  };
 
-        injectData(res.data.data);
+  axios
+    .post(`/admin/api/sales-report`, data)
+    .then(function (res) {
+      if (!res.data.status) {
+        return console.log("failed");
+      }
+      injectData(res.data.data);
+      fieldData = res.data.data;
+      console.log("success");
     })
-    .catch(function(err){
-        console.log(`error while fetching api data : ${err.message}`);
-    })
-
+    .catch(function (err) {
+      console.log(`error while fetching api data : ${err.message}`);
+    });
 });
 
 // Sort by date
 
+// Generate custom date
+document
+  .getElementById("generate-custom-btn")
+  .addEventListener("click", function () {
+    const startDate = document.getElementById("start-date").value;
+    const endDate = document.getElementById("end-date").value;
 
-// Reset Form
-window.onload = function() {
-    document.getElementById('sort-date').value = 'All';
-}
-// Reset Form
-
-
-// Function to inject data in to body
-function injectData(value){
-    
-        console.log(value[0]);
-    // const body = document.getElementById('table-body');
-    // value.forEach(value => {
-    //     const tr = document.createElement('tr');
-
-    //     tr.innerHTML = `
-    //     <td>1</td>
-    //     <td>
-    //     ${value.orderid}
-    //     </td>
-    //     <td> ${value.name} </td>
-    //     <td> ${value.date} </td>
-    //     <td> ${value.coupon} </td>
-    //     <td> ${value.offer} </td>
-    //     <td> ${value.total} </td>
-    //     <td> ${value.payment_method} </td>
-    //     `
-    //     body.appendChild(tr);
-
-    // });
-}
-// Function to inject data in to body
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const value = [
-    {
-        orderid:  "#666c35623113bbe4d7956ee4",
-        name: 'Randome Name',
-        date: '14/ 6/ 2024',
-        coupon: "0.00",
-        offer: "0.00",
-        total: "9,999",
-        payment_method: 'Razor Pay'
-    },
-    {
-        orderid:  "#666c35623113bbe4d7956ee4",
-        name: 'Randome Name',
-        date: '14/ 6/ 2024',
-        coupon: "0.00",
-        offer: "0.00",
-        total: "9,999",
-        payment_method: 'Razor Pay'
-    },
-    {
-        orderid:  "#666c35623113bbe4d7956ee4",
-        name: 'Randome Name',
-        date: '14/ 6/ 2024',
-        coupon: "0.00",
-        offer: "0.00",
-        total: "9,999",
-        payment_method: 'Razor Pay'
-    },
-    {
-        orderid:  "#666c35623113bbe4d7956ee4",
-        name: 'Randome Name',
-        date: '14/ 6/ 2024',
-        coupon: "0.00",
-        offer: "0.00",
-        total: "9,999",
-        payment_method: 'Razor Pay'
-    },
-    {
-        orderid:  "#666c35623113bbe4d7956ee4",
-        name: 'Randome Name',
-        date: '14/ 6/ 2024',
-        coupon: "0.00",
-        offer: "0.00",
-        total: "9,999",
-        payment_method: 'Razor Pay'
-    },
-    {
-        orderid:  "#666c35623113bbe4d7956ee4",
-        name: 'Randome Name',
-        date: '14/ 6/ 2024',
-        coupon: "0.00",
-        offer: "0.00",
-        total: "9,999",
-        payment_method: 'Razor Pay'
+    if (!startDate || !endDate) {
+      alert("Please select both start and end dates.");
+      return;
     }
-]
 
-injectData(value);
+    if (new Date(startDate) > new Date(endDate)) {
+      alert("End date must be after the start date.");
+      return;
+    }
+    const data = {
+      by: "custom",
+      sDate: startDate,
+      eDate: endDate,
+    };
+
+    axios
+      .post(`/admin/api/sales-report`, data)
+      .then(function (res) {
+        if (!res.data.status) {
+          return console.log("failed");
+        }
+        injectData(res.data.data);
+        fieldData = res.data.data;
+        console.log("success");
+      })
+      .catch(function (err) {
+        console.log(`error while fetching api data : ${err.message}`);
+      });
+  });
+// Generate custom date
+
+// Function to inject data in to body
+function injectData(value) {
+  const body = document.getElementById("table-body");
+  body.innerHTML = "";
+  value.forEach((value, indx) => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+        <td>${indx + 1}</td>
+        <td>
+        #${value._id}
+        </td>
+        <td> ${value.billName ? value.billName : "Testing"} </td>
+        <td> ${new Date(value.orderedAt)
+          .toLocaleDateString("en-GB")
+          .replace(/\//g, "/")} </td>
+        <td> ${value.coupon ? value.coupon : "0.00"} </td>
+        <td> ${value.offer ? value.offer : "0.00"} </td>
+        <td> ${value.totalPrice} </td>
+        <td> ${value.paymentMethod} </td>
+        `;
+    body.appendChild(tr);
+  });
+}
+// Function to inject data in to body
+
+// Reset Form
+window.onload = function () {
+  document.getElementById("sort-date").value = "all";
+
+  axios
+    .post(`/admin/api/sales-report`, { by: "all" })
+    .then(function (res) {
+      if (!res.data.status) { 
+        return console.log("failed");
+      }
+      injectData(res.data.data);
+      fieldData = res.data.data;
+      console.log("success");
+    })
+    .catch(function (err) {
+      console.log(`error while fetching api data : ${err.message}`);
+    });
+};
+// Reset Form
+
+setTimeout(function(){
+  console.log(`This is field data : ${JSON.stringify(fieldData[0])}`);
+},5000)

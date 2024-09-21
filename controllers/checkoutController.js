@@ -57,6 +57,7 @@ export async function orderCreate(req, res) {
   let cartData = null;
 
   let Addressid;
+  let billName;
   if (req.body.formData) {
     try {
       const address = {
@@ -72,6 +73,7 @@ export async function orderCreate(req, res) {
         email: req.body.formData.email,
         user_id: userId,
       };
+      billName = `${address.first_name} ${address.last_name}`;
 
       const addressData = await addressModel.create(address);
       Addressid = addressData._id;
@@ -89,6 +91,10 @@ export async function orderCreate(req, res) {
 
   if (req.body.addressId) {
     Addressid = req.body.addressId;
+
+    const {first_name, last_name} = await addressModel.findById(req.body.addressId);
+    billName = `${first_name} ${last_name}`;
+
   }
 
   try {
@@ -146,6 +152,7 @@ export async function orderCreate(req, res) {
     addressId: Addressid,
     paymentMethod: paymentMethod,
     coupon: couponDiscount,
+    billName: billName
   };
 
   if (optionalMessage) {

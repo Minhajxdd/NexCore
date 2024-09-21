@@ -40,11 +40,7 @@ import {
   deleteCoupon,
 } from "../services/admin/couponServices.js";
 
-
-import {
-  sreportFilter,
-} from '../services/admin/s-reportServices.js';
-
+import { sreportFilter } from "../services/admin/s-reportServices.js";
 
 export const loginGet = (req, res) => {
   if (req.query) {
@@ -242,19 +238,18 @@ export async function adminOrderAction(req, res) {
     const { id } = req.body;
     const { action } = req.params;
 
-    if(!id){
+    if (!id) {
       return res.json({
         status: false,
-        message: `order id not found`
-      })
+        message: `order id not found`,
+      });
     }
-    
-    if(action === 'accept'){
-      await acceptOrderRequest(id, 'accepted');
-    } else if(action === 'reject'){
-      await acceptOrderRequest(id, 'rejected');
+
+    if (action === "accept") {
+      await acceptOrderRequest(id, "accepted");
+    } else if (action === "reject") {
+      await acceptOrderRequest(id, "rejected");
     }
-    
 
     return res.json({
       status: true,
@@ -268,8 +263,6 @@ export async function adminOrderAction(req, res) {
     });
   }
 }
-
-
 
 // Admin Orders Dashboard Controllers
 
@@ -334,23 +327,29 @@ export const salesReportGet = (req, res) => {
   res.render(`pages/admin/s-report`);
 };
 
-export const salesReportApi = async function(req, res){
-  const data = await sreportFilter(req.body);
+export const salesReportApi = async function (req, res) {
+  let data = null;
 
-  if(!data){
+  if (req.body.sDate && req.body.eDate) {
+    data = await sreportFilter(req.body.by, req.body.sDate, req.body.eDate);
+  } else {
+    data = await sreportFilter(req.body.by);
+  }
+
+  if (!data) {
     return res.json({
       status: false,
-      message: `Data not found`
+      message: `Data not found`,
     });
   }
 
+  console.log(data)
   return res.json({
     status: true,
     message: `successfuly fetched data`,
-    data
-  })
-
-}
+    data,
+  });
+};
 
 // Admin Sales Report Dashboard Controllers
 

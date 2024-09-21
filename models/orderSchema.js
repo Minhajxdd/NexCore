@@ -49,6 +49,10 @@ const orderSchmea = new Schema({
     coupon: {
       type: Number
     },
+    billName:{
+      type: String,
+      required: true
+    },
     returnRequest: {
       request: { type: String, enum: ['requested', 'accepted', 'rejected'] },
       reason: { type: String, default: '' },

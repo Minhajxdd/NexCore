@@ -118,6 +118,9 @@
     <div class="col-12 grid-margin">
       <div class="card">
         <div class="card-body">
+
+
+          
           <!-- Date Filter Drop -->
           <div
             id="date-drop-main-div"
@@ -126,24 +129,25 @@
             <div class="col-lg-2 col-md-3 col-6">
               <div class="custom_select">
                 <select id="sort-date" class="form-select select-nice">
-                  <option value="All">All</option>
-                  <option value="Daily">Daily</option>
-                  <option value="Weekly">Weekly</option>
-                  <option value="Monthly">Monthly</option>
-                  <option value="Yearly">Yearly</option>
-                  <option value="Custom">Custom</option>
+                  <option value="all">All</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                  <option value="custom">Custom</option>
                 </select>
               </div>
             </div>
 
-            <div id="custom-date-div" style="display: none">
+
+              <form id="custom-date-div" style="display: none">
               <div class="col-md-2 col-6" id="startDate" style="width: auto">
                 <h6>Start date</h6>
-                <input type="date" class="form-control" />
+                <input id="start-date" type="date" class="form-control" required>
               </div>
               <div class="col-md-2 col-6" id="endDate" style="width: auto">
                 <h6>End date</h6>
-                <input type="date" class="form-control" />
+                <input id="end-date" type="date" class="form-control" required>
               </div>
               <div
                 class="col-md-2 col-6"
@@ -151,11 +155,10 @@
                 style="width: auto"
               >
                 <br />
-                <a href="#" class="btn btn-primary" onclick="generateReport()"
-                  >Generate</a
-                >
+                <button type="button" id="generate-custom-btn" class="btn btn-primary">Generate</button>
               </div>
-            </div>
+            </form>
+
           </div>
           <!-- Date Filter Drop -->
 
