@@ -11,84 +11,109 @@
     gap: 10px;
   }
 
-  .custom_select {     
-    background-color: #191c24;     
-    border-radius: 4px;     
-    padding: 5px;     
-    width: fit-content;   
-}    
+  .custom_select {
+    background-color: #191c24;
+    border-radius: 4px;
+    padding: 5px;
+    width: fit-content;
+  }
 
-.form-select {     
-    background-color: #191c24;     
-    color: #ffffff;     
-    border: 1px solid #282c35;     
-    border-radius: 4px;     
-    padding: 6px 10px;     
-    font-size: 14px;     
-    width: auto;     
-    height: auto;     
-    box-shadow: none;     
-    outline: none;     
-    transition: border-color 0.3s ease-in-out;   
-}    
+  .form-select {
+    background-color: #191c24;
+    color: #ffffff;
+    border: 1px solid #282c35;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+  }
 
-.form-select:focus {     
-    border-color: #495057;   
-}    
+  .form-select:focus {
+    border-color: #495057;
+  }
 
-.form-select option {     
-    background-color: #191c24;     
-    color: #ffffff;     
-    padding: 8px 10px;     
-    font-size: 14px;   
-}    
+  .form-select option {
+    background-color: #191c24;
+    color: #ffffff;
+    padding: 8px 10px;
+    font-size: 14px;
+  }
 
-#custom-date-div {     
-    background-color: #191C24;     
-    padding: 10px;     
-    border-radius: 4px;     
-    display: flex;     
-    gap: 15px;     
-    align-items: center;   
-}  
+  #custom-date-div {
+    background-color: #191c24;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
 
-#custom-date-div h6 {     
-    color: #ffffff;     
-    font-size: 14px;     
-    margin-bottom: 5px;   
-}  
+  #custom-date-div h6 {
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
 
-#custom-date-div input[type="date"] {     
-    background-color: #191C24;     
-    color: #ffffff;     
-    border: 1px solid #282C35;     
-    border-radius: 4px;     
-    padding: 6px 10px;     
-    font-size: 14px;     
-    height: auto;     
-    box-shadow: none;     
-    outline: none;     
-    transition: border-color 0.3s ease-in-out;   
-}  
+  #custom-date-div input[type="date"] {
+    background-color: #191c24;
+    color: #ffffff;
+    border: 1px solid #282c35;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+    height: auto;
+    box-shadow: none;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+  }
 
-#custom-date-div input[type="date"]:focus {     
-    border-color: #495057;   
-}  
+  #custom-date-div input[type="date"]:focus {
+    border-color: #495057;
+  }
 
-#customGenerate a {     
-    background-color: #007bff;     
-    color: #ffffff;     
-    padding: 6px 12px;     
-    border-radius: 4px;     
-    text-decoration: none;     
-    font-size: 14px;     
-    transition: background-color 0.3s ease-in-out;   
-}  
+  #customGenerate a {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease-in-out;
+  }
 
-#customGenerate a:hover {     
-    background-color: #0056b3;   
-}
+  #customGenerate a:hover {
+    background-color: #0056b3;
+  }
 
+  .report-container {
+    background-color: #1c2833; /* Dark blue-black theme */
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .report-header h3 {
+    margin: 0;
+    font-size: 24px;
+  }
+  .btn-custom {
+    background-color: #2e4053;
+    border-color: #1c2833;
+    color: white;
+  }
+  .btn-custom:hover {
+    background-color: #34495e;
+    border-color: #1c2833;
+  }
 </style>
 
 <!-- partial -->
@@ -118,9 +143,20 @@
     <div class="col-12 grid-margin">
       <div class="card">
         <div class="card-body">
+          <div class="report-container">
+            <div class="report-header">
+              <h3>Generate Report</h3>
+              <div>
+                <button class="btn btn-custom" onclick="generatePDF()">
+                  <i class="fa fa-file-pdf-o"></i> Download PDF
+                </button>
+                <button class="btn btn-custom" onclick="generateExcel()">
+                  <i class="fa fa-file-excel-o"></i> Download Excel
+                </button>
+              </div>
+            </div>
+          </div>
 
-
-          
           <!-- Date Filter Drop -->
           <div
             id="date-drop-main-div"
@@ -139,15 +175,24 @@
               </div>
             </div>
 
-
-              <form id="custom-date-div" style="display: none">
+            <form id="custom-date-div" style="display: none">
               <div class="col-md-2 col-6" id="startDate" style="width: auto">
                 <h6>Start date</h6>
-                <input id="start-date" type="date" class="form-control" required>
+                <input
+                  id="start-date"
+                  type="date"
+                  class="form-control"
+                  required
+                />
               </div>
               <div class="col-md-2 col-6" id="endDate" style="width: auto">
                 <h6>End date</h6>
-                <input id="end-date" type="date" class="form-control" required>
+                <input
+                  id="end-date"
+                  type="date"
+                  class="form-control"
+                  required
+                />
               </div>
               <div
                 class="col-md-2 col-6"
@@ -155,10 +200,15 @@
                 style="width: auto"
               >
                 <br />
-                <button type="button" id="generate-custom-btn" class="btn btn-primary">Generate</button>
+                <button
+                  type="button"
+                  id="generate-custom-btn"
+                  class="btn btn-primary"
+                >
+                  Generate
+                </button>
               </div>
             </form>
-
           </div>
           <!-- Date Filter Drop -->
 
@@ -177,7 +227,7 @@
                 </tr>
               </thead>
               <tbody id="table-body">
-                
+                <!-- Here is the data is injected -->
               </tbody>
             </table>
           </div>
@@ -191,6 +241,21 @@
 <script src="/script/admin/s-report.js" defer></script>
 
 <!-- Cdn -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js" defer></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"
+  defer
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+  defer
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"
+  defer
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"
+  defer
+></script>
 
 <%- include('../../partials/admin/body'); -%>

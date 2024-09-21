@@ -343,7 +343,6 @@ export const salesReportApi = async function (req, res) {
     });
   }
 
-  console.log(data)
   return res.json({
     status: true,
     message: `successfuly fetched data`,
