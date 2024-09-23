@@ -93,6 +93,16 @@ adminRouter.route('/api/coupon/delete')
 
 // Coupon Dashboard routes
 
+// Offer Dashboard routes
+adminRouter.route('/offers')
+    .get(authenticate, adminContoller.offerGet);
+
+adminRouter.route('/api/offers/type')
+    .get(authenticate, adminContoller.offerType);
+
+// Offer Dashboard routes
+
+
 // Sales Report routes
 
 adminRouter.route('/sales-report')

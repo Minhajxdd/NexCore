@@ -2,6 +2,7 @@
 import orderModel from "../../models/orderSchema.js";
 import productModel from "../../models/productSchema.js";
 import addressModel from "../../models/addressSchema.js";
+import walletModel from '../../models/walletSchema.js';
 
 export async function ordersDetails(id) {
   try {
@@ -46,13 +47,41 @@ export async function addressDetailsGet(id) {
   }
 }
 
-export async function orderCancel(id) {
+export async function orderCancel(id, userId) {
   try {
-    await orderModel.findByIdAndUpdate(id, {
+    const orderData = await orderModel.findByIdAndUpdate(id, {
       $set: {
         orderStatus: "cancelled",
       },
     });
+
+    if(orderData.paymentMethod !== 'Cash on Delivery'){
+      
+      const update = {
+        $inc: { balance_amount: parseInt(orderData.totalPrice - ( orderData.coupon || 0 ) - ( orderData.offer || 0 ))},
+        $push: { 
+          transactions: { 
+            amount: orderData.totalPrice - ( orderData.coupon || 0 ) - ( orderData.offer || 0 ), 
+            transaction_type: 'credit', 
+            description: `Cancel #${orderData._id}` 
+          }
+        }
+      };
+  
+      const options = { 
+        upsert: true,
+        setDefaultsOnInsert: true
+      };
+  
+      await walletModel.findOneAndUpdate(
+        { user_id: userId },
+        update,
+        options
+      );
+
+
+    }
+
     return true;
   } catch (err) {
     console.log(`error on order status update: ${err.message}`);

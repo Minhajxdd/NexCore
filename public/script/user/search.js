@@ -44,14 +44,32 @@ let minPrice = null;
 let maxPrice = null;
 let categories = [];
 
-PagenationReqSent(page, limit);
+// Category Query On load Search Select
+window.onload = function() {
+  const queryString = window.location.search;
+
+  const urlParams = new URLSearchParams(queryString);
+
+  if (urlParams.has('category')) {
+    const categoryValue = urlParams.get('category');
+    if (categoryValue !== '0') {
+      // categories.push(categoryValue);
+      categories = categoryValue;
+    }
+    document.getElementById('nav-search-category-select').value = categoryValue
+  }
+  filterReqSent(page, limit);
+};
+// Category Query On load Search Select
+
+
 
 // Pagenation Buttons
 document.querySelectorAll(".pagenation-btns").forEach((button) => {
   button.addEventListener("click", () => {
     page = button.textContent;
 
-    PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+    filterReqSent(page, limit, LtH, minPrice, maxPrice);
   });
 });
 // Pagenation Buttons
@@ -70,7 +88,7 @@ document
     limit = parseInt(itemsPerPageSelect.value);
 
     // Sent Axios request
-    PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+    filterReqSent(page, limit, LtH, minPrice, maxPrice);
   });
 // Show items limit
 
@@ -78,7 +96,7 @@ document
 export default function assignPrice(min, max) {
   minPrice = min;
   maxPrice = max;
-  PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+  filterReqSent(page, limit, LtH, minPrice, maxPrice);
 }
 
 document.getElementById("itemSortingSelect").addEventListener("change", () => {
@@ -94,7 +112,7 @@ document.getElementById("itemSortingSelect").addEventListener("change", () => {
       LtH = null;
   }
 
-  PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+  filterReqSent(page, limit, LtH, minPrice, maxPrice);
 });
 
 document.querySelectorAll(".category-check-boxes").forEach((checkbox) => {
@@ -105,12 +123,12 @@ document.querySelectorAll(".category-check-boxes").forEach((checkbox) => {
       categories.push(checkbox.value);
     }
 
-    PagenationReqSent(page, limit, LtH, minPrice, maxPrice);
+    filterReqSent(page, limit, LtH, minPrice, maxPrice);
   });
 });
 
 // Pagenation api request
-function PagenationReqSent(
+function filterReqSent(
   page,
   limit,
   LtH = null,

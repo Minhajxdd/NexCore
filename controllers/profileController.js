@@ -15,6 +15,8 @@ import {
   validateOrder,
 } from "../services/user/profileOrdersServices.js";
 
+import { getWalletData } from '../services/user/profileWalletServices.js';
+
 export function profileGet(req, res) {
   res.render("pages/user/profile.ejs");
 }
@@ -128,7 +130,9 @@ export async function orderDetailsGet(req, res) {
 }
 
 export async function cancelOrderApi(req, res) {
-  if (orderCancel(req.query.id)) {
+  const userId = req.session.userId || req.session.passport.user;
+
+  if (orderCancel(req.query.id, userId)) {
     return res.json({
       status: "success",
       message: "order cancelled successfully",
@@ -217,7 +221,13 @@ export async function getInvoiceData(req, res) {
 // Wallet
 
 export async function getWallet(req, res) {
-  res.render("pages/user/wallet.ejs");
+  const userId = req.session.userId || req.session.passport.user;
+
+  const wallet =  await getWalletData(userId)
+  
+  res.render("pages/user/wallet.ejs", {
+    wallet
+  });
 }
 
 // Wallet

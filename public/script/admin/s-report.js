@@ -129,7 +129,7 @@ function injectData(value) {
   orderDetails.forEach((detail) => {
     // Create the row using template literals
     const row = `
-    <tr style="background-color: #003366; color: #f0f8ff; border: 'black'">
+    <tr style="background-color: #1C2833; color: #f0f8ff; border: 'black'">
       <td></td>
       <td></td>
       <td></td>
@@ -199,9 +199,9 @@ function generatePDF() {
     arr.push(`#${val._id}`);
     arr.push(val.billName || "Testing ac");
     arr.push(new Date(val.orderedAt).toLocaleDateString());
-    arr.push(`₹${new Intl.NumberFormat("en-IN").format(val.coupon || 0)}`);
-    arr.push(`₹${new Intl.NumberFormat("en-IN").format(val.offer || 0)}`);
-    arr.push(`₹${new Intl.NumberFormat("en-IN").format(val.totalPrice || 0)}`);
+    arr.push(`${new Intl.NumberFormat("en-IN").format(val.coupon || 0)}`);
+    arr.push(`${new Intl.NumberFormat("en-IN").format(val.offer || 0)}`);
+    arr.push(`${new Intl.NumberFormat("en-IN").format(val.totalPrice || 0)}`);
     arr.push(val.paymentMethod);
     tableRows.push(arr);
   });

@@ -42,6 +42,8 @@ import {
 
 import { sreportFilter } from "../services/admin/s-reportServices.js";
 
+import { offerGetType } from '../services/admin/offerServices.js';
+
 export const loginGet = (req, res) => {
   if (req.query) {
     const err = Number(req.query.err);
@@ -318,11 +320,21 @@ export const apiDeleteCoupon = async (req, res) => {
     message: "Update Successfully",
   });
 };
-
 // Admin Coupons Dashboard Controllers
 
-// Admin Sales Report Dashboard Controllers
+// Admin Offer Dashboard Controllers
 
+export const offerGet = (req, res) => {
+  res.render(`pages/admin/offers`);
+}
+
+export const offerType = function(req, res){
+  offerGetType(req.query.type);
+}
+
+// Admin Offer Dashboard Controllers
+
+// Admin Sales Report Dashboard Controllers
 export const salesReportGet = (req, res) => {
   res.render(`pages/admin/s-report`);
 };

@@ -506,7 +506,7 @@
     </ul>
 
     <% if(orders.orderStatus !== 'cancelled' && orders.orderStatus !==
-    'delivered' && orders.orderStatus !== 'returned' && !orders.returnRequest){
+    'delivered' && orders.orderStatus !== 'returned' && !orders.returnRequest.reason){
     %>
     <div class="order-actions">
       <button

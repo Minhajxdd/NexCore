@@ -97,6 +97,8 @@ function updateStatusBar(status) {
   document.getElementById("status-bar").innerHTML = status;
 }
 
+
+
 // Invoice Download
 document
   .getElementById("invoice-download-btn")
