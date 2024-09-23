@@ -100,6 +100,12 @@ adminRouter.route('/offers')
 adminRouter.route('/api/offers/type')
     .get(authenticate, adminContoller.offerType);
 
+adminRouter.route('/api/offers/add')
+    .post(authenticate, adminContoller.addOffer);
+
+
+adminRouter.route('/api/offers/toggle')
+    .get(authenticate, adminContoller.toggleActivate);
 // Offer Dashboard routes
 
 

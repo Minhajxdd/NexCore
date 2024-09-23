@@ -42,7 +42,7 @@ import {
 
 import { sreportFilter } from "../services/admin/s-reportServices.js";
 
-import { offerGetType } from "../services/admin/offerServices.js";
+import { offerGetType, createOffer, existCouponName, getOffers, updateOfferStatus } from "../services/admin/offerServices.js";
 
 export const loginGet = (req, res) => {
   if (req.query) {
@@ -324,8 +324,15 @@ export const apiDeleteCoupon = async (req, res) => {
 
 // Admin Offer Dashboard Controllers
 
-export const offerGet = (req, res) => {
-  res.render(`pages/admin/offers`);
+export const offerGet = async (req, res) => {
+  
+  const offers = await getOffers();
+  
+  res.render(`pages/admin/offers`,{
+    offers
+  });
+
+
 };
 
 export const offerType = async function (req, res) {
@@ -335,7 +342,6 @@ export const offerType = async function (req, res) {
       message: `type query not found`,
     });
   }
-  console.log('called');
   const data = await offerGetType(req.query.type);
 
   return res.json({
@@ -344,6 +350,44 @@ export const offerType = async function (req, res) {
     data,
   });
 };
+
+
+export const addOffer = async function (req, res){
+  if(await existCouponName(req.body.title)){
+    return res.json({
+      status: false,
+      err_message: 'Offer Title Exists'
+    })
+  }
+
+  const data = await createOffer(req.body)
+  console.log(data);
+  if(data){
+    return res.json({
+      status: true,
+      message: `user created succesfully`,
+      data
+    })
+  }
+}
+
+export const toggleActivate = async function(req, res){
+  const { id } = req.query;
+
+  if(!id){
+    return res.json({
+      status: false,
+      message: `Id Note Found`
+    })
+  }
+
+  await updateOfferStatus(id);
+
+  return res.json({
+    status: true,
+    message: `offere status update`
+  })
+}
 
 // Admin Offer Dashboard Controllers
 

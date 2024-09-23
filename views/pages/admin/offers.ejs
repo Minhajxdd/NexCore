@@ -51,19 +51,38 @@
                   <th>Offer Title</th>
                   <th>Offer Type</th>
                   <th>Offer</th>
-                  <th>Discount Percentage</th>
+                  <th>Discount</th>
                   <th>Expires</th>
+                  <td>Action</td>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>02312</td>
-                  <td>$14,500</td>
-                  <td>Dashboard</td>
-                  <td>Credit card</td>
-                  <td>04 Dec 2019</td>
-                </tr>
+              <tbody id="t-body">
+
+                <% offers.forEach((offer, ind) => { %>
+
+                  <tr>
+                    <td class="si-no"><%= ind + 1 %></td>
+                    <td><%= offer.offer_title %></td>
+                    <td><%= offer.offer_type %></td>
+
+                    <td>
+                      <%- offer.offer_available.map(item => item).join('<br>') %>
+                    </td>
+
+                    <td><%= offer.discount_percentage %>%</td>
+                    <td><%= new Date(offer.exp_date).toLocaleDateString('en-GB') %></td>
+                    <td>
+                      <% if(offer.isDeleted){ %>
+                        <button id="action-btn" type="button" value="<%= offer._id %>" class="btn btn-outline-success">Activate</button>
+                        
+                      <% }else{ %>
+                        <button id="action-btn" type="button" value="<%= offer._id %>" class="btn btn-outline-danger ">Deactivate</button>
+                        <% } %>
+                    </td>
+                  </tr>
+
+                <% }) %>
+                
               </tbody>
             </table>
           </div>
@@ -72,9 +91,9 @@
     </div>
 
     <!-- offer add form -->
-    <div class="card" id="add-offer-div" style="display: block;">
-      <div class="card-body">
-        <h4 class="card-title">Add a new Coupon</h4>
+    <div class="card" id="add-offer-div">
+      <div class="card-body" style="overflow-y: scroll; max-height: 80vh;">
+        <h4 class="card-title">Add Offer</h4>
         <form class="forms-sample" id="add-offer-form">
           <div class="form-group">
             <label for="add-offer-code">Offer Title</label>
