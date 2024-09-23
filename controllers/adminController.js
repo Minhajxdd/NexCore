@@ -42,7 +42,7 @@ import {
 
 import { sreportFilter } from "../services/admin/s-reportServices.js";
 
-import { offerGetType } from '../services/admin/offerServices.js';
+import { offerGetType } from "../services/admin/offerServices.js";
 
 export const loginGet = (req, res) => {
   if (req.query) {
@@ -326,11 +326,24 @@ export const apiDeleteCoupon = async (req, res) => {
 
 export const offerGet = (req, res) => {
   res.render(`pages/admin/offers`);
-}
+};
 
-export const offerType = function(req, res){
-  offerGetType(req.query.type);
-}
+export const offerType = async function (req, res) {
+  if (!req.query.type) {
+    return res.json({
+      status: false,
+      message: `type query not found`,
+    });
+  }
+  console.log('called');
+  const data = await offerGetType(req.query.type);
+
+  return res.json({
+    status: true,
+    message: `successfully data fetched`,
+    data,
+  });
+};
 
 // Admin Offer Dashboard Controllers
 

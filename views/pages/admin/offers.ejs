@@ -72,7 +72,7 @@
     </div>
 
     <!-- offer add form -->
-    <div class="card" id="add-offer-div">
+    <div class="card" id="add-offer-div" style="display: block;">
       <div class="card-body">
         <h4 class="card-title">Add a new Coupon</h4>
         <form class="forms-sample" id="add-offer-form">
@@ -87,24 +87,24 @@
             />
           </div>
 
-          <div class="form-group">
+          <div class="form-group" id="type-select-div">
             <label for="offer-type">Offer Type</label>
-            <select class="form-control" id="add-off-type-input" name="offerType">
+            <select class="form-control" id="add-off-type-input" name="offerType" required>
               <option value="">Select Offer Type</option>
-              <option value="category">Category</option>
-              <option value="products">Products</option>
+              <option value="Category">Category</option>
+              <option value="Products">Products</option>
             </select>
           </div>
           
 
           <div class="form-group">
-            <label for="add-minimum-value">Minimum Value</label>
+            <label for="add-minimum-value">Discount Percentage</label>
             <input
               type="number"
               class="form-control"
-              id="add-minimum-value"
-              name="minPrice"
-              placeholder="minimum value.."
+              id="add-offer-percentage"
+              name="percentage"
+              placeholder="Discount Percentage"
             />
           </div>
 
@@ -115,18 +115,6 @@
               class="form-control"
               id="add-expiration-date"
               name="expDate"
-              placeholder="offer expiration date"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="add-limit">Limit</label>
-            <input
-              type="number"
-              class="form-control"
-              id="add-limit"
-              name="limit"
-              placeholder="Limit"
             />
           </div>
 
