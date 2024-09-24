@@ -134,23 +134,23 @@
                   </thead>
                   <tbody id="table-body-list">
                     <% products.forEach((val, ind) =>{ %>
-                      <tr>
+                      <tr id="<%= val._id %>">
                         <td class="list-index"><%= ind + 1 %></td>
                         <td><img class="prod-img" src="/uploads/products/<%= val.images[0] %>" alt="product_image"></td>
-                        <td id="tb-description2"><%= val.name %></td>
+                        <td class="row-name" id="tb-description2"><%= val.name %></td>
                         <td id="tb-description1"><%= val.description.substring(0,300)+'...' %></td>
                         <td>
                           <h6>Original Price: </h6>
-                          <p><%= val.original_price %></p>
+                          <p id="td-original-price"><%= val.original_price %></p>
                           <h6>Discounted Price: </h6>
-                          <p><%= val.discounted_price %></p>  
+                          <p id="td-discount-price"><%= val.discounted_price %></p>  
                         </td>
                         <!-- <td> <%= val.stock %> </td> -->
                          <td>
                           <div class="qty-label">
                             Qty
                             <div class="input-number">
-                                <input id="input-value" type="number" value="<%= val.stock %>" data-id="<%= val._id%>" name="quantity" disabled>
+                                <input class="td-stock-input" id="input-value" type="number" value="<%= val.stock %>" data-id="<%= val._id%>" name="quantity" disabled>
                                 <span class="qty-up">+</span>
                                 <span class="qty-down">-</span>
                             </div>
@@ -287,6 +287,10 @@
             <!-- Add a wrapper with a fixed height and overflow -->
             <div class="form-scroll-container">
               <form id="product-edit-form"> 
+
+                <input type="text" id="Hidden-Product-id-field" name="productId" hidden>
+                <input type="text" id="Hidden-Category-id-field" name="oldCategoryId" hidden>
+
                 <div class="form-group">
                   <label for="product-name-edit">Product Name</label>
                   <input type="text" class="form-control" id="product-name-edit" placeholder="Product Name" name="name" required>
@@ -307,49 +311,6 @@
                     </optgroup>
                   </select>
                 </div>
-                <div class="form-group">
-                  <label for="add-size-field">Size</label>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <input type="text" class="form-control" placeholder="Size Field Name" name="size">
-                    </div>
-                    <div class="col-md-6">
-                      <input type="text" class="form-control" placeholder="Opton's Comma Separated" name="size_values">
-                    </div>
-                  </div>
-                </div>
-
-
-                 <div class="form-group">
-                      <label for="editimageInput1">Image 1</label>
-                      <input name="image" type="file" class="form-control" id="editimageInput1" accept="image/*" required>
-                      <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
-                  </div> 
-                  <div class="form-group">
-                      <label for="editimageInput2">Image 2</label>
-                      <input name="image" type="file" class="form-control" id="editimageInput2" accept="image/*" required>
-                      <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
-                  </div>
-                  <div class="form-group">
-                      <label for="editimageInput3">Image 3</label>
-                      <input name="image" type="file" class="form-control" id="editimageInput3" accept="image/*" required>
-                      <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
-                  </div> 
-                  <div class="" id="edit-image-form-new-content-div"></div>
-              <!-- Button to add more image upload fields -->
-              <button type="button" id="editImageButton" class="btn btn-success my-2">+ Add Another Image</button>
-                  
-              <div id="editcropContainer">
-                <img id="editimagePreview">
-                <div id="editcropButtons">
-                    <button type="button" class="btn btn-primary" id="editcropAndSaveButton">Crop and Save</button>
-                    <button type="button" class="btn btn-danger" id="editcancelCropButton">Cancel</button>
-                </div>
-             </div>
-    
-            <!-- Overlay for the Pop-Up -->
-            <div class="overlay" id="editoverlay"></div>  
-
 
             <div class="form-group">
               <label>Price</label>

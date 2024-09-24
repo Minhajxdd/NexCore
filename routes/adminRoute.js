@@ -73,7 +73,8 @@ adminRouter.route('/api/orders/status-update')
 adminRouter.route('/api/orders/return/:action')
     .post(adminContoller.adminOrderAction)
 
-
+adminRouter.route('/api/orders/edit')
+    .post(authenticate, adminContoller.productEdit);
 
 // Products order routes
 

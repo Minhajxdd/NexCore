@@ -23,6 +23,7 @@ import {
   updateDeletedProduct,
   updateProductStock,
   oneProductDetails,
+  editProduct
 } from "../services/admin/productServices.js";
 
 import {
@@ -43,6 +44,7 @@ import {
 import { sreportFilter } from "../services/admin/s-reportServices.js";
 
 import { offerGetType, createOffer, existCouponName, getOffers, updateOfferStatus } from "../services/admin/offerServices.js";
+import req from "express/lib/request.js";
 
 export const loginGet = (req, res) => {
   if (req.query) {
@@ -202,6 +204,24 @@ export async function updateStock(req, res) {
 export async function getProductDetails(req, res) {
   const productData = await oneProductDetails(req.query.id);
   res.json(productData);
+}
+
+export async function productEdit(req, res){
+
+  const updateData = await editProduct(req.body);
+
+  if(!updateData){
+    return res.json({
+      status: false,
+      message: 'somethign went wrong'
+    })
+  }
+
+  return res.json({
+    status: true,
+    updateData
+  })
+
 }
 
 // Admin Product Dashboard Controllers
