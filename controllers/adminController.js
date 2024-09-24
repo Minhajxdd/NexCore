@@ -325,9 +325,9 @@ export const apiDeleteCoupon = async (req, res) => {
 // Admin Offer Dashboard Controllers
 
 export const offerGet = async (req, res) => {
-  
+
   const offers = await getOffers();
-  
+
   res.render(`pages/admin/offers`,{
     offers
   });
@@ -372,7 +372,7 @@ export const addOffer = async function (req, res){
 }
 
 export const toggleActivate = async function(req, res){
-  const { id } = req.query;
+  const { id } = req.query
 
   if(!id){
     return res.json({
@@ -380,7 +380,7 @@ export const toggleActivate = async function(req, res){
       message: `Id Note Found`
     })
   }
-
+  
   await updateOfferStatus(id);
 
   return res.json({

@@ -188,7 +188,11 @@
   <div class="balance-card">
       <div>
           <h3>Current Balance</h3>
-          <p>₹<%= wallet.balance_amount %></p>
+          <% if(wallet){ %>
+              <p>₹<%= wallet.balance_amount %></p>
+          <% }else{ %>
+            <p>₹ 00</p>
+          <% } %>
       </div>
       <i class="fa fa-money"></i>
   </div>
@@ -196,7 +200,8 @@
   <!-- Unified Transactions and Bonuses Section -->
   <div class="transactions-section">
       <h4 class="section-title">Transactions</h4>
-      
+
+    <% if(wallet){ %>
 
       <% wallet.transactions.forEach((val) => { %>
 
@@ -223,15 +228,22 @@
         <% } %>
 
       <% }) %>
+      <% }else{ %>
+
+      <% } %>
 
 
-      
   </div>
 
   <!-- Withdraw & Add Funds Buttons -->
   <div class="btn-actions">
-      <a href="#" class="btn-action btn-withdraw"><i class="fa fa-minus"></i> Withdraw</a>
-      <a href="#" class="btn-action"><i class="fa fa-plus"></i> Add Funds</a>
+    <% if(wallet){ %>
+        <a href="#" class="btn-action btn-withdraw"><i class="fa fa-minus"></i> Withdraw</a>
+        <a href="#" class="btn-action"><i class="fa fa-plus"></i> Add Funds</a>
+        <% }else{ %>
+          <a style="width: 100%;" href="#" class="btn-action"><i class="fa fa-plus"></i> Add Funds</a>
+
+        <% } %>
   </div>
 </div>
 

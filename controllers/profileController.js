@@ -223,8 +223,8 @@ export async function getInvoiceData(req, res) {
 export async function getWallet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
 
-  const wallet =  await getWalletData(userId)
-  
+  const wallet =  await getWalletData(userId);
+
   res.render("pages/user/wallet.ejs", {
     wallet
   });

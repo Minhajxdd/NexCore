@@ -77,7 +77,7 @@ export async function getOffers(){
 
 export async function updateOfferStatus(id){
   try{
-   
+
     await offerModel.findByIdAndUpdate(
       id,
       [{ $set: { isDeleted: { $not: "$isDeleted" } } }]

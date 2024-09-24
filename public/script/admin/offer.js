@@ -6,7 +6,7 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
     document.getElementById("add-offer-div").style.display = "block";
   });
   // Form add btn
-  
+
   // Form cancel btn
   document
     .getElementById("add-offer-cancel")
@@ -14,23 +14,23 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
       document.getElementById("add-offer-div").style.display = "none";
       const element = document.getElementById("dynamic-type-drop-down");
       const addProBtn = document.getElementById("add-new-product-drop-toggler");
-  
+
       if (element) {
         element.remove();
       }
-  
+
       if (addProBtn) {
         addProBtn.remove();
       }
-  
+
       document.getElementById("add-off-type-input").value = "";
     });
   // Form cancel btn
-  
+
   // Add form type
   let product = null;
   let category = null;
-  
+
   document
     .getElementById("add-off-type-input")
     .addEventListener("change", async function () {
@@ -40,7 +40,7 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
         if (element) {
           element.remove();
         }
-  
+
         try {
           if (!product) {
             const response = await axios.get(
@@ -48,11 +48,11 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
             );
             product = response.data.data;
           }
-  
+
           if (product) {
             return createDropdown(product, "yes");
           }
-  
+
         } catch (err) {
           console.log(`Error while fetching data: ${err.message}`);
         }
@@ -66,7 +66,7 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
           if(toggler){
               toggler.remove();
           }
-    
+
           try {
             if (!category) {
               const response = await axios.get(
@@ -74,48 +74,48 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
               );
               category = response.data.data;
             }
-    
+
             if (category) {
               return createDropdown(category);
             }
           } catch (err) {
             console.log(`Error while fetching data: ${err.message}`);
-          } 
+          }
       }
-  
+
       function createDropdown(data, product = null) {
         const formGroupDiv = document.createElement("div");
         formGroupDiv.classList.add("form-group");
         formGroupDiv.id = "dynamic-type-drop-down";
         formGroupDiv.setAttribute("type", value);
-  
+
         const label = document.createElement("label");
         label.textContent = value;
-  
+
         const select = document.createElement("select");
         select.classList.add("form-control");
         select.classList.add('add-value-drop');
         select.id = "add-offfer-type-value";
         select.name = "offer-value";
-  
+
         const defaultOption = document.createElement("option");
         defaultOption.value = "";
         defaultOption.textContent = "Select";
         select.appendChild(defaultOption);
-  
+
         data.forEach((item) => {
           const option = document.createElement("option");
           option.value = item._id;
           option.textContent = item.name;
           select.appendChild(option);
         });
-  
+
         formGroupDiv.appendChild(label);
         formGroupDiv.appendChild(select);
-  
+
         const dropParent = document.getElementById(`type-select-div`);
         dropParent.insertAdjacentElement("afterend", formGroupDiv);
-  
+
         if (product) {
           const div = document.createElement(`div`);
           div.innerHTML = `
@@ -126,16 +126,16 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
       }
     });
   // Add form type
-  
+
   // Add to form product dropdown add
   // Add to form product dropdown add
-  
+
   document.addEventListener("click", function (event) {
     if (event.target.matches("#add-new-product-drop-toggler")) {
       addProductDrop(product); // Call the function when the element is clicked
     }
   });
-  
+
   function addProductDrop(data) {
     const select = document.createElement("select");
     select.required = true;
@@ -144,40 +144,40 @@ document.getElementById(`add-form-btn`).addEventListener("click", () => {
     select.classList.add("mt-2");
     select.id = "add-offer-type-value";
     select.name = "offer-value";
-  
+
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "Select";
     select.appendChild(defaultOption);
-  
+
     data.forEach((item) => {
       const option = document.createElement("option");
       option.value = item._id;
       option.textContent = item.name;
       select.appendChild(option);
     });
-  
+
     const parentDiv = document.getElementById("dynamic-type-drop-down");
     parentDiv.appendChild(select);
   }
-  
+
   window.onload = function () {
     document.getElementById(`add-off-type-input`).value = "";
   };
 })();
-// Everything Related to form 
+// Everything Related to form
 
 
 // Add form Submittion
 (function(){
 document.getElementById(`add-offer-form`).addEventListener(`submit`, function(e){
     e.preventDefault();
-    
+
 
     const errorMessage = document.getElementById('create-form-err-message');
     errorMessage.textContent = '';
-  
-    
+
+
     const title = document.getElementById('add-offer-title').value.trim();
     const offerType = document.getElementById('add-off-type-input').value;
     const percentage = document.getElementById('add-offer-percentage').value;
@@ -187,29 +187,29 @@ document.getElementById(`add-offer-form`).addEventListener(`submit`, function(e)
     const titleRegex = /^[A-Za-z\s]+$/;
     const minTitleLength = 5;
     const maxTitleLength = 25;
-    
+
     let errors = [];
-  
+
     if (!title) {
       errors.push('Offer title is required.');
     }
-  
+
     if (!titleRegex.test(title)) {
       errors.push('Offer title can only contain letters and spaces.');
     }
-  
+
     if (title.length < minTitleLength || title.length > maxTitleLength) {
       errors.push(`Offer title must be between ${minTitleLength} and ${maxTitleLength} characters.`);
     }
-  
+
     if (!offerType) {
       errors.push('Please select an offer type.');
     }
-  
+
     if (!percentage || percentage < 0 || percentage > 100) {
       errors.push('Discount percentage must be between 0 and 100.');
     }
-  
+
     if (!expDate) {
       errors.push('Expiration date is required.');
     }
@@ -237,7 +237,7 @@ document.getElementById(`add-offer-form`).addEventListener(`submit`, function(e)
       return;
     }
 
-    
+
     const data = {
         title,
         offer_type: offerType,
@@ -245,7 +245,7 @@ document.getElementById(`add-offer-form`).addEventListener(`submit`, function(e)
         expiry_date: expDate,
         values: offerValue
     }
-    
+
     axios.post('/admin/api/offers/add', data)
     .then(function(res){
         if(res.data.err_message){
@@ -279,7 +279,7 @@ function addRow(data){
         <td>${data.offer_available.join(`<br>`)}</td>
         <td>${data.discount_percentage}%</td>
         <td>${ new Date(data.exp_date).toLocaleDateString('en-GB') }</td>
-        <td><button id="action-btn" type="button" value="<%= offer._id %>" class="btn btn-outline-danger ">Deactivate</button>
+        <td><button id="action-btn" type="button" value="${ data._id }" class="btn btn-outline-danger ">Deactivate</button>
 </td>
     `;
     const tbody = document.getElementById(`t-body`);
@@ -324,7 +324,7 @@ function changeBtn(e) {
     }else if(clickedButton.classList.contains('btn-outline-danger')){
         clickedButton.innerHTML = 'Activate';
         clickedButton.classList.remove('btn-outline-danger');
-        clickedButton.classList.add('btn-outline-success');    
+        clickedButton.classList.add('btn-outline-success');
     }
 
 
