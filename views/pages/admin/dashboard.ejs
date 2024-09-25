@@ -15,8 +15,9 @@
 
         <!-- partial -->
         <div class="main-panel">
-            <div class="content-wrapper">
-              <div class="row">
+            <div class="content-wrapper" style="overflow-y: scroll; max-height: 90vh;">
+
+              <div class="row" >
                 <div class="col-12 grid-margin stretch-card">
                   <div class="card corona-gradient-card">
                     <div class="card-body py-0 px-0 px-sm-3 title-div">
@@ -33,22 +34,19 @@
                 </div>
               </div>
 
-
-
               <div class="row">
 
 
                 <div class="col-sm-3 grid-margin">
-                  <div class="card">
+                  <div class="card" style="max-height: 150px;">
                     <div class="card-body">
                       <h5>Revenue</h5>
                       <div class="row">
                         <div class="col-8 col-sm-12 col-xl-8 my-auto">
                           <div class="d-flex d-sm-block d-md-flex align-items-center">
-                            <h2 class="mb-0">$32123</h2>
-                            <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                            <h2 class="mb-0">₹<%= new Intl.NumberFormat('en-IN').format(data.revenue) %></h2>
                           </div>
-                          <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
+                          <h6 class="text-muted font-weight-normal">Total Revenue Generated</h6>
                         </div>
                         <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                           <i class="fa-solid fa-money-bill sum-icons" style="color: #00bcd4;"></i>
@@ -59,16 +57,15 @@
                 </div>
 
                 <div class="col-sm-3 grid-margin">
-                  <div class="card">
+                  <div class="card" style="max-height: 150px;">
                     <div class="card-body">
                       <h5>Orders</h5>
                       <div class="row">
                         <div class="col-8 col-sm-12 col-xl-8 my-auto">
                           <div class="d-flex d-sm-block d-md-flex align-items-center">
-                            <h2 class="mb-0">$32123</h2>
-                            <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                            <h2 class="mb-0"><%= data.orders %></h2>
                           </div>
-                          <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
+                          <h6 class="text-muted font-weight-normal">Total Completed Orders</h6>
                         </div>
                         <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                           <i class="fa-solid fa-truck sum-icons" style="color: #66bb6a;"></i>
@@ -80,16 +77,15 @@
                 
                 
                 <div class="col-sm-3 grid-margin">
-                  <div class="card">
+                  <div class="card" style="max-height: 150px;">
                     <div class="card-body">
                       <h5>Sales</h5>
                       <div class="row">
                         <div class="col-8 col-sm-12 col-xl-8 my-auto">
                           <div class="d-flex d-sm-block d-md-flex align-items-center">
-                            <h2 class="mb-0">$32123</h2>
-                            <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                            <h2 class="mb-0"><%= data.sales %></h2>
                           </div>
-                          <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
+                          <h6 class="text-muted font-weight-normal">Total Sales</h6>
                         </div>
                         <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                           <i class="fa-solid fa-cart-shopping sum-icons" style="color: #2979ff;"></i>
@@ -100,17 +96,16 @@
                 </div>
 
 
-                <div class="col-sm-3 grid-margin">
-                  <div class="card">
+                <div class="col-sm-3 grid-margin" >
+                  <div class="card" style="max-height: 150px;">
                     <div class="card-body">
                       <h5>Products</h5>
                       <div class="row">
                         <div class="col-8 col-sm-12 col-xl-8 my-auto">
                           <div class="d-flex d-sm-block d-md-flex align-items-center">
-                            <h2 class="mb-0">$32123</h2>
-                            <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                            <h2 class="mb-0"><%= data.products %></h2>
                           </div>
-                          <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
+                          <h6 class="text-muted font-weight-normal">Total Products</h6>
                         </div>
                         <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                           <i class="fa-solid fa-border-all sum-icons" style="color: #ffd700;"></i>
@@ -125,8 +120,85 @@
 
 
 
+
+
+
+              <div class="row">
+                <div class="col-xl-8 col-lg-12">
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Top Selling Products</h5>
+                            <div class="radio-group">
+                                <label><input class="product-chart-filter-radio" type="radio" name="productTimeRange" value="today" checked=""> Today</label>
+                                <label><input class="product-chart-filter-radio" type="radio" name="productTimeRange" value="weekly" checked=""> Week</label>
+                                <label><input class="product-chart-filter-radio" type="radio" name="productTimeRange" value="weekly"> Month</label>
+                                <label><input class="product-chart-filter-radio" type="radio" name="productTimeRange" value="weekly"> Year</label>
+                                <label><input class="product-chart-filter-radio" type="radio" name="productTimeRange" value="all-time" id="all-time-product-radio"> All Time</label>
+                            </div>
+                            <canvas id="product-chart" width="1503" height="751" style="box-sizing: border-box; display: block; height: 426px; width: 852px;"></canvas>
+                            
+                        </article>
+                        <article class="card-body">
+                            <h5 class="card-title">Top Selling Categories</h5>
+                            <div class="radio-group">
+                                <label><input class="category-chart-filter-radio" type="radio" name="categoryTimeRange" value="weekly" checked=""> Week</label>
+                                <label><input class="category-chart-filter-radio" type="radio" name="categoryTimeRange" value="weekly"> Month</label>
+                                <label><input class="category-chart-filter-radio" type="radio" name="categoryTimeRange" value="weekly"> Year</label>
+                                <label><input class="category-chart-filter-radio" type="radio" name="categoryTimeRange" value="all-time"> All Time</label>
+                            </div>
+                            <canvas id="category-chart" width="1503" height="751" style="box-sizing: border-box; display: block; height: 426px; width: 852px;"></canvas>
+                        </article>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-12">
+                    <div class="card mb-4">
+                        <article class="card-body">
+                            <h5 class="card-title">Top Selling</h5>
+        
+                            <div class="controls">
+                                <select id="dataTypeSelect">
+                                    <option value="products">Products</option>
+                                    <option value="categories">Categories</option>
+                                </select>
+                                <select id="timeRangeSelect">
+                                    <option value="week">Week</option>
+                                    <option value="month">Month</option>
+                                    <option value="year">Year</option>
+                                    <option value="allTime">All Time</option>
+                                </select>
+                            </div>                      
+                            <table id="topSellingTable">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th id="nameHeader">Category Name</th>
+                                        <th>Quantity Sold</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topSellingTableBody"><tr><td colspan="3">Invalid data structure</td></tr></tbody>
+                            </table>                      
+                            <canvas id="myChart" height="120px"></canvas>
+                            <canvas id="myChart2" height="217"></canvas>
+                        </article>
+
+                    </div>
+                   
+                </div>
+            </div>
+
+        
+
+
         </div>
     </div> 
+
+    
+    <!-- Cdns -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js" defer></script>
+    
+    <!-- Custom js -->
+     <script src="/script/admin/dashboardCharts.js" defer></script>
 
     <%- include('../../partials/admin/body'); -%>
 

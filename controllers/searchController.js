@@ -7,23 +7,8 @@ export async function searchGet(req, res) {
 
   try {
     const categories = await categoryModel.find({}, { name: 1 });
-    const products = await productModel
-      .find({
-        $and: [
-          { isDeleted: { $ne: true } },
-          {
-            $or: [
-              { name: { $regex: searchQuery, $options: "i" } },
-              { description: { $regex: searchQuery, $options: "i" } },
-              { category_name: { $regex: searchQuery, $options: "i" } },
-            ],
-          },
-        ],
-      })
-      .limit(6);
 
     res.render("pages/user/search", {
-      products,
       categories,
     });
   } catch (error) {

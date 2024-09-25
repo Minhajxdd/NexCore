@@ -13,9 +13,14 @@ adminRouter.route('/login')
 adminRouter.route('/logout')
     .get(adminLogout)
 
-
+// Admin Dashboard routes
 adminRouter.route('/')
     .get(authenticate, adminContoller.homeGet)
+
+adminRouter.route('/api/dashboard/product-data')
+    .get(authenticate, adminContoller.bestSellingProducts)
+
+// Admin Dashboard routes
 
 // User dashboard routes
 adminRouter.route('/users')
@@ -28,6 +33,7 @@ adminRouter.route('/users/form/edit')
 
 adminRouter.route('/users/edit/block')
     .patch(authenticate, adminContoller.editBlocked)
+
 // User dashboard routes
 
 

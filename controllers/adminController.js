@@ -23,7 +23,7 @@ import {
   updateDeletedProduct,
   updateProductStock,
   oneProductDetails,
-  editProduct
+  editProduct,
 } from "../services/admin/productServices.js";
 
 import {
@@ -43,8 +43,18 @@ import {
 
 import { sreportFilter } from "../services/admin/s-reportServices.js";
 
-import { offerGetType, createOffer, existCouponName, getOffers, updateOfferStatus } from "../services/admin/offerServices.js";
-import req from "express/lib/request.js";
+import {
+  offerGetType,
+  createOffer,
+  existCouponName,
+  getOffers,
+  updateOfferStatus,
+} from "../services/admin/offerServices.js";
+
+import {
+  getDashboardData,
+  productChartData,
+} from "../services/admin/dashboardServices.js";
 
 export const loginGet = (req, res) => {
   if (req.query) {
@@ -70,9 +80,35 @@ export const loginPost = (req, res) => {
   res.redirect("/admin/login?err=1");
 };
 
-export const homeGet = (req, res) => {
-  res.render(`pages/admin/dashboard`);
+export const homeGet = async (req, res) => {
+  // Function to get the dashborad top data;
+  const data = await getDashboardData();
+
+  res.render(`pages/admin/dashboard`, { data });
 };
+
+export const bestSellingProducts = async function(req, res){
+
+  const { time } = req.query;
+
+  if(!time){
+    return res.json({
+      status: false,
+      message: 'time zone not specified'
+    })
+  }
+
+  const productData = await productChartData(time);
+  
+  
+  return res.json({
+    status: true,
+    message: `successfully fetched data`,
+    productData
+  })
+
+  
+}
 
 // Admin User Dashboard Controllers
 export const usersGet = async (req, res) => {
@@ -206,22 +242,20 @@ export async function getProductDetails(req, res) {
   res.json(productData);
 }
 
-export async function productEdit(req, res){
-
+export async function productEdit(req, res) {
   const updateData = await editProduct(req.body);
 
-  if(!updateData){
+  if (!updateData) {
     return res.json({
       status: false,
-      message: 'somethign went wrong'
-    })
+      message: "somethign went wrong",
+    });
   }
 
   return res.json({
     status: true,
-    updateData
-  })
-
+    updateData,
+  });
 }
 
 // Admin Product Dashboard Controllers
@@ -345,14 +379,11 @@ export const apiDeleteCoupon = async (req, res) => {
 // Admin Offer Dashboard Controllers
 
 export const offerGet = async (req, res) => {
-
   const offers = await getOffers();
 
-  res.render(`pages/admin/offers`,{
-    offers
+  res.render(`pages/admin/offers`, {
+    offers,
   });
-
-
 };
 
 export const offerType = async function (req, res) {
@@ -371,43 +402,42 @@ export const offerType = async function (req, res) {
   });
 };
 
-
-export const addOffer = async function (req, res){
-  if(await existCouponName(req.body.title)){
+export const addOffer = async function (req, res) {
+  if (await existCouponName(req.body.title)) {
     return res.json({
       status: false,
-      err_message: 'Offer Title Exists'
-    })
+      err_message: "Offer Title Exists",
+    });
   }
 
-  const data = await createOffer(req.body)
+  const data = await createOffer(req.body);
   console.log(data);
-  if(data){
+  if (data) {
     return res.json({
       status: true,
       message: `user created succesfully`,
-      data
-    })
+      data,
+    });
   }
-}
+};
 
-export const toggleActivate = async function(req, res){
-  const { id } = req.query
+export const toggleActivate = async function (req, res) {
+  const { id } = req.query;
 
-  if(!id){
+  if (!id) {
     return res.json({
       status: false,
-      message: `Id Note Found`
-    })
+      message: `Id Note Found`,
+    });
   }
-  
+
   await updateOfferStatus(id);
 
   return res.json({
     status: true,
-    message: `offere status update`
-  })
-}
+    message: `offere status update`,
+  });
+};
 
 // Admin Offer Dashboard Controllers
 

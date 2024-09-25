@@ -110,17 +110,17 @@
     <!-- User List -->
 
     
-    <div class="content-wrapper">
+    <div class="content-wrapper" >
       <div class="row ">
         <div class="col-12 grid-margin">
           <div class="card">
             <div class="card-body">
               <div id="card-title">
-                <h4 class="card-title">Users</h4>
+                <h4 class="card-title">Products</h4>
                 <button class="btn btn-success" id="add-usr-btn">+ New Product </button>
               </div>
-              <div class="table-responsive">
-                <table class="table">
+              <div class="table-responsive" style="overflow-y: scroll; max-height: 60vh;">
+                <table class="table" >
                   <thead>
                     <tr>
                       <th> NO:</th>
@@ -132,7 +132,8 @@
                       <th> Action </th>
                     </tr>
                   </thead>
-                  <tbody id="table-body-list">
+                  <tbody id="table-body-list" >
+                    
                     <% products.forEach((val, ind) =>{ %>
                       <tr id="<%= val._id %>">
                         <td class="list-index"><%= ind + 1 %></td>
