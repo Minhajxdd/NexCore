@@ -55,7 +55,7 @@ export async function getDashboardData() {
 }
 // Get dashboard details
 
-export async function productChartData(filterBy) {
+export async function productChartData(filterBy = 'all-time') {
   try {
     const now = moment();
 
@@ -127,6 +127,76 @@ export async function productChartData(filterBy) {
 
     return data;
   } catch (err) {
-    console.log(`error while fetching `);
+    console.log(`error while fetching top products: ${err.message}`);
   }
+}
+
+export async function categoryChartData(filterBy = 'all-time') {
+    try{
+      const now = moment();
+
+      let startDate;
+  
+      switch (filterBy) {
+        case "today":
+          startDate = now.startOf("day").toDate();
+          break;
+        case "weekly":
+          startDate = now.subtract(1, "weeks").startOf("week").toDate();
+          break;
+        case "monthly":
+          startDate = now.subtract(1, "months").startOf("month").toDate();
+          break;
+        case "yearly":
+          startDate = now.subtract(1, "years").startOf("year").toDate();
+          break;
+        case "all-time":
+          startDate = new Date(0);
+          break;
+        default:
+          startDate = now.toDate();
+      }
+
+      const data = await orderModel.aggregate([
+        {
+          $match: {
+            orderedAt: { $gte: startDate },
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: 'products.product_id',
+            foreignField: '_id',
+            as: 'productDetails'
+          }
+        },
+        {
+          $unwind: '$productDetails'
+        },
+        {
+          $group: {
+            _id: '$productDetails.category_name',
+            quantity: {$sum: '$products.quantity'}
+          }
+        },
+        {
+          $sort: {
+            'quantity': -1
+          }
+        },
+        {
+          $limit: 10
+        }
+        
+      ]);
+      
+      return data;
+
+    }catch(err){
+      console.log(`error while fetching top categories: ${err.message}`);    
+    }
 }

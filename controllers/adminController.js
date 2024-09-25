@@ -54,6 +54,7 @@ import {
 import {
   getDashboardData,
   productChartData,
+  categoryChartData,
 } from "../services/admin/dashboardServices.js";
 
 export const loginGet = (req, res) => {
@@ -87,28 +88,47 @@ export const homeGet = async (req, res) => {
   res.render(`pages/admin/dashboard`, { data });
 };
 
-export const bestSellingProducts = async function(req, res){
+export const dashboardCharData = async function (req, res) {
+  const { type } = req.params;
 
-  const { time } = req.query;
+  if (type === `product-data`) {
+    const { time } = req.query;
 
-  if(!time){
+    if (!time) {
+      return res.json({
+        status: false,
+        message: "time zone not specified",
+      });
+    }
+
+    const productData = await productChartData(time);
+
+    return res.json({
+      status: true,
+      message: `successfully fetched data`,
+      productData,
+    });
+
+  }else if(type === `category-data`){
+    const { time } = req.query;
+
+  if (!time) {
     return res.json({
       status: false,
-      message: 'time zone not specified'
-    })
+      message: "time zone not specified",
+    });
   }
 
-  const productData = await productChartData(time);
-  
-  
+  const categoryData = await categoryChartData(time);
+
   return res.json({
     status: true,
     message: `successfully fetched data`,
-    productData
-  })
+    categoryData,
+  });
+  }
+};
 
-  
-}
 
 // Admin User Dashboard Controllers
 export const usersGet = async (req, res) => {

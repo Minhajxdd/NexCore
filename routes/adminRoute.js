@@ -17,8 +17,10 @@ adminRouter.route('/logout')
 adminRouter.route('/')
     .get(authenticate, adminContoller.homeGet)
 
-adminRouter.route('/api/dashboard/product-data')
-    .get(authenticate, adminContoller.bestSellingProducts)
+adminRouter.route('/api/dashboard/:type')
+    .get(authenticate, adminContoller.dashboardCharData)
+
+
 
 // Admin Dashboard routes
 
