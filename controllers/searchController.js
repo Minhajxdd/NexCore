@@ -1,6 +1,7 @@
 // Importing Models
 import productModel from "../models/productSchema.js";
 import categoryModel from "../models/categorySchema.js";
+import offerModel from "../models/offerSchema.js";
 
 export async function searchGet(req, res) {
   const searchQuery = req.query.search;
@@ -13,12 +14,10 @@ export async function searchGet(req, res) {
     });
   } catch (error) {
     console.error(error.message);
-    res
-      .status(500)
-      .json({
-        status: "failed",
-        message: "An error occurred during the search.",
-      });
+    res.status(500).json({
+      status: "failed",
+      message: "An error occurred during the search.",
+    });
   }
 }
 
@@ -72,15 +71,14 @@ export async function searchApi(req, res) {
       .find(query)
       .skip(startIndex)
       .limit(limit)
-      .sort(sortOptions);
+      .sort(sortOptions)
+      .lean();
   } catch (error) {
     console.error(error.message);
-    return res
-      .status(500)
-      .json({
-        status: "failed",
-        message: "An error occurred during the search.",
-      });
+    return res.status(500).json({
+      status: "failed",
+      message: "An error occurred during the search.",
+    });
   }
 
   if (results.results.length === limit) {
@@ -97,7 +95,40 @@ export async function searchApi(req, res) {
     };
   }
 
+  for (const result of results.results) {
+    const [data] = await offerModel.find(
+      {
+        '$or': [
+          {
+            offer_type: 'Products',
+            offer_available: { $in: result._id },
+            isDeleted: false
+          },
+          {
+            offer_type: 'Category',
+            offer_available: { $in: result.category },
+            isDeleted: false
+          }
+        ]
+      },
+      {
+        exp_date: 0,
+        isDeleted: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        offer_available: 0,
+        offer_type: 0,
+      }
+    )
+    .sort({ discount_percentage: -1 })
+    .limit(1);
+    
+    if (data) {
+      result.offer = data; // Update the current result's offer
+    }
+  }
+  
   results.status = "success";
-
   res.json({ result: results });
+
 }

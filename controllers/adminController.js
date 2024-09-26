@@ -353,9 +353,9 @@ export const couponsGet = async (req, res) => {
 };
 
 export const apiAddCoupon = async (req, res) => {
-  console.log(req.body);
 
   if (!(await checkDupeCoupon(req.body.cpCode))) {
+    console.log('errormessage');
     return res.json({
       status: "failed",
       err_message: "Coupon Code Already Exists!",

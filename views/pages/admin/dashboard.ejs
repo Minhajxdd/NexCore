@@ -167,17 +167,25 @@
                                     <option value="year">Year</option>
                                     <option value="allTime">All Time</option>
                                 </select>
-                            </div>                      
-                            <table id="topSellingTable">
+                            </div>  
+                            <div class="table-responsive">                    
+                            <table class="table table-dark">
                                 <thead>
                                     <tr>
                                         <th>Rank</th>
-                                        <th id="nameHeader">Category Name</th>
-                                        <th>Quantity Sold</th>
+                                        <th>Category</th>
+                                        <th>Quantity</th>
                                     </tr>
                                 </thead>
-                                <tbody id="topSellingTableBody"><tr><td colspan="3">Invalid data structure</td></tr></tbody>
-                            </table>                      
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>Proccessor</td>
+                                    <td>10</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                          </div>
                             <canvas id="myChart" height="120px"></canvas>
                             <canvas id="myChart2" height="217"></canvas>
                         </article>
@@ -200,6 +208,7 @@
     
     <!-- Custom js -->
      <script src="/script/admin/dashboardCharts.js" defer></script>
+     <script src="/script/admin/dashboard.js" defer></script>
 
     <%- include('../../partials/admin/body'); -%>
 

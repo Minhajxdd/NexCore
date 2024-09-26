@@ -229,12 +229,12 @@ document
 
       // Subtotal
       doc.text("Subtotal", 130, yPosition);
-      doc.text(`₹${grandTotal.toFixed(2)}`, 170, yPosition);
+      doc.text(grandTotal.toFixed(2), 170, yPosition);
 
       // Delivery Charge (you can change the value as needed)
       let deliveryCharge = 0; // Example: ₹50 delivery charge
       doc.text("Delivery Charge", 130, yPosition + 10);
-      doc.text(`₹${deliveryCharge.toFixed(2)}`, 170, yPosition + 10);
+      doc.text(deliveryCharge.toFixed(2), 170, yPosition + 10);
 
       // Calculate total after adding delivery charge
       let totalWithDelivery = grandTotal + deliveryCharge;
@@ -246,7 +246,7 @@ document
       if (data.coupon && data.coupon.isApplied) {
         couponDiscount = data.coupon.discountAmount || 0; // Example: Coupon discount amount from data
         doc.text(`Coupon (${data.coupon.code})`, 130, yPosition + 20);
-        doc.text(`- ₹${couponDiscount.toFixed(2)}`, 170, yPosition + 20);
+        doc.text(couponDiscount.toFixed(2), 170, yPosition + 20);
         totalWithDelivery -= couponDiscount; // Reduce the total by coupon discount
       }
 
@@ -254,7 +254,7 @@ document
       doc.setFontSize(14);
       doc.text("Total", 130, yPosition + (couponDiscount ? 30 : 20)); // Adjusting Y position based on whether coupon is applied
       doc.text(
-        `₹${totalWithDelivery.toFixed(2)}`,
+        totalWithDelivery.toFixed(2),
         170,
         yPosition + (couponDiscount ? 30 : 20)
       );

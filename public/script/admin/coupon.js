@@ -4,6 +4,7 @@ document
   .addEventListener("submit", async (e) => {
     e.preventDefault();
 
+
     let errorMessage = "";
 
     const couponCode = document.getElementById("add-coupon-code").value;
@@ -59,15 +60,17 @@ document
     await axios
       .post("/admin/api/coupon/add", data)
       .then(function (res) {
+        console.log(res.data);
         if (res.data.err_message) {
           console.log("failed");
-          return (errorElement.innerHTML = res.data.err_message);
+          return errorElement.innerHTML = res.data.err_message;
         }
 
         console.log(res.data.status);
 
         formElement.reset();
         submitBtn.style.display = "none";
+        window.location.href = "/admin/coupons";
       })
       .catch(function (err) {
         console.log(
@@ -75,8 +78,6 @@ document
         );
       });
 
-    // Replace this when integrating proper xhr doms
-    window.location.href = "/admin/coupons";
   });
 // Add New Coupon
 
@@ -160,6 +161,7 @@ document.getElementById("table-body").addEventListener("click", (e) => {
 
     axios.get(`/admin/api/coupon/delete?id=${id}`)
     .then(function(res){
+
       if(res.data.status === 'success'){
         changeBackground()
       }

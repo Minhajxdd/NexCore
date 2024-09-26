@@ -144,6 +144,13 @@ export async function orderCreate(req, res) {
       console.log(`error whle applying coupon coupon : ${err.message}`);
     }
   }
+  
+  if(cartData.totalPrice > 1000 && paymentMethod === 'Cash on Delivery'){
+    return res.json({
+      status: false,
+      err_message: `Order About 1000 is not Applicable for COD!`,
+    })
+  }
 
   const order = {
     user_id: userId,
@@ -209,9 +216,9 @@ export const razorPayCreateOrder = async (req, res) => {
   }
 
   let { totalPrice: amount } = cartData;
-
+  
   const options = {
-    amount: amount * 100, // Razorpay expects the amount in the smallest currency unit (e.g., 100 = 1 INR)
+    amount: amount, // Razorpay expects the amount in the smallest currency unit (e.g., 100 = 1 INR)
     currency: "INR", // e.g., 'INR'
     receipt: `order_rcptid_${Math.floor(Math.random() * 1000)}`, // Unique receipt ID
   };

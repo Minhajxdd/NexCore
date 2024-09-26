@@ -69,11 +69,6 @@
                                                     <div class="col-md-4 product-name">
                                                         <div class="product-name">
                                                             <a href="/product?id=<%= val._id %>" target="_blank"><%= val.name %></a>
-                                                            <!-- <div class="product-info">
-                                                                <div>Display: <span class="value">5 inch</span></div>
-                                                                <div>RAM: <span class="value">4GB</span></div>
-                                                                <div>Memory: <span class="value">32GB</span></div>
-                                                            </div> -->
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3 quantity">
@@ -105,12 +100,13 @@
                     <div class="col-md-12 col-lg-4">
                         <div class="summary">
                             <h3>Checkout</h3>
-                            <div class="summary-item"><span class="text">Subtotal</span><span class="price">$360</span></div>
+
+                            <div class="summary-item"><span class="text">Subtotal</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice)  %></span></div>
                             <div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
+                            <div class="summary-item"><span class="text">Shipping</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(shipping)  %></span></div>
 
                             <% if(cart){ %>
-                                <div class="summary-item"><span class="text">Total</span><span class="price" id="final-price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice)  %></span></div>
+                                <div class="summary-item"><span class="text">Total</span><span class="price" id="final-price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice - shipping)  %></span></div>
                             <% } %>
 
                             <a href="/checkout"><button type="button" style="background-color: #D10024; color: white;" class="btn btn-lg btn-block">Checkout</button></a>

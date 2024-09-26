@@ -24,11 +24,26 @@ export async function cartGet(req, res) {
       return await productModel.findById(val.product_id);
     })
   );
+  const shipping = calculateShipping(cart.totalPrice);
+
   res.render("pages/user/cartPage", {
     cart,
     products,
+    shipping
   });
 }
+
+// Delivery charge Calculate
+function calculateShipping(price) {
+  if (price < 1000) {
+    return 50;
+  } else if (price > 1000 && price <= 10000) {
+    return 200;
+  } else {
+    return 0;
+  }
+}
+// Delivery charge Calculate
 
 // Cart update api controller
 export async function addCartProducts(req, res) {

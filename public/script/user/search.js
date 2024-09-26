@@ -12,18 +12,25 @@
           .post("/cart/product/add", data)
           .then((res) => {
             console.log(res.data);
+            if(res.data.status === 'success'){
+              return showPopup("Item added to cart successfully!", '#4CAF50');
+            }
+            return showPopup(res.data.error_message, 'red');
+            
           })
           .catch((err) => {
             console.log(err.message);
           });
-        return;
       } else if (wishlist) {
-        console.log(`Hello`)
         const productId = event.target.getAttribute("data-id");
 
-        axios.get(`/api/wishlist/add?productId=${productId}`)
+        axios
+          .get(`/api/wishlist/add?productId=${productId}`)
           .then(function (res) {
-            console.log(res.data);
+            if (res.data.status) {
+              console.log("success");
+              return showPopup("Item added to wishlist successfully!",'#4CAF50');
+            }
           })
           .catch(function (err) {
             console.log(`error while axios add to wishlist : ${err.message}`);
@@ -45,24 +52,22 @@ let maxPrice = null;
 let categories = [];
 
 // Category Query On load Search Select
-window.onload = function() {
+window.onload = function () {
   const queryString = window.location.search;
 
   const urlParams = new URLSearchParams(queryString);
 
-  if (urlParams.has('category')) {
-    const categoryValue = urlParams.get('category');
-    if (categoryValue !== '0') {
+  if (urlParams.has("category")) {
+    const categoryValue = urlParams.get("category");
+    if (categoryValue !== "0") {
       // categories.push(categoryValue);
       categories = categoryValue;
     }
-    document.getElementById('nav-search-category-select').value = categoryValue
+    document.getElementById("nav-search-category-select").value = categoryValue;
   }
   filterReqSent(page, limit);
 };
 // Category Query On load Search Select
-
-
 
 // Pagenation Buttons
 document.querySelectorAll(".pagenation-btns").forEach((button) => {
@@ -181,6 +186,11 @@ function changeProductDetails(data) {
                     <img class="prd-img-align" src="/uploads/products/${
                       product.images[0]
                     }" alt="Product Image!!">
+                    ${product.offer ? `
+                    <div class="product-label">
+											<span class="sale">-${product.offer.discount_percentage}%</span>
+										</div>
+                    `: ''}
                 </div>
                 <div class="product-body">
                     <p class="product-category">${product.category_name}</p>
@@ -196,7 +206,9 @@ function changeProductDetails(data) {
                     </h4>
                     <div class="product-btns">
                         <button class="add-to-wishlist">
-                            <i class="fa-regular fa-heart add-to-wishlist-btn" data-id="${product._id}"></i>
+                            <i class="fa-regular fa-heart add-to-wishlist-btn" data-id="${
+                              product._id
+                            }"></i>
                             <span class="tooltipp">add to wishlist</span>
                         </button>
                         <button class="quick-view">
@@ -253,3 +265,17 @@ document.querySelectorAll(".pagenation-btns").forEach((button) => {
   });
 });
 // Pagenation button color change
+
+// Wishlist Popup
+function showPopup(msg, color) {
+  const popup = document.getElementById("popup-wishlist");
+  popup.innerHTML = msg;
+  popup.classList.add("show");
+  popup.style.backgroundColor = color;
+
+  // Hide after 2 seconds
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 2000);
+}
+// Wishlist Popup

@@ -2102,3 +2102,58 @@ ol {
 		padding: 30px 30px 10px;
 	}
 }
+
+/* Notification container */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 20px 30px;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    display: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px); /* Start below */
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Show notification */
+.notification.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0); /* Slide up */
+}
+
+/* Modern look for text */
+.notification p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Close button */
+.notification .close-btn {
+    position: absolute;
+    top: -10px; /* Move above the notification */
+    right: -10px; /* Move it to the right edge */
+    background: black;
+    border: none;
+    color: white;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; /* Make it round */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.notification .close-btn:hover {
+    background-color: #333; /* Darker shade on hover */
+}
+

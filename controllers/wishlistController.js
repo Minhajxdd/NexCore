@@ -95,6 +95,12 @@ export const addtoWishlist = async (req, res) => {
         }
       );
     }
+
+    return res.json({
+      status: true,
+      message: 'Successfully added to cart'
+    });
+
   } catch (err) {
     console.log(`error on wishlist add or create : ${err.message}`);
   }

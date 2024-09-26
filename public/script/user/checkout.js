@@ -8,9 +8,14 @@ let couponId = null;
     const data = {};
 
     const selectedOption = document.querySelector('input[name="pm"]:checked');
+    const totalPriceElement = Number(document.getElementById(`coupon-th-total`).innerHTML.replace(/[₹,]/g,''));
 
     if (!selectedOption) {
-      return alert("Select Payment Method");
+      return showNotification("Select Payment Method", 'red');
+    }
+    
+    if(selectedOption.value === 'Cash on Delivery' && totalPriceElement > 1000){
+      return showNotification("Order About 1000 is not applicable for COD!", 'red');
     }
 
     data.paymentMethod = selectedOption.value;
@@ -182,9 +187,15 @@ let couponId = null;
 })();
 
 // Apply Coupon
-document
+let couponOgAmount = null;
+let finalOgAmount = null;
+(function(){
+  document
   .getElementById("apply-coupon-btn")
-  .addEventListener("click", function () {
+  .addEventListener("click", async function () {
+
+    if(this.innerHTML == 'Apply'){
+
     const coupon = document.getElementById("coupon-input").value.trim();
     const err = document.getElementById("coupon-err-msg");
 
@@ -192,13 +203,14 @@ document
       return (err.innerHTML = "Enter a valid coupon");
     }
 
-    axios
+    await axios
       .post("/api/coupon/auth", {
         coupon: coupon,
       })
       .then(function (res) {
         if (res.data.err_message) {
-          return (err.innerHTML = res.data.err_message);
+          (err.innerHTML = res.data.err_message);
+          return Promise.reject(); 
         }
 
         updateAmount(res.data.couponResponse);
@@ -206,14 +218,28 @@ document
       .catch(function (err) {
         console.log(`error while sending coupon request: ${err.message}`);
       });
-
-    err.innerHTML = "";
+      err.innerHTML = "";
+      this.innerHTML = 'Remove';
+      this.style.backgroundColor = 'red';
+    }else if(this.innerHTML == 'Remove'){
+      couponId = null;
+      document.getElementById("coupon-td-amount").innerHTML = couponOgAmount;
+      document.getElementById("coupon-th-total").innerHTML = finalOgAmount;
+      document.getElementById("coupon-input").value = '';
+      this.innerHTML = 'Apply';
+      this.style.backgroundColor = '#1BD31B';
+    }
+    console.log(couponId);
+    setTimeout(() => console.log('setTimout',couponId),2000)
   });
+
 
 // update the dom of coupon
 function updateAmount(data) {
   const couponAmount = document.getElementById("coupon-td-amount");
   const finalTotal = document.getElementById("coupon-th-total");
+  couponOgAmount = couponAmount.innerHTML;
+  finalOgAmount = finalTotal.innerHTML; 
 
   couponId = data.id;
 
@@ -227,3 +253,27 @@ function updateAmount(data) {
 // update the dom of coupon
 
 // updateAmount(data)
+
+})();
+// Apply Coupon
+
+// Show notification function
+function showNotification(message, bgColor) {
+  const notification = document.getElementById("notification");
+  
+  notification.innerHTML = `<p>${message}</p> <button class="close-btn">&times;</button>`;
+  notification.style.backgroundColor = bgColor;
+
+  notification.classList.add("show");
+
+  const hideTimeout = setTimeout(() => {
+      notification.classList.remove("show");
+  }, 3000);
+
+  const closeButton = notification.querySelector('.close-btn');
+  closeButton.addEventListener('click', () => {
+      clearTimeout(hideTimeout);
+      notification.classList.remove("show");
+  });
+}
+// Show notification function

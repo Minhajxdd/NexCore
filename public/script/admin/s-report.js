@@ -237,61 +237,33 @@ function generatePDF() {
   // Get the final Y position after the table ends
   const finalY = doc.lastAutoTable.finalY + 15; // Adjust margin from the table to the footer
 
-  // Footer fields for totals and summary
-  const footerFields = [
-    { label: "Total Order Count:", value: fieldData.length.toString() },
-    {
-      label: "Total Order Amount:",
-      value: `₹${new Intl.NumberFormat("en-IN").format(
-        fieldData.reduce((acc, val) => acc + (val.totalPrice || 0), 0)
-      )}`,
-    },
-    {
-      label: "Total Coupon Discount:",
-      value: `₹${new Intl.NumberFormat("en-IN").format(
-        fieldData.reduce((acc, val) => acc + (val.coupon || 0), 0)
-      )}`,
-    },
-    {
-      label: "Total Offer Discount:",
-      value: `₹${new Intl.NumberFormat("en-IN").format(
-        fieldData.reduce((acc, val) => acc + (val.offer || 0), 0)
-      )}`,
-    },
-  ];
-
-  // Set font size and color for uniformity across all fields
-  doc.setFontSize(10);
-  doc.setTextColor(40);
-
-  // Left alignment and spacing
+  // Set a uniform font size and type
+  const footerFontSize = 10; // Fixed font size
+  const footerFontType = "helvetica"; // Font type
+  doc.setFont(footerFontType);
+  doc.setFontSize(footerFontSize);
+  doc.setTextColor(40); // Set text color if needed
+  
+  // Left alignment
   const footerLeftAlignment = 20;
   const lineSpacing = 8;
+  
 
-  // Ensure all text matches the size of "Total Order Count"
-  footerFields.forEach((field, index) => {
-    const positionY = finalY + index * lineSpacing;
-    const text = `${field.label} ${field.value}`;
+  doc.text("Total Order Count", 150, finalY + 10);
+  doc.text(fieldData.length.toString(), 190, finalY + 10);
+  
 
-    // Adjust text size by getting width of the first field ("Total Order Count")
-    const totalOrderCountWidth = doc.getTextWidth(
-      footerFields[0].label + " " + footerFields[0].value
-    );
-    const currentTextWidth = doc.getTextWidth(text);
+  doc.text("Total Order Amount", 150, finalY + 20);
+  doc.text(new Intl.NumberFormat("en-IN").format(fieldData.reduce((acc, val) => acc + (val.totalPrice || 0), 0)), 190, finalY + 20);
 
-    // Scale the current text if needed (so it stays same size as "Total Order Count")
-    if (currentTextWidth > totalOrderCountWidth) {
-      doc.setFontSize(10 * (totalOrderCountWidth / currentTextWidth));
-    }
+  doc.text("Total Coupon Discount", 150, finalY + 30);
+  doc.text(new Intl.NumberFormat("en-IN").format(fieldData.reduce((acc, val) => acc + (val.coupon || 0), 0)), 190, finalY + 30);
 
-    // Draw the text
-    doc.text(text, footerLeftAlignment, positionY);
+  doc.text("Total Offer Discount", 150, finalY + 40);
+  doc.text(new Intl.NumberFormat("en-IN").format(fieldData.reduce((acc, val) => acc + (val.offer || 0), 0)), 190, finalY + 40);
+  
+  // Add a dividing line above the footer for clarity
 
-    // Reset font size for consistency
-    doc.setFontSize(10);
-  });
-
-  // Add dividing line above the footer for clarity
   doc.setLineWidth(0.5);
   doc.line(
     margin.left,
@@ -299,6 +271,10 @@ function generatePDF() {
     doc.internal.pageSize.getWidth() - margin.right,
     finalY - 10
   );
+  
+  
+  
+  
 
   // Save the PDF
   doc.save("sales_report.pdf");
