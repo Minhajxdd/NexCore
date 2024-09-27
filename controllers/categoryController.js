@@ -74,9 +74,14 @@ export async function categoryFilter(req, res){
         .find(query)
         .skip(startIndex)
         .limit(limit)
-        .sort(sortOptions);
+        .sort(sortOptions)
+        .lean();
     }catch(err){
         console.log(`Error while category filter or pagination ${err.message}`);
+        return res.status(500).json({
+            status: "failed",
+            message: "An error occurred during the search.",
+          });
     }
 
 

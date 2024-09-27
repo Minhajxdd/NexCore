@@ -8,14 +8,22 @@ let couponId = null;
     const data = {};
 
     const selectedOption = document.querySelector('input[name="pm"]:checked');
-    const totalPriceElement = Number(document.getElementById(`coupon-th-total`).innerHTML.replace(/[₹,]/g,''));
+    const totalPriceElement = Number(
+      document.getElementById(`coupon-th-total`).innerHTML.replace(/[₹,]/g, "")
+    );
 
     if (!selectedOption) {
-      return showNotification("Select Payment Method", 'red');
+      return showNotification("Select Payment Method", "red");
     }
-    
-    if(selectedOption.value === 'Cash on Delivery' && totalPriceElement > 1000){
-      return showNotification("Order About 1000 is not applicable for COD!", 'red');
+
+    if (
+      selectedOption.value === "Cash on Delivery" &&
+      totalPriceElement > 1000
+    ) {
+      return showNotification(
+        "Order About 1000 is not applicable for COD!",
+        "red"
+      );
     }
 
     data.paymentMethod = selectedOption.value;
@@ -98,13 +106,9 @@ let couponId = null;
       }
     }
 
-    if (couponId) {
-      data.couponId = couponId;
-    }
-
     if (data.paymentMethod === "Razer Pay") {
       axios
-        .get("/api/order/razorpay/create")
+        .get(`/api/order/razorpay/create?couponId=${couponId}`)
         .then(function (res) {
           const options = {
             key: res.data.key_id, // Replace with your Razorpay Test Key
@@ -133,12 +137,12 @@ let couponId = null;
               if (!result.success) {
                 return;
               }
+              data.couponId = couponId;
 
               // Send data using Axios
               axios
                 .post("/order/create", data)
                 .then(function (res) {
-                  console.log(res.data);
                   if (res.data.status === "success") {
                     window.location.href = res.data.redirectUrl;
                   } else {
@@ -166,6 +170,8 @@ let couponId = null;
         });
       return;
     } else if (data.paymentMethod === "Cash on Delivery") {
+      data.couponId = couponId;
+
       // Send data using Axios
       axios
         .post("/order/create", data)
@@ -189,91 +195,93 @@ let couponId = null;
 // Apply Coupon
 let couponOgAmount = null;
 let finalOgAmount = null;
-(function(){
+(function () {
   document
-  .getElementById("apply-coupon-btn")
-  .addEventListener("click", async function () {
+    .getElementById("apply-coupon-btn")
+    .addEventListener("click", async function () {
+      if (this.innerHTML == "Apply") {
+        const coupon = document.getElementById("coupon-input").value.trim();
+        const err = document.getElementById("coupon-err-msg");
 
-    if(this.innerHTML == 'Apply'){
-
-    const coupon = document.getElementById("coupon-input").value.trim();
-    const err = document.getElementById("coupon-err-msg");
-
-    if (!coupon) {
-      return (err.innerHTML = "Enter a valid coupon");
-    }
-
-    await axios
-      .post("/api/coupon/auth", {
-        coupon: coupon,
-      })
-      .then(function (res) {
-        if (res.data.err_message) {
-          (err.innerHTML = res.data.err_message);
-          return Promise.reject(); 
+        if (!coupon) {
+          return (err.innerHTML = "Enter a valid coupon");
         }
 
-        updateAmount(res.data.couponResponse);
-      })
-      .catch(function (err) {
-        console.log(`error while sending coupon request: ${err.message}`);
-      });
-      err.innerHTML = "";
-      this.innerHTML = 'Remove';
-      this.style.backgroundColor = 'red';
-    }else if(this.innerHTML == 'Remove'){
-      couponId = null;
-      document.getElementById("coupon-td-amount").innerHTML = couponOgAmount;
-      document.getElementById("coupon-th-total").innerHTML = finalOgAmount;
-      document.getElementById("coupon-input").value = '';
-      this.innerHTML = 'Apply';
-      this.style.backgroundColor = '#1BD31B';
-    }
-    console.log(couponId);
-    setTimeout(() => console.log('setTimout',couponId),2000)
-  });
+        await axios
+          .post("/api/coupon/auth", {
+            coupon: coupon,
+          })
+          .then(function (res) {
+            if (res.data.err_message) {
+              err.innerHTML = res.data.err_message;
+              return Promise.reject();
+            }
 
+            updateAmount(res.data.couponResponse);
+          })
+          .catch(function (err) {
+            console.log(`error while sending coupon request: ${err.message}`);
+          });
+        err.innerHTML = "";
+        this.innerHTML = "Remove";
+        this.style.backgroundColor = "red";
+      } else if (this.innerHTML == "Remove") {
+        couponId = null;
+        document.getElementById("coupon-td-amount").innerHTML = couponOgAmount;
+        document.getElementById("coupon-th-total").innerHTML = finalOgAmount;
+        document.getElementById("coupon-input").value = "";
+        this.innerHTML = "Apply";
+        this.style.backgroundColor = "#1BD31B";
+      }
+    });
 
-// update the dom of coupon
-function updateAmount(data) {
-  const couponAmount = document.getElementById("coupon-td-amount");
-  const finalTotal = document.getElementById("coupon-th-total");
-  couponOgAmount = couponAmount.innerHTML;
-  finalOgAmount = finalTotal.innerHTML; 
+  // update the dom of coupon
+  function updateAmount(data) {
+    const couponAmount = document.getElementById("coupon-td-amount");
+    const finalTotal = document.getElementById("coupon-th-total");
+    const shippingAmount = document.getElementById("shipping-td-amount");
+    let offerAmount = document.getElementById(`offer-td-amount`).innerHTML;
+    couponOgAmount = couponAmount.innerHTML;
+    finalOgAmount = finalTotal.innerHTML;
 
-  couponId = data.id;
+    offerAmount = parseFloat(offerAmount.replace(/[^\d.]/g, ""));
 
-  couponAmount.innerHTML = `-₹${new Intl.NumberFormat("en-IN").format(
-    data.discountPrice
-  )}`;
-  finalTotal.innerHTML = `₹${new Intl.NumberFormat("en-IN").format(
-    data.couponPrice
-  )}`;
-}
-// update the dom of coupon
+    couponId = data.id;
 
-// updateAmount(data)
+    couponAmount.innerHTML = `-₹${new Intl.NumberFormat("en-IN").format(
+      data.discountPrice
+    )}`;
 
+    // console.log(data.couponPrice)
+    finalTotal.innerHTML = `₹${new Intl.NumberFormat("en-IN").format(
+      Number(data.couponPrice) +
+        Number(shippingAmount.innerHTML) -
+        (offerAmount || 0)
+    )}`;
+  }
+  // update the dom of coupon
+
+  // updateAmount(data)
 })();
 // Apply Coupon
 
 // Show notification function
 function showNotification(message, bgColor) {
   const notification = document.getElementById("notification");
-  
+
   notification.innerHTML = `<p>${message}</p> <button class="close-btn">&times;</button>`;
   notification.style.backgroundColor = bgColor;
 
   notification.classList.add("show");
 
   const hideTimeout = setTimeout(() => {
-      notification.classList.remove("show");
+    notification.classList.remove("show");
   }, 3000);
 
-  const closeButton = notification.querySelector('.close-btn');
-  closeButton.addEventListener('click', () => {
-      clearTimeout(hideTimeout);
-      notification.classList.remove("show");
+  const closeButton = notification.querySelector(".close-btn");
+  closeButton.addEventListener("click", () => {
+    clearTimeout(hideTimeout);
+    notification.classList.remove("show");
   });
 }
 // Show notification function

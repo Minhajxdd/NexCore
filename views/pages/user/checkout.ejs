@@ -153,14 +153,27 @@
                         %>
                       </td>
                     </tr>
-                    <tr class="cart-subtotal">
-                      <td>Shipping</td>
-                      <td>Free</td>
-                    </tr>
-
+                
                     <tr>
                       <td>Coupon</td>
                       <td id="coupon-td-amount" style="color: red;">none</td>
+                    </tr>
+
+                    <tr></tr>
+                      <td>Offer</td>
+                      <td id="offer-td-amount" style="color: red;">
+                        <% if(products.offer){ %>
+                          -₹<%= new
+                          Intl.NumberFormat('en-IN').format(products.offer)
+                          %></td>
+                        <% }else{ %>
+                          <%= 'none' %>
+                        <% } %>
+                    </tr>
+
+                    <tr>
+                      <td>Shipping</td>
+                      <td id="shipping-td-amount"><%= shipping %></td>
                     </tr>
 
                   </tbody>
@@ -168,8 +181,9 @@
                     <tr class="order-total">
                       <th>Total</th>
                       <th id="coupon-th-total">
+                        
                         ₹<%= new
-                        Intl.NumberFormat('en-IN').format(cartData.totalPrice)
+                        Intl.NumberFormat('en-IN').format(cartData.totalPrice - ( products.offer || 0 ) + shipping )
                         %>
                       </th>
                     </tr>

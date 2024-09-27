@@ -24,7 +24,7 @@ export async function cartGet(req, res) {
       return await productModel.findById(val.product_id);
     })
   );
-  const shipping = calculateShipping(cart.totalPrice);
+  const shipping = '000';
 
   res.render("pages/user/cartPage", {
     cart,

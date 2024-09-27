@@ -197,13 +197,26 @@ function changeProductDetails(data) {
                     <h3 class="product-name"><a href="/product?id=${
                       product._id
                     }">${product.name.substring(0, 40)}...</a></h3>
+                    ${
+                    product.offer ? 
+                    `
+                    <h4 class="product-price">₹ ${new Intl.NumberFormat(
+                      "en-IN"
+                    ).format(product.discounted_price - (product.discounted_price * (product.offer.discount_percentage / 100)) )}
+                        <del class="product-old-price">${new Intl.NumberFormat(
+                          "en-IN"
+                        ).format(product.discounted_price)}</del>
+                    </h4> `
+                    :
+                    `
                     <h4 class="product-price">₹ ${new Intl.NumberFormat(
                       "en-IN"
                     ).format(product.discounted_price)}
                         <del class="product-old-price">${new Intl.NumberFormat(
                           "en-IN"
                         ).format(product.original_price)}</del>
-                    </h4>
+                    </h4> `
+                    }
                     <div class="product-btns">
                         <button class="add-to-wishlist">
                             <i class="fa-regular fa-heart add-to-wishlist-btn" data-id="${

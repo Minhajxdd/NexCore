@@ -16,6 +16,7 @@ import userModel from "../models/userSchema.js";
 import orderModel from "../models/orderSchema.js";
 import address from "../models/addressSchema.js";
 import couponModel from "../models/couponSchema.js";
+import offerModel from "../models/offerSchema.js";
 
 export async function getCheckout(req, res) {
   const cartId = req.session.cartId;
@@ -30,25 +31,78 @@ export async function getCheckout(req, res) {
   try {
     const cartData = await cartModel.findById(cartId);
     const productsId = cartData.items.map((item) => item.product_id);
-
+    
     const products = await productModel.find({
       _id: { $in: productsId },
-    });
+    }).lean();
 
     if (cartData.items.length === 0) {
       return res.redirect("/not-found");
     }
 
+    for (const product of products) {
+      const [data] = await offerModel.find(
+        {
+          '$or': [
+            {
+              offer_type: 'Products',
+              offer_available: { $in: product._id },
+              isDeleted: false
+            },
+            {
+              offer_type: 'Category',
+              offer_available: { $in: product.category },
+              isDeleted: false
+            }
+          ]
+        },
+        {
+          exp_date: 0,
+          isDeleted: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          offer_available: 0,
+          offer_type: 0,
+          _id: 0,
+          offer_title: 0,
+          __v:0
+        }
+      )
+      .sort({ discount_percentage: -1 })
+      .limit(1);
+      
+      if (data) {
+        products.offer = 0;
+        products.offer += product.discounted_price - ( product.discounted_price - (product.discounted_price * (data.discount_percentage / 100))); 
+      }
+    }
+    
+    const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
+
     res.render("pages/user/checkout.ejs", {
       products,
       cartData,
       addresses,
+      shipping
     });
   } catch (err) {
     console.log(`Error which get checkout data on checkout: ${err.message}`);
   }
 }
 
+// Delivery charge Calculate
+function calculateShipping(price) {
+  if (price < 1000) {
+    return 50;
+  } else if (price > 1000 && price <= 10000) {
+    return 200;
+  } else {
+    return 0;
+  }
+}
+// Delivery charge Calculate
+
+// Order create
 export async function orderCreate(req, res) {
   const userId = req.session.userId || req.session.passport.user;
 
@@ -152,6 +206,57 @@ export async function orderCreate(req, res) {
     })
   }
 
+  const productsId = cartData.items.map((item) => item.product_id);
+    
+  const products = await productModel.find({
+    _id: { $in: productsId },
+  }).lean();
+
+  if (cartData.items.length === 0) {
+    return res.redirect("/not-found");
+  }
+
+  for (const product of products) {
+    const [data] = await offerModel.find(
+      {
+        '$or': [
+          {
+            offer_type: 'Products',
+            offer_available: { $in: product._id },
+            isDeleted: false
+          },
+          {
+            offer_type: 'Category',
+            offer_available: { $in: product.category },
+            isDeleted: false
+          }
+        ]
+      },
+      {
+        exp_date: 0,
+        isDeleted: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        offer_available: 0,
+        offer_type: 0,
+        _id: 0,
+        offer_title: 0,
+        __v:0
+      }
+    )
+    .sort({ discount_percentage: -1 })
+    .limit(1);
+    
+    if (data) {
+      products.offer = 0;
+      products.offer += product.discounted_price - ( product.discounted_price - (product.discounted_price * (data.discount_percentage / 100))); 
+    }
+  }
+
+  const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
+
+  cartData.totalPrice = cartData.totalPrice - ( products.offer || 0 ) + shipping;
+
   const order = {
     user_id: userId,
     products: cartData.items,
@@ -159,6 +264,7 @@ export async function orderCreate(req, res) {
     addressId: Addressid,
     paymentMethod: paymentMethod,
     coupon: couponDiscount,
+    offer: products.offer,
     billName: billName
   };
 
@@ -189,6 +295,7 @@ export async function orderCreate(req, res) {
     id: address._id,
   });
 }
+// Order create
 
 // Route to create an order
 export const razorPayCreateOrder = async (req, res) => {
@@ -217,6 +324,88 @@ export const razorPayCreateOrder = async (req, res) => {
 
   let { totalPrice: amount } = cartData;
   
+  const productsId = cartData.items.map((item) => item.product_id);
+    
+  const products = await productModel.find({
+    _id: { $in: productsId },
+  }).lean();
+
+  if (cartData.items.length === 0) {
+    return res.redirect("/not-found");
+  }
+
+  for (const product of products) {
+    const [data] = await offerModel.find(
+      {
+        '$or': [
+          {
+            offer_type: 'Products',
+            offer_available: { $in: product._id },
+            isDeleted: false
+          },
+          {
+            offer_type: 'Category',
+            offer_available: { $in: product.category },
+            isDeleted: false
+          }
+        ]
+      },
+      {
+        exp_date: 0,
+        isDeleted: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        offer_available: 0,
+        offer_type: 0,
+        _id: 0,
+        offer_title: 0,
+        __v:0
+      }
+    )
+    .sort({ discount_percentage: -1 })
+    .limit(1);
+    
+    if (data) {
+      products.offer = 0;
+      products.offer += product.discounted_price - ( product.discounted_price - (product.discounted_price * (data.discount_percentage / 100))); 
+    }
+  }
+
+  const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
+
+  amount = cartData.totalPrice - ( products.offer || 0 ) + shipping;
+
+  const { couponId } = req.query;
+
+  if(couponId !== 'null'){
+    
+    const couponData = await couponModel.findById(couponId);
+    
+    if (!couponData) {
+      return res.json({
+        status: false,
+        message: "coupon id not found",
+      });
+    }
+    
+    if (cartData.totalPrice < couponData.minimumPrice) {
+      return res.json({
+        status: false,
+        err_message: `Coupon Can be only applied for more than ${couponData.minimumPrice}`,
+      });
+    }
+    
+    if (couponData.limit <= 0) {
+      return res.json({
+        status: false,
+        err_message: `Coupon limit reached`,
+      });
+    }
+    amount = amount - couponData.discountPrice;
+  }
+
+  amount = Math.floor(amount);
+
   const options = {
     amount: amount, // Razorpay expects the amount in the smallest currency unit (e.g., 100 = 1 INR)
     currency: "INR", // e.g., 'INR'
@@ -228,6 +417,7 @@ export const razorPayCreateOrder = async (req, res) => {
     order.key_id = process.env.RAZORPAY_KEY_ID;
     res.json(order); // Send the order details back to the client
   } catch (error) {
+    console.log('Failed to create order ',error);
     res.status(500).json({ error: "Failed to create order" }); // Error handling
   }
 };

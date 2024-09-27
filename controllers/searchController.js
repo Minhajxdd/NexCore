@@ -124,7 +124,7 @@ export async function searchApi(req, res) {
     .limit(1);
     
     if (data) {
-      result.offer = data; // Update the current result's offer
+      result.offer = data;
     }
   }
   

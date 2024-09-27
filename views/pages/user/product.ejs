@@ -94,10 +94,20 @@
                         </div>
                         <a class="review-link" href="#">10 Review(s) | Add your review</a>
                     </div>
-                    <div>
-                        <h3 class="product-price"><%= product.discounted_price %><del class="product-old-price"><%= product.original_price %></del></h3>
-                        <span class="product-available" id="product-stock-count"><%= product.stock ? 'Stock :  '+product.stock : 'Unavailable' %></span>
-                    </div>
+                    <% if(offer){ %>
+                        <div style="margin-top: 10px;">
+                            <span >Special Offer : <%= offer.discount_percentage %>%</span>
+                        </div>
+                        <div>
+                            <h3 class="product-price"><%= product.discounted_price - (product.discounted_price * (offer.discount_percentage / 100)) %><del class="product-old-price"><%= product.discounted_price %></del></h3>
+                            <span class="product-available" id="product-stock-count"><%= product.stock ? 'Stock :  '+product.stock : 'Unavailable' %></span>
+                        </div>
+                    <% }else{ %>
+                        <div>
+                            <h3 class="product-price"><%= product.discounted_price %><del class="product-old-price"><%= product.original_price %></del></h3>
+                            <span class="product-available" id="product-stock-count"><%= product.stock ? 'Stock :  '+product.stock : 'Unavailable' %></span>
+                        </div>
+                    <% } %>
                     <p><%= product.description %></p>
 
                     <div class="product-options">

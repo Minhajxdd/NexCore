@@ -49,6 +49,9 @@ const orderSchmea = new Schema({
     coupon: {
       type: Number
     },
+    offer: {
+      type: Number
+    },
     billName:{
       type: String,
       required: true
