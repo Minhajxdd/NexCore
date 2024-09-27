@@ -122,6 +122,9 @@ router.route('/api/order/razorpay/conform')
 router.route('/api/coupon/auth')
     .post(checkout.authCoupon)
 
+router.route('/api/checkout/wallet-balance')
+    .post(checkout.checkWalletBalance)
+
 // Checkout
 
 

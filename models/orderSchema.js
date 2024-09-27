@@ -42,7 +42,7 @@ const orderSchmea = new Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['Cash on Delivery', 'Razer Pay', 'Bank'], 
+        enum: ['Cash on Delivery', 'Razer Pay', 'Wallet'], 
         default: 'pending',
         required: true
     },

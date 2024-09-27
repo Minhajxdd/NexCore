@@ -212,7 +212,7 @@
                   <i class="fa fa-plus-circle"></i>
                   <%= val.description %>
               </div>
-              <div class="amount expense">+ ₹<%= val.amount %></div>
+              <div class="amount expense" style="color: blue;">+ ₹<%= val.amount %></div>
           </div>
 
         <% }else{ %>
@@ -222,7 +222,7 @@
               <i class="fa fa-minus-circle"></i>
               <%= val.description %>
           </div>
-          <div class="amount expense">+ ₹<%= val.amount %></div>
+          <div class="amount expense" style="color: red;">- ₹<%= val.amount %></div>
           </div>
 
         <% } %>

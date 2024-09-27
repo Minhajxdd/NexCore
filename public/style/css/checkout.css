@@ -1683,7 +1683,9 @@ ol {
 }
 
 .payment-method input[type=radio]:checked+label:after {
-	border: 2px solid #e95a5a;
+	border: 2px solid #1c0000;
+	background-color: #000;
+	
 }
 
 /*------------------

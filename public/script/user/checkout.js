@@ -188,6 +188,39 @@ let couponId = null;
             `An error occurred during axios request ${error.message}`
           );
         });
+    } else if(data.paymentMethod === 'Wallet'){
+      data.couponId = couponId;
+
+      axios.post('/api/checkout/wallet-balance', data)
+      .then(function(res){
+        if(res.data.err_message){
+          showNotification(res.data.err_message, "red", '#fff');
+          return;
+        }
+
+
+        axios
+        .post("/order/create", data)
+        .then(function (res) {
+          if (res.data.status === "success") {
+            window.location.href = res.data.redirectUrl;
+          } else {
+            window.location.href = "http://localhost:4000/not-found";
+          }
+        })
+        .catch(function (error) {
+          console.log(
+            `An error occurred during creting wallet ${error.message}`
+          );
+        });
+
+      })
+      .catch(function(err){
+        console.log(`error while checking wallet balance: ${err.message}`);
+      });
+
+      
+
     }
   });
 })();
@@ -266,17 +299,22 @@ let finalOgAmount = null;
 // Apply Coupon
 
 // Show notification function
-function showNotification(message, bgColor) {
+function showNotification(message, bgColor, color) {
   const notification = document.getElementById("notification");
 
-  notification.innerHTML = `<p>${message}</p> <button class="close-btn">&times;</button>`;
+  notification.innerHTML = `<p style="color: #fff;">${message}</p> <button class="close-btn">&times;</button>`;
   notification.style.backgroundColor = bgColor;
+
+  if(color){
+    notification.style.color = color;
+  }
 
   notification.classList.add("show");
 
   const hideTimeout = setTimeout(() => {
     notification.classList.remove("show");
   }, 3000);
+
 
   const closeButton = notification.querySelector(".close-btn");
   closeButton.addEventListener("click", () => {

@@ -17,6 +17,7 @@ import orderModel from "../models/orderSchema.js";
 import address from "../models/addressSchema.js";
 import couponModel from "../models/couponSchema.js";
 import offerModel from "../models/offerSchema.js";
+import walletModel from "../models/walletSchema.js";
 
 export async function getCheckout(req, res) {
   const cartId = req.session.cartId;
@@ -31,59 +32,67 @@ export async function getCheckout(req, res) {
   try {
     const cartData = await cartModel.findById(cartId);
     const productsId = cartData.items.map((item) => item.product_id);
-    
-    const products = await productModel.find({
-      _id: { $in: productsId },
-    }).lean();
+
+    const products = await productModel
+      .find({
+        _id: { $in: productsId },
+      })
+      .lean();
 
     if (cartData.items.length === 0) {
       return res.redirect("/not-found");
     }
 
     for (const product of products) {
-      const [data] = await offerModel.find(
-        {
-          '$or': [
-            {
-              offer_type: 'Products',
-              offer_available: { $in: product._id },
-              isDeleted: false
-            },
-            {
-              offer_type: 'Category',
-              offer_available: { $in: product.category },
-              isDeleted: false
-            }
-          ]
-        },
-        {
-          exp_date: 0,
-          isDeleted: 0,
-          createdAt: 0,
-          updatedAt: 0,
-          offer_available: 0,
-          offer_type: 0,
-          _id: 0,
-          offer_title: 0,
-          __v:0
-        }
-      )
-      .sort({ discount_percentage: -1 })
-      .limit(1);
-      
+      const [data] = await offerModel
+        .find(
+          {
+            $or: [
+              {
+                offer_type: "Products",
+                offer_available: { $in: product._id },
+                isDeleted: false,
+              },
+              {
+                offer_type: "Category",
+                offer_available: { $in: product.category },
+                isDeleted: false,
+              },
+            ],
+          },
+          {
+            exp_date: 0,
+            isDeleted: 0,
+            createdAt: 0,
+            updatedAt: 0,
+            offer_available: 0,
+            offer_type: 0,
+            _id: 0,
+            offer_title: 0,
+            __v: 0,
+          }
+        )
+        .sort({ discount_percentage: -1 })
+        .limit(1);
+
       if (data) {
         products.offer = 0;
-        products.offer += product.discounted_price - ( product.discounted_price - (product.discounted_price * (data.discount_percentage / 100))); 
+        products.offer +=
+          product.discounted_price -
+          (product.discounted_price -
+            product.discounted_price * (data.discount_percentage / 100));
       }
     }
-    
-    const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
+
+    const shipping = calculateShipping(
+      cartData.totalPrice - products.offer || 0
+    );
 
     res.render("pages/user/checkout.ejs", {
       products,
       cartData,
       addresses,
-      shipping
+      shipping,
     });
   } catch (err) {
     console.log(`Error which get checkout data on checkout: ${err.message}`);
@@ -146,9 +155,10 @@ export async function orderCreate(req, res) {
   if (req.body.addressId) {
     Addressid = req.body.addressId;
 
-    const {first_name, last_name} = await addressModel.findById(req.body.addressId);
+    const { first_name, last_name } = await addressModel.findById(
+      req.body.addressId
+    );
     billName = `${first_name} ${last_name}`;
-
   }
 
   try {
@@ -198,64 +208,102 @@ export async function orderCreate(req, res) {
       console.log(`error whle applying coupon coupon : ${err.message}`);
     }
   }
-  
-  if(cartData.totalPrice > 1000 && paymentMethod === 'Cash on Delivery'){
+
+  if (cartData.totalPrice > 1000 && paymentMethod === "Cash on Delivery") {
     return res.json({
       status: false,
       err_message: `Order About 1000 is not Applicable for COD!`,
-    })
+    });
   }
-
-  const productsId = cartData.items.map((item) => item.product_id);
-    
-  const products = await productModel.find({
-    _id: { $in: productsId },
-  }).lean();
 
   if (cartData.items.length === 0) {
     return res.redirect("/not-found");
   }
 
+  const productsId = cartData.items.map((item) => item.product_id);
+
+  const products = await productModel
+    .find({
+      _id: { $in: productsId },
+    })
+    .lean();
+
   for (const product of products) {
-    const [data] = await offerModel.find(
-      {
-        '$or': [
-          {
-            offer_type: 'Products',
-            offer_available: { $in: product._id },
-            isDeleted: false
-          },
-          {
-            offer_type: 'Category',
-            offer_available: { $in: product.category },
-            isDeleted: false
-          }
-        ]
-      },
-      {
-        exp_date: 0,
-        isDeleted: 0,
-        createdAt: 0,
-        updatedAt: 0,
-        offer_available: 0,
-        offer_type: 0,
-        _id: 0,
-        offer_title: 0,
-        __v:0
-      }
-    )
-    .sort({ discount_percentage: -1 })
-    .limit(1);
-    
+    const [data] = await offerModel
+      .find(
+        {
+          $or: [
+            {
+              offer_type: "Products",
+              offer_available: { $in: product._id },
+              isDeleted: false,
+            },
+            {
+              offer_type: "Category",
+              offer_available: { $in: product.category },
+              isDeleted: false,
+            },
+          ],
+        },
+        {
+          exp_date: 0,
+          isDeleted: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          offer_available: 0,
+          offer_type: 0,
+          _id: 0,
+          offer_title: 0,
+          __v: 0,
+        }
+      )
+      .sort({ discount_percentage: -1 })
+      .limit(1);
+
     if (data) {
       products.offer = 0;
-      products.offer += product.discounted_price - ( product.discounted_price - (product.discounted_price * (data.discount_percentage / 100))); 
+      products.offer +=
+        product.discounted_price -
+        (product.discounted_price -
+          product.discounted_price * (data.discount_percentage / 100));
     }
   }
 
   const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
 
-  cartData.totalPrice = cartData.totalPrice - ( products.offer || 0 ) + shipping;
+
+  cartData.totalPrice = parseInt( cartData.totalPrice - (products.offer || 0) + shipping );
+
+  if (paymentMethod === "Wallet") {
+    try{
+      
+      const update = {
+        $inc: { balance_amount: -cartData.totalPrice},
+        $push: { 
+          transactions: { 
+            amount: cartData.totalPrice, 
+            transaction_type: 'debit', 
+            description: `Order` 
+          }
+        }
+      };
+
+      const options = { 
+        upsert: true,
+        setDefaultsOnInsert: true
+      };
+
+      await walletModel.findOneAndUpdate(
+        { user_id: userId },
+        update,
+        options
+      );
+
+
+    }catch(err){
+      return console.log(`error while deducting: ${err.message}`);
+    }
+  }
 
   const order = {
     user_id: userId,
@@ -265,7 +313,7 @@ export async function orderCreate(req, res) {
     paymentMethod: paymentMethod,
     coupon: couponDiscount,
     offer: products.offer,
-    billName: billName
+    billName: billName,
   };
 
   if (optionalMessage) {
@@ -323,78 +371,83 @@ export const razorPayCreateOrder = async (req, res) => {
   }
 
   let { totalPrice: amount } = cartData;
-  
+
   const productsId = cartData.items.map((item) => item.product_id);
-    
-  const products = await productModel.find({
-    _id: { $in: productsId },
-  }).lean();
+
+  const products = await productModel
+    .find({
+      _id: { $in: productsId },
+    })
+    .lean();
 
   if (cartData.items.length === 0) {
     return res.redirect("/not-found");
   }
 
   for (const product of products) {
-    const [data] = await offerModel.find(
-      {
-        '$or': [
-          {
-            offer_type: 'Products',
-            offer_available: { $in: product._id },
-            isDeleted: false
-          },
-          {
-            offer_type: 'Category',
-            offer_available: { $in: product.category },
-            isDeleted: false
-          }
-        ]
-      },
-      {
-        exp_date: 0,
-        isDeleted: 0,
-        createdAt: 0,
-        updatedAt: 0,
-        offer_available: 0,
-        offer_type: 0,
-        _id: 0,
-        offer_title: 0,
-        __v:0
-      }
-    )
-    .sort({ discount_percentage: -1 })
-    .limit(1);
-    
+    const [data] = await offerModel
+      .find(
+        {
+          $or: [
+            {
+              offer_type: "Products",
+              offer_available: { $in: product._id },
+              isDeleted: false,
+            },
+            {
+              offer_type: "Category",
+              offer_available: { $in: product.category },
+              isDeleted: false,
+            },
+          ],
+        },
+        {
+          exp_date: 0,
+          isDeleted: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          offer_available: 0,
+          offer_type: 0,
+          _id: 0,
+          offer_title: 0,
+          __v: 0,
+        }
+      )
+      .sort({ discount_percentage: -1 })
+      .limit(1);
+
     if (data) {
       products.offer = 0;
-      products.offer += product.discounted_price - ( product.discounted_price - (product.discounted_price * (data.discount_percentage / 100))); 
+      products.offer +=
+        product.discounted_price -
+        (product.discounted_price -
+          product.discounted_price * (data.discount_percentage / 100));
     }
   }
 
   const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
 
-  amount = cartData.totalPrice - ( products.offer || 0 ) + shipping;
+  amount = cartData.totalPrice - (products.offer || 0) + shipping;
 
   const { couponId } = req.query;
 
-  if(couponId !== 'null'){
-    
+  if (couponId !== "null") {
     const couponData = await couponModel.findById(couponId);
-    
+
     if (!couponData) {
       return res.json({
         status: false,
         message: "coupon id not found",
       });
     }
-    
+
     if (cartData.totalPrice < couponData.minimumPrice) {
       return res.json({
         status: false,
         err_message: `Coupon Can be only applied for more than ${couponData.minimumPrice}`,
       });
     }
-    
+
     if (couponData.limit <= 0) {
       return res.json({
         status: false,
@@ -417,7 +470,7 @@ export const razorPayCreateOrder = async (req, res) => {
     order.key_id = process.env.RAZORPAY_KEY_ID;
     res.json(order); // Send the order details back to the client
   } catch (error) {
-    console.log('Failed to create order ',error);
+    console.log("Failed to create order ", error);
     res.status(500).json({ error: "Failed to create order" }); // Error handling
   }
 };
@@ -470,11 +523,11 @@ export async function authCoupon(req, res) {
       });
     }
 
-    if(couponData.isDeleted){
+    if (couponData.isDeleted) {
       return res.json({
         status: false,
-        err_message: 'Coupon Not Found'
-      })
+        err_message: "Coupon Not Found",
+      });
     }
 
     const cartData = await cartModel.findById(cartId);
@@ -512,3 +565,150 @@ export async function authCoupon(req, res) {
     });
   }
 }
+
+// check Is there Price in wallet
+export async function checkWalletBalance(req, res) {
+  const userId = req.session.userId || req.session.passport.user;
+
+  const { paymentMethod, couponId } = req.body;
+
+  if (paymentMethod !== "Wallet") {
+    return res.json({
+      status: false,
+      message: "Invalid Payment Method",
+    });
+  }
+
+  // Retreving cartdata
+  let cartData = null;
+  try {
+    cartData = await cartModel.findById(req.session.cartId);
+  } catch (err) {
+    console.log(
+      `error while fetching data from cart on checkout: ${err.message}`
+    );
+  }
+  // Retreving cartdata
+
+  // Valid and reduce coupon price
+  if (couponId) {
+    try {
+      const couponData = await couponModel.findById(couponId);
+
+      if (
+        !couponData ||
+        cartData.totalPrice < couponData.minimumPrice ||
+        couponData.limit <= 0
+      ) {
+        return res.json({
+          status: false,
+          message: "Invalid Coupon",
+        });
+      }
+
+      cartData.totalPrice = cartData.totalPrice - couponData.discountPrice;
+    } catch (err) {
+      console.log(`error whle applying coupon coupon : ${err.message}`);
+    }
+  }
+  // Valid and reduce coupon price
+
+  if (cartData.items.length === 0) {
+    return res.redirect("/not-found");
+  }
+
+  // Check for offers and reduce the price
+  const productsId = cartData.items.map((item) => item.product_id);
+
+  const products = await productModel
+    .find({
+      _id: { $in: productsId },
+    })
+    .lean();
+
+  for (const product of products) {
+    const [data] = await offerModel
+      .find(
+        {
+          $or: [
+            {
+              offer_type: "Products",
+              offer_available: { $in: product._id },
+              isDeleted: false,
+            },
+            {
+              offer_type: "Category",
+              offer_available: { $in: product.category },
+              isDeleted: false,
+            },
+          ],
+        },
+        {
+          exp_date: 0,
+          isDeleted: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          offer_available: 0,
+          offer_type: 0,
+          _id: 0,
+          offer_title: 0,
+          __v: 0,
+        }
+      )
+      .sort({ discount_percentage: -1 })
+      .limit(1);
+
+    if (data) {
+      products.offer = 0;
+      products.offer +=
+        product.discounted_price -
+        (product.discounted_price -
+          product.discounted_price * (data.discount_percentage / 100));
+    }
+  }
+  // Check for offers and reduce the price
+
+  const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
+
+  const finalPrice = cartData.totalPrice - (products.offer || 0) + shipping;
+
+  try {
+    const walletData = await walletModel.findOne(
+      {
+        user_id: userId,
+      },
+      {
+        _id: 0,
+        __v: 0,
+        created_at: 0,
+        transactions: 0,
+        user_id: 0
+      }
+    ).lean();
+
+    if(!walletData){
+      return res.json({
+        status: false,
+        err_message: 'Insufficient wallet balance'
+      })
+    }
+
+    const { balance_amount } = walletData;
+
+    if(finalPrice > balance_amount){
+      return res.json({
+        status: false,
+        err_message: 'Insufficient wallet balance'
+      })
+    }
+
+  } catch (err) {
+    console.log(`error while checking wallet: ${err.message}`);
+  }
+
+  return res.json({
+    status: true,
+    message: "Proceed with the next step",
+  });
+}
+// check Is there Price in wallet

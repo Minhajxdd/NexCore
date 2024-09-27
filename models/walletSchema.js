@@ -11,7 +11,8 @@ const WalletSchema = new Schema({
     {
       amount: {
         type: Number,
-        required: true
+        required: true,
+        min: [0, 'Price cannot be below zero'],
       },
       transaction_type: {
         type: String,
