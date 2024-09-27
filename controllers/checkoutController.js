@@ -19,6 +19,7 @@ import couponModel from "../models/couponSchema.js";
 import offerModel from "../models/offerSchema.js";
 import walletModel from "../models/walletSchema.js";
 
+// Get Checkout Details
 export async function getCheckout(req, res) {
   const cartId = req.session.cartId;
   let addresses = [];
@@ -98,6 +99,7 @@ export async function getCheckout(req, res) {
     console.log(`Error which get checkout data on checkout: ${err.message}`);
   }
 }
+// Get Checkout Details
 
 // Delivery charge Calculate
 function calculateShipping(price) {
@@ -271,36 +273,30 @@ export async function orderCreate(req, res) {
 
   const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
 
-
-  cartData.totalPrice = parseInt( cartData.totalPrice - (products.offer || 0) + shipping );
+  cartData.totalPrice = parseInt(
+    cartData.totalPrice - (products.offer || 0) + shipping
+  );
 
   if (paymentMethod === "Wallet") {
-    try{
-      
+    try {
       const update = {
-        $inc: { balance_amount: -cartData.totalPrice},
-        $push: { 
-          transactions: { 
-            amount: cartData.totalPrice, 
-            transaction_type: 'debit', 
-            description: `Order` 
-          }
-        }
+        $inc: { balance_amount: -cartData.totalPrice },
+        $push: {
+          transactions: {
+            amount: cartData.totalPrice,
+            transaction_type: "debit",
+            description: `Order`,
+          },
+        },
       };
 
-      const options = { 
+      const options = {
         upsert: true,
-        setDefaultsOnInsert: true
+        setDefaultsOnInsert: true,
       };
 
-      await walletModel.findOneAndUpdate(
-        { user_id: userId },
-        update,
-        options
-      );
-
-
-    }catch(err){
+      await walletModel.findOneAndUpdate({ user_id: userId }, update, options);
+    } catch (err) {
       return console.log(`error while deducting: ${err.message}`);
     }
   }
@@ -337,7 +333,15 @@ export async function orderCreate(req, res) {
     console.og(`error while clearing cart: ${err.message}`);
   }
 
-  res.json({
+  if (paymentMethod === "Failed Payment") {
+    return res.json({
+      status: "success",
+      redirectUrl: "/order/payment-failed",
+      id: address._id,
+    });
+  }
+
+  return res.json({
     status: "success",
     redirectUrl: "/order/successfull",
     id: address._id,
@@ -487,6 +491,12 @@ export const conformPaymentRazorPay = (req, res) => {
     .digest("hex"); // Create the expected signature using HMAC SHA256 and the key secret
 
   if (expectedSignature === razorpay_signature) {
+    if (req.body.orderId) {
+      return res.redirect(
+        `/api/orders/razor/conform?orderId=${req.body.orderId}`
+      );
+    }
+
     return res.json({
       success: true,
       message: "Payment verified successfully",
@@ -497,10 +507,6 @@ export const conformPaymentRazorPay = (req, res) => {
     .status(400)
     .json({ success: false, message: "Payment verification failed" }); // Failure if signatures don't match
 };
-
-export async function orderSuccessfullGet(req, res) {
-  res.render("pages/user/orderSuccessfull.ejs");
-}
 
 export async function authCoupon(req, res) {
   const { coupon } = req.body;
@@ -673,35 +679,36 @@ export async function checkWalletBalance(req, res) {
   const finalPrice = cartData.totalPrice - (products.offer || 0) + shipping;
 
   try {
-    const walletData = await walletModel.findOne(
-      {
-        user_id: userId,
-      },
-      {
-        _id: 0,
-        __v: 0,
-        created_at: 0,
-        transactions: 0,
-        user_id: 0
-      }
-    ).lean();
+    const walletData = await walletModel
+      .findOne(
+        {
+          user_id: userId,
+        },
+        {
+          _id: 0,
+          __v: 0,
+          created_at: 0,
+          transactions: 0,
+          user_id: 0,
+        }
+      )
+      .lean();
 
-    if(!walletData){
+    if (!walletData) {
       return res.json({
         status: false,
-        err_message: 'Insufficient wallet balance'
-      })
+        err_message: "Insufficient wallet balance",
+      });
     }
 
     const { balance_amount } = walletData;
 
-    if(finalPrice > balance_amount){
+    if (finalPrice > balance_amount) {
       return res.json({
         status: false,
-        err_message: 'Insufficient wallet balance'
-      })
+        err_message: "Insufficient wallet balance",
+      });
     }
-
   } catch (err) {
     console.log(`error while checking wallet: ${err.message}`);
   }
@@ -712,3 +719,88 @@ export async function checkWalletBalance(req, res) {
   });
 }
 // check Is there Price in wallet
+
+// Conform Page
+export async function orderSuccessfullGet(req, res) {
+  res.render("pages/user/orderSuccessfull.ejs");
+}
+// Conform Page
+// Payment Failed Page
+export async function paymetFailedGet(req, res) {
+  res.render("pages/user/orderFailed.ejs");
+}
+// Payment Failed Page
+
+export async function retryRazorPayCreate(req, res) {
+  const userId = req.session.userId || req.session.passport.user;
+  const { orderId } = req.body;
+
+  try {
+    var { totalPrice } = await orderModel
+      .findOne(
+        {
+          _id: orderId,
+          user_id: userId,
+          paymentMethod: "Failed Payment",
+        },
+        {
+          totalPrice: 1,
+          _id: 0,
+        }
+      )
+      .lean();
+
+    if (!totalPrice) {
+      res.status(500).json({ error: "Failed to create order" });
+    }
+  } catch (err) {
+    console.log(`error while fetching order data: ${err.message}`);
+  }
+
+  // Initialize Razorpay instance
+  const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+
+  const options = {
+    amount: totalPrice, // Razorpay expects the amount in the smallest currency unit (e.g., 100 = 1 INR)
+    currency: "INR", // e.g., 'INR'
+    receipt: `order_rcptid_${Math.floor(Math.random() * 1000)}`, // Unique receipt ID
+  };
+
+  try {
+    const order = await razorpay.orders.create(options); // Create an order using Razorpay API
+    order.key_id = process.env.RAZORPAY_KEY_ID;
+    res.json(order); // Send the order details back to the client
+  } catch (error) {
+    console.log("Failed to create order ", error);
+    res.status(500).json({ error: "Failed to create order" }); // Error handling
+  }
+}
+
+// Conform Failed Payment
+export async function conformFailedPayment(req, res) {
+  const orderId = req.query.orderId;
+  try {
+    await orderModel.findByIdAndUpdate(
+      {
+        _id: orderId,
+      },
+      {
+        $set: {
+          paymentMethod: `Razer Pay`,
+        },
+      }
+    );
+
+    return res.json({
+      success: true,
+      message: `successfully payment completed`,
+    });
+  } catch (err) {
+    console.log(`error while conforming faile order: ${err.message}`);
+    return res.json({ status: false });
+  }
+}
+// Conform Failed Payment

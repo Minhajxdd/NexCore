@@ -457,9 +457,16 @@
       </p>
     </div>
 
-    <div class="payment-details">
+    <div class="payment-details" id="payment-details-div">
       <h5>Payment Method</h5>
-      <p><%= orders.paymentMethod %></p>
+      <% if(orders.paymentMethod === 'Failed Payment'){ %>
+        <p><%= orders.paymentMethod %></p>
+        <button data-id="<%= orders._id %>" type="button" class="btn btn-warning" id="btn-retry-payment">
+          <span class="glyphicon glyphicon-refresh"></span> Retry Payment
+        </button>
+      <% }else{ %>
+        <p><%= orders.paymentMethod %></p>
+      <% } %>
     </div>
 
     <div class="order-summary">
@@ -530,9 +537,13 @@
     </div>
     <% } %>
     
-    <div class="invoice-download-container" >
-      <button class="invoice-btn-download" id="invoice-download-btn" value="<%= orders._id %>"> Download Invoice </button>
-    </div>
+    <% if(orders.orderStatus === 'delivered'){ %>
+      <div class="invoice-download-container" >
+        <button class="invoice-btn-download" id="invoice-download-btn" value="<%= orders._id %>"> Download Invoice </button>
+      </div>
+    <% } %>
+
+  
   </div>
 </div>
 
@@ -586,5 +597,8 @@
 
 <!-- Custom Js -->
 <script src="/script/user/orderDetails.js"></script>
+
+<!-- Razor Pay cdn -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <%- include('../../partials/user/footer'); -%>

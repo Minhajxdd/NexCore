@@ -155,6 +155,33 @@ let couponId = null;
                   );
                 });
             },
+            modal: {
+              ondismiss: function () {
+                data.couponId = couponId;
+                data.paymentMethod = "Failed Payment";
+
+                axios
+                  .post("/order/create", data)
+                  .then(function (res) {
+                    console.log(res.data);
+                    if (res.data.status === "success") {
+                      window.location.href = res.data.redirectUrl;
+                    } else {
+                      window.location.href = "http://localhost:4000/not-found";
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(
+                      `An error occurred during axios request ${error.message}`
+                    );
+                  });
+              },
+            },
+            prefille: {
+              name: "Customer Name",
+              email: "testing@gmail.com",
+              contact: "7898778987",
+            },
             theme: {
               color: "#3399cc",
             },
@@ -188,39 +215,35 @@ let couponId = null;
             `An error occurred during axios request ${error.message}`
           );
         });
-    } else if(data.paymentMethod === 'Wallet'){
+    } else if (data.paymentMethod === "Wallet") {
       data.couponId = couponId;
 
-      axios.post('/api/checkout/wallet-balance', data)
-      .then(function(res){
-        if(res.data.err_message){
-          showNotification(res.data.err_message, "red", '#fff');
-          return;
-        }
-
-
-        axios
-        .post("/order/create", data)
+      axios
+        .post("/api/checkout/wallet-balance", data)
         .then(function (res) {
-          if (res.data.status === "success") {
-            window.location.href = res.data.redirectUrl;
-          } else {
-            window.location.href = "http://localhost:4000/not-found";
+          if (res.data.err_message) {
+            showNotification(res.data.err_message, "red", "#fff");
+            return;
           }
+
+          axios
+            .post("/order/create", data)
+            .then(function (res) {
+              if (res.data.status === "success") {
+                window.location.href = res.data.redirectUrl;
+              } else {
+                window.location.href = "http://localhost:4000/not-found";
+              }
+            })
+            .catch(function (error) {
+              console.log(
+                `An error occurred during creting wallet ${error.message}`
+              );
+            });
         })
-        .catch(function (error) {
-          console.log(
-            `An error occurred during creting wallet ${error.message}`
-          );
+        .catch(function (err) {
+          console.log(`error while checking wallet balance: ${err.message}`);
         });
-
-      })
-      .catch(function(err){
-        console.log(`error while checking wallet balance: ${err.message}`);
-      });
-
-      
-
     }
   });
 })();
@@ -305,7 +328,7 @@ function showNotification(message, bgColor, color) {
   notification.innerHTML = `<p style="color: #fff;">${message}</p> <button class="close-btn">&times;</button>`;
   notification.style.backgroundColor = bgColor;
 
-  if(color){
+  if (color) {
     notification.style.color = color;
   }
 
@@ -314,7 +337,6 @@ function showNotification(message, bgColor, color) {
   const hideTimeout = setTimeout(() => {
     notification.classList.remove("show");
   }, 3000);
-
 
   const closeButton = notification.querySelector(".close-btn");
   closeButton.addEventListener("click", () => {

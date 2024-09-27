@@ -113,6 +113,9 @@ router.route('/order/create')
 router.route('/order/successfull')
     .get(checkout.orderSuccessfullGet);
 
+router.route('/order/payment-failed')
+    .get(checkout.paymetFailedGet);
+
 router.route('/api/order/razorpay/create')
     .get(checkout.razorPayCreateOrder)
 
@@ -170,7 +173,13 @@ router.route('/api/orders/return')
 
 router.route('/api/orders/invoice/data')
     .get(profile.getInvoiceData)
+
+router.route('/api/orders/razor/retry')
+    .post(checkout.retryRazorPayCreate);
     
+router.route('/api/orders/razor/conform')
+    .get(checkout.conformFailedPayment);
+
     // Orders
 
 

@@ -97,12 +97,11 @@ function updateStatusBar(status) {
   document.getElementById("status-bar").innerHTML = status;
 }
 
-
-
 // Invoice Download
-document
-  .getElementById("invoice-download-btn")
-  .addEventListener("click", function () {
+const invoiceDownloadBtn = document.getElementById("invoice-download-btn");
+
+if (invoiceDownloadBtn) {
+  invoiceDownloadBtn.addEventListener("click", function () {
     const id = this.value;
 
     axios(`/api/orders/invoice/data?id=${id}`)
@@ -267,5 +266,86 @@ document
       doc.save("invoice_with_table.pdf");
     }
   });
+}
 
 // Invoice Download
+
+// Retry Payment RazorPay
+(function () {
+  document
+    .getElementById(`btn-retry-payment`)
+    .addEventListener("click", function () {
+      const orderId = this.getAttribute("data-id");
+
+      axios
+        .post("/api/orders/razor/retry", { orderId })
+        .then(function (res) {
+          const options = {
+            key: res.data.key_id, // Replace with your Razorpay Test Key
+            amount: res.data.amount, // Amount from backend
+            currency: res.data.currency,
+            name: "Checkout",
+            description: "Test payment integration",
+            order_id: res.data.id, // Order ID from backend
+            handler: async function (response) {
+              const paymentData = {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              };
+              paymentData.orderId = orderId;
+
+              // Verify payment in backend
+              const verifyResponse = await axios.post(
+                "/api/order/razorpay/conform",
+                paymentData,
+                {
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
+              const result = verifyResponse.data;
+
+              if (!result.success) {
+                return;
+              }
+
+              updateOrderDetails();
+
+              console.log("success");
+            },
+            modal: {
+              ondismiss: function () {
+                alert("Payment Failed!!");
+              },
+            },
+            prefille: {
+              name: "Customer Name",
+              email: "testing@gmail.com",
+              contact: "7898778987",
+            },
+            theme: {
+              color: "#3399cc",
+            },
+          };
+
+          const rzp1 = new Razorpay(options);
+          rzp1.open();
+        })
+        .catch(function (err) {
+          console.log(`error while axios retry razor request: ${err.message}`);
+        });
+    });
+})();
+
+// Retry Payment RazorPay
+
+// Dom order details
+function updateOrderDetails() {
+  const orderDetails = document.getElementById(`payment-details-div`);
+
+  orderDetails.innerHTML = `
+        <h5>Payment Method</h5>
+        <p>Razor Pay</p>
+  `;
+}
+// Dom order details
