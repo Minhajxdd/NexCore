@@ -31,6 +31,7 @@ import {
   getUsersData,
   updateOrderStatus,
   acceptOrderRequest,
+  getOrderDetails
 } from "../services/admin/orderServices.js";
 
 import {
@@ -339,6 +340,34 @@ export async function adminOrderAction(req, res) {
     });
   }
 }
+
+export async function apiOrderProducts(req, res){
+
+  if(!req.body.orderId){
+    return res.json({
+      status: false,
+      message: `orderID not found`
+    });
+  };
+
+  const data = await getOrderDetails(req.body.orderId);
+
+  if(!data){
+    return res.json({
+      status: false,
+      message: `something went wrong`
+    })
+  }
+
+  return res.json({
+    status: true,
+    message: `successfully fetched`,
+    data
+  })
+
+
+}
+
 
 // Admin Orders Dashboard Controllers
 

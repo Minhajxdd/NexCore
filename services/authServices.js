@@ -15,7 +15,7 @@ export async function generateOTP() {
 // Send OTP
 export async function sendOTP(email, otp, fullName) {
     const mailOptions = {
-        from: 'nexcore.ecommerce@gmail.com', 
+        from: process.env.GMAIL_ID, 
         to: email,
         subject: 'Your OTP for NexCore Signup',
         text: `Dear ${fullName},
@@ -35,7 +35,7 @@ export async function sendOTP(email, otp, fullName) {
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-            user: 'nexcore.ecommerce@gmail.com', // Your Email Id
+            user: process.env.GMAIL_ID, // Your Email Id
             pass: process.env.GMAIL_APP_PASS // Your Password
         },
         tls: {
@@ -54,7 +54,7 @@ export async function sendOTP(email, otp, fullName) {
 
 export async function sendOTPReset(email, otp) {
     const mailOptions = {
-        from: 'nexcore.ecommerce@gmail.com', 
+        from: process.env.GMAIL_ID, 
         to: email,
         subject: 'Otp for Reset Password',
         text: `
@@ -74,7 +74,7 @@ export async function sendOTPReset(email, otp) {
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-            user: 'nexcore.ecommerce@gmail.com', // Your Email Id
+            user: process.env.GMAIL_ID, // Your Email Id
             pass: process.env.GMAIL_APP_PASS // Your Password
         },
         tls: {

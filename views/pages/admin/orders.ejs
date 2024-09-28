@@ -136,6 +136,171 @@
           font-size: 40px;
         }
       }
+
+
+      .modal-content {
+            background-color: #161b22;
+            color: #c9d1d9;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #30363d;
+        }
+
+        .modal-title {
+            color: #58a6ff;
+            font-weight: bold;
+            font-size: 1.6rem;
+        }
+
+        .modal-body {
+            background-color: #161b22;
+            padding: 20px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #30363d;
+            padding: 15px;
+        }
+
+        .close {
+            color: #c9d1d9;
+            opacity: 0.8;
+        }
+
+        .close:hover {
+            opacity: 1;
+        }
+
+        .btn-dark-blue {
+            background-color: #238636;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-dark-blue:hover {
+            background-color: #2ea043;
+        }
+
+        /* Add subtle animation to the modal */
+        .fade .modal-content {
+            transform: scale(0.9);
+        }
+
+        .fade.in .modal-content {
+            transform: scale(1);
+        }
+
+        .order-details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-details-table th,
+        .order-details-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #30363d;
+            text-align: left;
+        }
+
+        .order-details-table th {
+            color: #58a6ff;
+            font-size: 1.1rem;
+        }
+
+        .order-details-table img {
+            width: 50px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .summary-section {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            background-color: #21262d;
+        }
+
+        .order-summary {
+            padding-top: 10px;
+            margin-top: 10px;
+            color: #8b949e;
+        }
+
+        .order-summary p {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .order-summary strong {
+            color: #c9d1d9;
+        }
+
+        .payment-method {
+            margin-top: 15px;
+            color: #8b949e;
+        }
+
+        .payment-method p {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .order-status {
+            margin-top: 15px;
+            color: #8b949e;
+        }
+
+        .order-status p {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        /* Dark themed background button */
+        #openModalBtn {
+            background-color: #21262d;
+            border: none;
+            color: #c9d1d9;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #openModalBtn:hover {
+            background-color: #30363d;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+        }
+/* Styles for the close button */
+.close-popup {
+    background: transparent; /* Transparent background */
+    border: none; /* Remove default border */
+    color: #c9d1d9; /* Light color for visibility */
+    font-size: 1.5rem; /* Increase size for better clickability */
+    cursor: pointer; /* Pointer cursor for better UX */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+.close-popup:hover {
+    color: #ff6b6b; /* Change color to red on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.close-popup:focus {
+    outline: none; /* Remove outline on focus */
+}
+
+
     </style>
 
 
@@ -283,7 +448,7 @@
                                 </select>
                               </td>
                               <td>
-                                <button class="badge btn-success" id="btn-action" value="<%= orders[ind]._id %>">
+                                <button class="badge btn-success more-details-btn-green" value="<%= orders[ind]._id %>">
                                   More Details..
                                 </button>
                               </td>
@@ -297,6 +462,72 @@
             </div>
           </div>
         </div>
+
+
+
+
+      <!-- Order Details Pop up -->
+        <div class="container text-center" style="padding-top: 50px;">
+          <!-- Modal -->
+          <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailsLabel">
+              <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close-popup" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h4 class="modal-title" id="orderDetailsLabel">Order Details</h4>
+                      </div>
+                      <div class="modal-body">
+                          <table class="order-details-table">
+                              <thead>
+                                  <tr>
+                                      <th>Product Name</th>
+                                      <th>Image</th>
+                                      <th>Quantity</th>
+                                      <th>Price</th>
+                                      <th>Total</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="pop-up-details-body">
+                                 
+                              </tbody>
+                          </table>
+                          <div class="summary-section">
+                              <div class="order-summary">
+                                  <p><strong>Coupon Discount:</strong><span id="order-details-coupon"></span></p>
+                                  <p><strong>Offer Discount:</strong><span id="order-details-offer"></span></p>
+                                  <p><strong>Delivery Charge:</strong><span id="order-details-delivery"></span></p>
+                                  <p><strong>Total Price:</strong> <span id="order-total-price"></span>  </p>
+                              </div>
+                              <div class="payment-method">
+                                  <p><strong>Payment Method:</strong> <span id="order-details-payment-method"></span></p>
+                              </div>
+                              <div class="order-status">
+                                  <p><strong>Order Status:</strong> <span id="order-details-order-status"></span></p>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" id="modal-close-btn" class="btn btn-dark-blue" data-dismiss="modal">Close</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Order Details Pop up -->
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
     </div>
 

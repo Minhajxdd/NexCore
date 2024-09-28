@@ -12,11 +12,10 @@
           .post("/cart/product/add", data)
           .then((res) => {
             console.log(res.data);
-            if(res.data.status === 'success'){
-              return showPopup("Item added to cart successfully!", '#4CAF50');
+            if (res.data.status === "success") {
+              return showPopup("Item added to cart successfully!", "#4CAF50");
             }
-            return showPopup(res.data.error_message, 'red');
-            
+            return showPopup(res.data.error_message, "red");
           })
           .catch((err) => {
             console.log(err.message);
@@ -29,7 +28,10 @@
           .then(function (res) {
             if (res.data.status) {
               console.log("success");
-              return showPopup("Item added to wishlist successfully!",'#4CAF50');
+              return showPopup(
+                "Item added to wishlist successfully!",
+                "#4CAF50"
+              );
             }
           })
           .catch(function (err) {
@@ -180,67 +182,154 @@ function changeProductDetails(data) {
     const productDiv = document.createElement("div");
     productDiv.classList.add("product-divs", "col-md-4", "col-xs-6");
 
-    productDiv.innerHTML = `
-            <div class="product">
-                <div class="product-img">
-                    <img class="prd-img-align" src="/uploads/products/${
-                      product.images[0]
-                    }" alt="Product Image!!">
-                    ${product.offer ? `
-                    <div class="product-label">
-											<span class="sale">-${product.offer.discount_percentage}%</span>
-										</div>
-                    `: ''}
+    if (product.stock > 0) {
+      productDiv.innerHTML = `
+              <div class="product">
+                  <div class="product-img">
+                      <img class="prd-img-align" src="/uploads/products/${
+                        product.images[0]
+                      }" alt="Product Image!!">
+                      ${
+                        product.offer
+                          ? `
+                      <div class="product-label">
+                        <span class="sale">-${product.offer.discount_percentage}%</span>
+                      </div>
+                      `
+                          : ""
+                      }
+                  </div>
+                  <div class="product-body">
+                      <p class="product-category">${product.category_name}</p>
+                      <h3 class="product-name"><a href="/product?id=${
+                        product._id
+                      }">${product.name.substring(0, 40)}...</a></h3>
+                      ${
+                        product.offer
+                          ? `
+                      <h4 class="product-price">₹ ${new Intl.NumberFormat(
+                        "en-IN"
+                      ).format(
+                        product.discounted_price -
+                          product.discounted_price *
+                            (product.offer.discount_percentage / 100)
+                      )}
+                          <del class="product-old-price">${new Intl.NumberFormat(
+                            "en-IN"
+                          ).format(product.discounted_price)}</del>
+                      </h4> `
+                          : `
+                      <h4 class="product-price">₹ ${new Intl.NumberFormat(
+                        "en-IN"
+                      ).format(product.discounted_price)}
+                          <del class="product-old-price">${new Intl.NumberFormat(
+                            "en-IN"
+                          ).format(product.original_price)}</del>
+                      </h4> `
+                      }
+                      <div class="product-btns">
+                          <button class="add-to-wishlist">
+                              <i class="fa-regular fa-heart add-to-wishlist-btn" data-id="${
+                                product._id
+                              }"></i>
+                              <span class="tooltipp">add to wishlist</span>
+                          </button>
+                          <button class="quick-view">
+                              <a href="/product?id=${
+                                product._id
+                              }" target="_blank">
+                                  <i class="fa fa-eye"></i>
+                              </a>
+                              <span class="tooltipp">quick view</span>
+                          </button>
+                      </div>
+                  </div>
+                  <div class="add-to-cart">
+                      <button class="add-to-cart-btn" data-id="${
+                        product._id
+                      }"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                  </div>
+              </div>
+          `;
+    } else {
+      productDiv.innerHTML = `
+     
+      <div class="product out-of-stock-product">
+          <div class="product-img">
+              <img src="/uploads/products/${
+                        product.images[0]
+                      }" alt="Out of stock image">
+              ${
+                  product.offer
+                    ? `
+                <div class="product-label">
+                  <span class="sale">-${product.offer.discount_percentage}%</span>
                 </div>
-                <div class="product-body">
-                    <p class="product-category">${product.category_name}</p>
-                    <h3 class="product-name"><a href="/product?id=${
+                `
+                    : ""
+                }
+              <div class="out-of-stock-overlay">
+                  <p class="out-of-stock-text">Out of Stock</p>
+              </div>
+          </div>
+          <div class="product-body">
+              <p class="product-category">${product.category_name}</p>
+              <h3 class="product-name">
+                  <a href="/product?id=${
+                        product._id
+                      }">${product.name.substring(0, 40)}...</a>
+              </h3>
+${
+                product.offer
+                  ? `
+              <h4 class="product-price">₹ ${new Intl.NumberFormat(
+                "en-IN"
+              ).format(
+                product.discounted_price -
+                  product.discounted_price *
+                    (product.offer.discount_percentage / 100)
+              )}
+                  <del class="product-old-price">${new Intl.NumberFormat(
+                    "en-IN"
+                  ).format(product.discounted_price)}</del>
+              </h4> `
+                  : `
+              <h4 class="product-price">₹ ${new Intl.NumberFormat(
+                "en-IN"
+              ).format(product.discounted_price)}
+                  <del class="product-old-price">${new Intl.NumberFormat(
+                    "en-IN"
+                  ).format(product.original_price)}</del>
+              </h4> `
+              }
+             
+              <div class="product-btns">
+                  <button class="add-to-wishlist add-to-wishlist-btn" data-id="${
+                                product._id
+                              }">
+                      <i class="fa-regular fa-heart"></i>
+                      <span class="tooltipp">add to wishlist</span>
+                  </button>
+                  <button class="quick-view add-to-wishlist-btn" data-id="<%= val._id %>">
+                    <a href="/product?id=${
                       product._id
-                    }">${product.name.substring(0, 40)}...</a></h3>
-                    ${
-                    product.offer ? 
-                    `
-                    <h4 class="product-price">₹ ${new Intl.NumberFormat(
-                      "en-IN"
-                    ).format(product.discounted_price - (product.discounted_price * (product.offer.discount_percentage / 100)) )}
-                        <del class="product-old-price">${new Intl.NumberFormat(
-                          "en-IN"
-                        ).format(product.discounted_price)}</del>
-                    </h4> `
-                    :
-                    `
-                    <h4 class="product-price">₹ ${new Intl.NumberFormat(
-                      "en-IN"
-                    ).format(product.discounted_price)}
-                        <del class="product-old-price">${new Intl.NumberFormat(
-                          "en-IN"
-                        ).format(product.original_price)}</del>
-                    </h4> `
-                    }
-                    <div class="product-btns">
-                        <button class="add-to-wishlist">
-                            <i class="fa-regular fa-heart add-to-wishlist-btn" data-id="${
-                              product._id
-                            }"></i>
-                            <span class="tooltipp">add to wishlist</span>
-                        </button>
-                        <button class="quick-view">
-                            <a href="/product?id=${
-                              product._id
-                            }" target="_blank">
-                                <i class="fa fa-eye"></i>
-                            </a>
-                            <span class="tooltipp">quick view</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="add-to-cart">
-                    <button class="add-to-cart-btn" data-id="${
-                      product._id
-                    }"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                </div>
-            </div>
-        `;
+                    }" target="_blank">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                    <span class="tooltipp">quick view</span>
+
+                  </button>
+              </div>
+          </div>
+          <div class="add-to-cart">
+              <button class="add-to-cart-btn out-of-stock-btn" disabled>
+                  <i class="fa fa-ban"></i> Out of Stock
+              </button>
+          </div>
+      </div>
+ 
+      `;
+    }
 
     container.appendChild(productDiv);
   });

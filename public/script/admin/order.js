@@ -27,6 +27,105 @@
     }
   });
 
+  // More details
+  parentElement.addEventListener("click", function (event) {
+    if (
+      event.target &&
+      event.target.classList.contains("more-details-btn-green")
+    ) {
+      const data = {
+        orderId: event.target.value,
+      };
+
+      axios
+        .post(`/admin/api/order/details`, data)
+        .then(function (res) {
+          if (!res.data.status) {
+            return console.log("failed");
+          }
+          console.log("succes");
+
+          updateOrderDetails(res.data.data);
+        })
+        .catch(function (err) {
+          console.log(`error while fetching data: ${err.message}`);
+        });
+
+      $("#orderDetailsModal").modal("show");
+
+      $(".close-popup").on("click", function () {
+        $("#orderDetailsModal").modal("hide");
+      });
+
+      $("#modal-close-btn").on("click", function () {
+        $("#orderDetailsModal").modal("hide");
+      });
+    }
+  });
+  // More details
+
+  function updateOrderDetails(data) {
+    const tbody = document.getElementById("pop-up-details-body");
+
+    tbody.innerHTML = "";
+
+    data.productsDetail.forEach((product, indx) => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <tr>
+          <td>${product.name.substring(0, 30)}...</td>
+          <td><img src="/uploads/products/${
+            product.images[0]
+          }" style="height: 50px; width: 50px;" alt="Product Image"></td>
+          <td>${data.products[indx].quantity}</td>
+          <td>₹${new Intl.NumberFormat("en-IN").format(
+            product.discounted_price
+          )}</td>
+          <td>₹${new Intl.NumberFormat("en-IN").format(
+            product.discounted_price * data.products[indx].quantity
+          )}</td>
+      </tr>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById(
+      `order-details-coupon`
+    ).innerHTML = ` ₹${new Intl.NumberFormat("en-IN").format(
+      data.coupon || 0
+    )}`;
+    document.getElementById(
+      `order-details-offer`
+    ).innerHTML = ` ₹${new Intl.NumberFormat("en-IN").format(data.offer || 0)}`;
+    document.getElementById(
+      `order-details-delivery`
+    ).innerHTML = ` ₹${new Intl.NumberFormat("en-IN").format(
+      calculateShipping(data.totalPrice)
+    )}`;
+    document.getElementById(
+      `order-total-price`
+    ).innerHTML = ` ₹${new Intl.NumberFormat("en-IN").format(
+      data.totalPrice || 0
+    )}`;
+    document.getElementById(`order-details-payment-method`).innerHTML =
+      data.paymentMethod;
+    document.getElementById(`order-details-order-status`).innerHTML =
+      data.orderStatus;
+  }
+
+  // Calculate Shipping
+  function calculateShipping(price) {
+    if (price < 1000) {
+      return 50;
+    } else if (price > 1000 && price <= 10000) {
+      return 200;
+    } else {
+      return 0;
+    }
+  }
+  // Calculate Shipping
+
   function updateOptions(dropDown, selectedStatus) {
     dropDown.innerHTML = "";
 
@@ -93,7 +192,6 @@ window.onclick = function (event) {
   }
 };
 
-
 // Return request div
 document.getElementById("messagePopup").addEventListener("click", async (e) => {
   // Return request accept
@@ -101,43 +199,47 @@ document.getElementById("messagePopup").addEventListener("click", async (e) => {
     const id = e.target.getAttribute("data-id");
 
     const data = { id };
-    await axios.post('/admin/api/orders/return/accept',data)
-    .then(function(res){
-
-        if(!res.data.status){
-            return console.log('failed');
+    await axios
+      .post("/admin/api/orders/return/accept", data)
+      .then(function (res) {
+        if (!res.data.status) {
+          return console.log("failed");
         }
 
-        console.log('success');
+        console.log("success");
         removeRequest();
-
-    }).catch(function(err){
-        console.log(`error while sending accept reqeust axios : ${err.message}`);
-    })
+      })
+      .catch(function (err) {
+        console.log(
+          `error while sending accept reqeust axios : ${err.message}`
+        );
+      });
 
     const dropDown = document.getElementById(id);
-    
+
     dropDown.value = "returned";
-    document.getElementById('return-delivery-option').style.display = 'none';
+    document.getElementById("return-delivery-option").style.display = "none";
     // Return request accept
   } else if (e.target.classList.contains("return-reject")) {
     // Return request reject
     const id = e.target.getAttribute("data-id");
-    
-    const data = { id };
-    await axios.post('/admin/api/orders/return/reject',data)
-    .then(function(res){
 
-        if(!res.data.status){
-            return console.log('failed');
+    const data = { id };
+    await axios
+      .post("/admin/api/orders/return/reject", data)
+      .then(function (res) {
+        if (!res.data.status) {
+          return console.log("failed");
         }
 
-        console.log('success');
+        console.log("success");
         removeRequest();
-
-    }).catch(function(err){
-        console.log(`error while sending accept reqeust axios : ${err.message}`);
-    })
+      })
+      .catch(function (err) {
+        console.log(
+          `error while sending accept reqeust axios : ${err.message}`
+        );
+      });
     // Return request reject
   }
 
@@ -152,7 +254,6 @@ document.getElementById("messagePopup").addEventListener("click", async (e) => {
   }
 });
 // Return request div
-
 
 // Update the message counter
 document.getElementById("messageCounter-return").innerHTML =
