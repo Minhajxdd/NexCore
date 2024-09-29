@@ -288,7 +288,7 @@
                                 <!-- Reviews -->
                                 <div class="col-md-6">
                                     <div id="reviews">
-                                        <ul class="reviews">
+                                        <ul class="reviews" id="reviews-container">
                                             <li>
                                                 <div class="review-heading">
                                                     <h5 class="name">John</h5>
@@ -349,28 +349,32 @@
                                 </div>
                                 <!-- /Reviews -->
 
-                                <!-- Review Form -->
-                                <div class="col-md-3">
-                                    <div id="review-form">
-                                        <form class="review-form">
-                                            <input class="input" type="text" placeholder="Your Name">
-                                            <input class="input" type="email" placeholder="Your Email">
-                                            <textarea class="input" placeholder="Your Review"></textarea>
-                                            <div class="input-rating">
-                                                <span>Your Rating: </span>
-                                                <div class="stars">
-                                                    <input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
-                                                    <input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
-                                                    <input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
-                                                    <input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
-                                                    <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
-                                                </div>
-                                            </div>
-                                            <button class="primary-btn">Submit</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <!-- /Review Form -->
+              
+<!-- Review Form -->
+<div class="col-md-3">
+    <div id="review-form">
+        <form class="review-form" id="add-review-form">
+           
+            <textarea name="review" class="input" placeholder="Your Review"></textarea>
+            <div class="input-rating">
+                <span>Your Rating: </span>
+                <div class="stars">
+                    <input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
+                    <input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
+                    <input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
+                    <input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
+                    <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
+                </div>
+            </div>
+            <span id="error-message"  style="color: red;"></span><br>
+            <button id="review-submit-btn" type="submit" class="primary-btn" style="margin-top: 10px;" data-id="<%= product._id %>">Submit</button>
+        </form>
+    </div>
+</div>
+<!-- /Review Form -->
+
+
+
                             </div>
                         </div>
                         <!-- /tab3  -->
@@ -463,12 +467,11 @@
 <!-- Error Popup -->
 <div id="popup" class="err-popup hidden"></div>
 
-
+<!-- Axios cdn -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js" defer></script>
 
 <!-- Custom Script -->
-<script src="/script/user/productPage.js"></script>
-
-
+<script src="/script/user/productPage.js" defer></script>
 
 
 <%- include('../../partials/user/footer'); -%>

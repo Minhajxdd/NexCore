@@ -7,6 +7,7 @@ import * as search from '../controllers/searchController.js';
 import * as checkout from '../controllers/checkoutController.js';
 import * as profile from '../controllers/profileController.js';
 import * as wishlist from '../controllers/wishlistController.js';
+import * as product from '../controllers/productController.js';
 
 
 const router = express.Router();
@@ -60,10 +61,18 @@ router.route('/logout')
 router.route('/')
     .get(noCache, users.homeGet)
 
+// Product Routes
 
 router.route('/product')
     .get(users.productGet);
 
+router.route('/api/product/review')
+    .post(product.reviewApi);
+
+router.route(`/api/product/review/get`)
+    .get(product.reviewFilterApi)
+
+// Product Routes
 
 // Cart Routes
 router.route('/cart')

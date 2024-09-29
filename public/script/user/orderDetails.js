@@ -349,3 +349,4 @@ function updateOrderDetails() {
   `;
 }
 // Dom order details
+

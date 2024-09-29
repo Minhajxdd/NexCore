@@ -493,7 +493,24 @@
                                  
                               </tbody>
                           </table>
-                          <div class="summary-section">
+                          <div class="summary-section" style="display: flex; align-items:center; justify-content: space-around;">
+                            
+                            
+                            <div>
+                              <div class="order-summary" style="display: flex;flex-direction: column; justify-content: center; align-items: flex-start;">
+                                  <p><strong>First Name:</strong><span id="order-details-address-first-name"></span></p>
+                                  <p><strong>Last Name:</strong><span id="order-details-address-last-name"></span></p>
+                                  <p><strong>Company:</strong><span id="order-details-address-company"></span></p>
+                                  <p><strong>Land Mark:</strong> <span id="order-total-address-land-mark"></span>  </p>
+                                  <p><strong>City / Town:</strong> <span id="order-total-address-city"></span>  </p>
+                                  <p><strong>State:</strong> <span id="order-total-address-state"></span>  </p>
+                                  <p><strong>Zip Code:</strong> <span id="order-total-address-zip"></span>  </p>
+                                  <p><strong>Phone No:</strong> <span id="order-total-address-phone"></span>  </p>
+                                  <p><strong>Email:</strong> <span id="order-total-address-email"></span>  </p>                              </div>
+                            </div>
+                            
+                            
+                            <div>
                               <div class="order-summary">
                                   <p><strong>Coupon Discount:</strong><span id="order-details-coupon"></span></p>
                                   <p><strong>Offer Discount:</strong><span id="order-details-offer"></span></p>
@@ -506,7 +523,11 @@
                               <div class="order-status">
                                   <p><strong>Order Status:</strong> <span id="order-details-order-status"></span></p>
                               </div>
+
+                            </div>
+
                           </div>
+  
                       </div>
                       <div class="modal-footer">
                           <button type="button" id="modal-close-btn" class="btn btn-dark-blue" data-dismiss="modal">Close</button>

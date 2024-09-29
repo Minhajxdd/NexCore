@@ -24,12 +24,12 @@ export async function cartGet(req, res) {
       return await productModel.findById(val.product_id);
     })
   );
-  const shipping = '000';
+  const shipping = "000";
 
   res.render("pages/user/cartPage", {
     cart,
     products,
-    shipping
+    shipping,
   });
 }
 

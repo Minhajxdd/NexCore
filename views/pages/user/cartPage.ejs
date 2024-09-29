@@ -101,9 +101,9 @@
                         <div class="summary">
                             <h3>Checkout</h3>
 
-                            <div class="summary-item"><span class="text">Subtotal</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice)  %></span></div>
+                            <!-- <div class="summary-item"><span class="text">Subtotal</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice)  %></span></div>
                             <div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Shipping</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(shipping)  %></span></div>
+                            <div class="summary-item"><span class="text">Shipping</span><span class="price">₹ <%= new Intl.NumberFormat('en-IN').format(shipping)  %></span></div> -->
 
                             <% if(cart){ %>
                                 <div class="summary-item"><span class="text">Total</span><span class="price" id="final-price">₹ <%= new Intl.NumberFormat('en-IN').format(cart.totalPrice - shipping)  %></span></div>

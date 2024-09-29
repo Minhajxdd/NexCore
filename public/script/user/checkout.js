@@ -345,3 +345,37 @@ function showNotification(message, bgColor, color) {
   });
 }
 // Show notification function
+
+
+// Zip Code Api
+document.getElementById(`zipcode-input`).addEventListener('input', function(){
+  const pin = this.value;
+
+
+  if(pin.length === 6 && Number(pin)){
+    axios.get(`https://api.postalpincode.in/pincode/${pin}`)
+    .then(function(res){
+      const [ data ] = res.data;
+
+      if(data.Status === 'Error'){
+        return console.log('failed');
+      }
+      
+      const postOffice = data.PostOffice[0];
+      console.log(postOffice);
+
+      document.getElementById('state').value = postOffice.State;
+      document.getElementById(`street-address`).value = postOffice.Block;
+      document.getElementById(`city-address`).value = postOffice.Region;
+
+    })
+    .catch(function(err){
+      console.log(`error while fetching postpincode api: ${err.message}`);
+    })
+    
+  }
+
+
+})
+
+// Zip Code Api

@@ -34,7 +34,7 @@ export async function searchApi(req, res) {
   const maxPrice = parseFloat(req.query.maxp) || null;
 
   const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
+  // const endIndex = page * limit;
 
   const query = {
     $and: [

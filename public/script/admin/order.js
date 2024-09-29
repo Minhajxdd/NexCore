@@ -112,6 +112,19 @@
       data.paymentMethod;
     document.getElementById(`order-details-order-status`).innerHTML =
       data.orderStatus;
+
+      console.log(data);
+
+      $('#order-details-address-first-name').html(` ${data.address.first_name}`);
+      $('#order-details-address-last-name').html(` ${data.address.last_name}`);
+      $('#order-details-address-company').html(` ${data.address.company}`);
+      $('#order-total-address-land-mark').html(` ${data.address.land_mark}`);
+      $('#order-total-address-city').html(` ${data.address.city_town}`);
+      $('#order-total-address-state').html(` ${data.address.state}`);
+      $('#order-total-address-zip').html(` ${data.address.zipcode}`);
+      $('#order-total-address-phone').html(` ${data.address.phone_no}`);
+      $('#order-total-address-email').html(` ${data.address.email}`); 
+
   }
 
   // Calculate Shipping
