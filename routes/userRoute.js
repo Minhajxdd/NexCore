@@ -163,8 +163,12 @@ router.route('/address')
 router.route('/api/address/delete')
     .delete(profile.deleteAddess)
 
+router.route('/api/address/create')
+    .post(profile.crateAddress)
+
 router.route('/api/address/update')
     .post(profile.updateAddress)
+    
     // Address
 
     // Orders

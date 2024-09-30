@@ -31,8 +31,13 @@
       <div class="row">
         <% if(addresses.length !== 0) { %>
         <input type="hidden" value="1" id="hidden-one" />
-        <h4 class="mb-3">Pick a Address:</h4>
-        <div class="col-lg-6 address-main-div">
+        <h4 class="mb-3">Pick a Address:
+          <br>
+          <button type="button" class="btn btn-success" id="new-address-form-btn" style="margin-top: 20px;" >+ Add Address </button>
+
+        </h4>
+        
+        <div class="col-lg-6 address-main-div" id="address-body" style="margin-top: 10px; display: block">
           <% addresses.forEach((val) => { %>
 
           <label>
@@ -233,6 +238,70 @@
   </div>
 </div>
 <!-- Page -->
+
+
+<div class="overlay" id="overlay"></div>
+
+<!-- Pop-Up Form add-->
+<div class="edit-form-address" id="edit-form">
+    <button type="button" class="close" id="close-form">&times;</button>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <input type="text" id="firstName" class="form-control" placeholder="First Name *">
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="lastName" class="form-control" placeholder="Last Name *">
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" id="address1" class="form-control" placeholder="Flat, House no., Building, Company, Apartment *">
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" id="address2" class="form-control" placeholder="Area, Street, Sector, Village">
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" id="landmark" class="form-control" placeholder="Landmark">
+            </div>
+
+            <div class="col-md-6 form-group">
+                <input type="text" id="zipcode" class="form-control" placeholder="Zipcode *">
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="city" class="form-control" placeholder="Town/City">
+            </div>
+            <div class="col-md-12 form-group">
+                <select id="state" class="form-control">
+                    <option value="">Select State</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Haryana">Haryana</option>
+                </select>
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="text" id="phone" class="form-control" placeholder="Phone no *">
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="email" id="email" class="form-control" placeholder="Email Address *">
+            </div>
+            <div class="col-md-12 form-group">
+                <span id="error_message" class="err-msg text-danger"></span>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" id="form-add-btn" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+</div>
+<!-- Pop-Up Form add -->
+
+
+
 
 <div id="notification" class="notification"></div>
 

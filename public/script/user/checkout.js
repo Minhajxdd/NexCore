@@ -346,36 +346,175 @@ function showNotification(message, bgColor, color) {
 }
 // Show notification function
 
+// Zip Code Api
+const zipInput = document.getElementById(`zipcode-input`);
+
+if (zipInput) {
+  zipInput.addEventListener("input", function () {
+    const pin = this.value;
+
+    if (pin.length === 6 && Number(pin)) {
+      axios
+        .get(`https://api.postalpincode.in/pincode/${pin}`)
+        .then(function (res) {
+          const [data] = res.data;
+
+          if (data.Status === "Error") {
+            return console.log("failed");
+          }
+
+          const postOffice = data.PostOffice[0];
+          console.log(postOffice);
+
+          document.getElementById("state").value = postOffice.State;
+          document.getElementById(`street-address`).value = postOffice.Block;
+          document.getElementById(`city-address`).value = postOffice.Region;
+        })
+        .catch(function (err) {
+          console.log(`error while fetching postpincode api: ${err.message}`);
+        });
+    }
+  });
+}
 
 // Zip Code Api
-document.getElementById(`zipcode-input`).addEventListener('input', function(){
-  const pin = this.value;
 
+// Address Form
+document
+  .getElementById("new-address-form-btn")
+  .addEventListener("click", function () {
+    document.getElementById("edit-form").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  });
 
-  if(pin.length === 6 && Number(pin)){
-    axios.get(`https://api.postalpincode.in/pincode/${pin}`)
-    .then(function(res){
-      const [ data ] = res.data;
+document.getElementById("close-form").onclick = function () {
+  closeForm();
+};
 
-      if(data.Status === 'Error'){
-        return console.log('failed');
-      }
-      
-      const postOffice = data.PostOffice[0];
-      console.log(postOffice);
+document.getElementById("overlay").onclick = function () {
+  closeForm();
+};
+function closeForm() {
+  document.getElementById("edit-form").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+}
 
-      document.getElementById('state').value = postOffice.State;
-      document.getElementById(`street-address`).value = postOffice.Block;
-      document.getElementById(`city-address`).value = postOffice.Region;
+// Validation and axios of address
+(function () {
+  document.querySelector("#form-add-btn").addEventListener("click", (e) => {
+    e.preventDefault();
 
-    })
-    .catch(function(err){
-      console.log(`error while fetching postpincode api: ${err.message}`);
-    })
-    
+    let errorMsg = document.getElementById("error_message");
+
+    errorMsg = "";
+    let firstName = document.getElementById("firstName").value.trim();
+    let lastName = document.getElementById("lastName").value.trim();
+    let address1 = document.getElementById("address1").value.trim();
+    let zipcode = document.getElementById("zipcode").value.trim();
+    let state = document.getElementById("state").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let email = document.getElementById("email").value.trim();
+
+    if (!firstName || !/^[A-Za-z\s]+$/.test(firstName)) {
+      errorMsg += "First Name is required and should only contain letters.<br>";
+    }
+    if (!lastName || !/^[A-Za-z\s]+$/.test(lastName)) {
+      errorMsg += "Last Name is required and should only contain letters.<br>";
+    }
+    if (!address1) {
+      errorMsg += "Address is required.<br>";
+    }
+    if (!zipcode || !/^\d{6}$/.test(zipcode)) {
+      errorMsg += "Valid Zipcode is required (6 digits).<br>";
+    }
+    if (!state || state === "State") {
+      errorMsg += "Please select a valid state.<br>";
+    }
+    if (!phone || !/^\d{10}$/.test(phone)) {
+      errorMsg += "Valid Phone Number is required (10 digits).<br>";
+    }
+    if (
+      !email ||
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+    ) {
+      errorMsg += "Valid Email Address is required.<br>";
+    }
+
+    if (errorMsg) {
+      return (document.getElementById("error_message").innerHTML = errorMsg);
+    }
+    document.getElementById("error_message").innerHTML = "";
+
+    const data = {
+      formData: {
+        firstName: firstName,
+        lastName: lastName,
+        company: address1,
+        street: document.getElementById("address2").value.trim(),
+        land_mark: document.getElementById("landmark").value.trim(),
+        zipcode: zipcode,
+        city_town: document.getElementById("city").value.trim(),
+        state: state,
+        phone_no: phone,
+        email: email,
+      },
+    };
+
+    // return;
+    // Send data using Axios
+    axios
+      .post("/api/address/create", data)
+      .then(function (res) {
+
+        if (res.data.status === 'Success') {
+          injectAddress(res.data.address);
+          closeForm();
+          console.log('success');
+        }
+
+        console.log('failed');
+      })
+      .catch(function (error) {
+        console.log(
+          `An error occurred during new address axios request ${error.message}`
+        );
+      });
+  });
+
+  // Validation and axios of address
+
+  // Injecting address
+  function injectAddress(data) {
+
+    const label = document.createElement("label");
+
+    label.innerHTML = `
+    <div class="address-card-checkout col-xl-1">
+    <input
+      class="input-radio"
+      type="radio"
+      name="address"
+      value="${ data._id }"
+      checked
+    />
+    <br />
+    First Name: ${ data.first_name } <br />
+    Last Name : ${ data.last_name } <br />
+    Company: ${ data.company } <br />
+    Street: ${ data.street } <br />
+    Land Mark: ${ data.land_mark } <br />
+    Zipcode: ${ data.zipcode } <br />
+    City / Town: ${ data.city_town } <br />
+    State: ${ data.state } <br />
+    Phone Number: ${ data.phone_no } <br />
+    Email: ${ data.email }
+  </div>
+  `;
+  
+  document.getElementById(`address-body`).appendChild(label);
   }
 
 
-})
-
-// Zip Code Api
+  // Injecting address
+})();
+// Address Form

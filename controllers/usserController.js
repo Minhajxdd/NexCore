@@ -19,7 +19,6 @@ export async function productGet(req, res) {
   const products = await getProducts();
   const offer = await checkOffers(product._id, product.category);
 
-
   res.render("pages/user/product", {
     product,
     products,

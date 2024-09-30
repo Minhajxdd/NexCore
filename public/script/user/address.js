@@ -58,6 +58,7 @@ document.getElementById('close-form').onclick = function() {
     document.getElementById('edit-form').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
 }
+
 document.getElementById('overlay').onclick = function() {
     document.getElementById('edit-form').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
@@ -144,12 +145,14 @@ document.getElementById('close-form-edit').addEventListener('click', function(){
 
 
             // Send data using Axios
-            axios.post('/order/authenticate', data)
+            axios.post('/api/address/create', data)
             .then(function (res) {
-                if(res.data.success){
+                if(res.data.status === `Success`){
                     closeForm();
-                    injectAddress(res.data.id);
+                    injectAddress(res.data.address._id);
+                    console.log('Success')
                 }
+                console.log(`Failed`);
 
             })
             .catch(function (error) {
@@ -163,6 +166,7 @@ document.getElementById('close-form-edit').addEventListener('click', function(){
 let indxInj = 3;
 
 function injectAddress(id){
+
     const row = document.getElementById('address-container-row');
 
     const div = document.createElement('div');

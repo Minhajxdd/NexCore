@@ -1,9 +1,9 @@
 // Importing Services
 import {
-  addressIdRetreve,
-  addressRetrevefromArray,
   deleteAddress,
   updateAddressFun,
+  addAddressFun,
+  getAddressDetails
 } from "../services/user/profileAddressServices.js";
 import {
   ordersDetails,
@@ -15,7 +15,7 @@ import {
   validateOrder,
 } from "../services/user/profileOrdersServices.js";
 
-import { getWalletData } from '../services/user/profileWalletServices.js';
+import { getWalletData } from "../services/user/profileWalletServices.js";
 
 export function profileGet(req, res) {
   res.render("pages/user/profile.ejs");
@@ -27,8 +27,9 @@ export async function addressGet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
 
   try {
-    const addressId = await addressIdRetreve(userId);
-    const addresses = await addressRetrevefromArray(addressId);
+    
+    const addresses = await getAddressDetails(userId);
+    
     res.render("pages/user/address", {
       addresses,
     });
@@ -64,6 +65,32 @@ export async function updateAddress(req, res) {
   result.status = "success";
 
   res.json(result);
+}
+
+export async function crateAddress(req, res) {
+  if (!req.body.formData) {
+    return res.json({
+      status: "Failed",
+      message: `Something went wrong`,
+    });
+  }
+  
+  const userId = req.session.userId || req.session.passport.user;
+
+  const addressData = await addAddressFun(req.body.formData, userId);
+
+  if (addressData) {
+    return res.json({
+      status: "Success",
+      message: "Successfully crated address",
+      address: addressData
+    });
+  }
+
+  return res.json({
+    status: "Failed",
+    message: "Somethign went wrong",
+  });
 }
 
 // Address
@@ -108,9 +135,9 @@ export async function orderDetailsGet(req, res) {
     return res.redirect("/not-found");
   }
 
-  const [orders] = await getAddressIdAndUser(req.query.id, userId);
+  const [ orders ] = await getAddressIdAndUser(req.query.id, userId);
 
-  if (Object.keys(orders).length === 0) {
+  if (!orders) {
     return res.redirect("/not-found");
   }
 
@@ -208,11 +235,11 @@ export async function getInvoiceData(req, res) {
   return res.json({
     status: true,
     message: "successfully fetched data",
-    data:{
+    data: {
       orders,
       products,
       address,
-    }
+    },
   });
 }
 
@@ -223,10 +250,10 @@ export async function getInvoiceData(req, res) {
 export async function getWallet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
 
-  const wallet =  await getWalletData(userId);
+  const wallet = await getWalletData(userId);
 
   res.render("pages/user/wallet.ejs", {
-    wallet
+    wallet,
   });
 }
 

@@ -1,7 +1,6 @@
 // Importing Services
 import {
-  addressIdRetreve,
-  addressRetrevefromArray,
+  getAddressDetails,
 } from "../services/user/profileAddressServices.js";
 
 // Importing modules
@@ -22,13 +21,11 @@ import walletModel from "../models/walletSchema.js";
 // Get Checkout Details
 export async function getCheckout(req, res) {
   const cartId = req.session.cartId;
-  let addresses = [];
+  
   const userId = req.session.userId || req.session.passport.user;
 
-  const addressId = await addressIdRetreve(userId);
-  if (addressId.address_id.length !== 0) {
-    addresses = await addressRetrevefromArray(addressId);
-  }
+  const addresses = await getAddressDetails(userId);
+  
 
   try {
     const cartData = await cartModel.findById(cartId);
