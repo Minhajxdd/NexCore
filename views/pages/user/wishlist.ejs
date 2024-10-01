@@ -275,17 +275,132 @@
     font-size: 20px;
     color: #212529;
 }
+
+.wishlist-empty {
+      padding: 50px;
+      background-color: #f9f9f9;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 100px auto;
+      text-align: center;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s forwards;
+    }
+  
+    .wishlist-empty .icon {
+      font-size: 80px;
+      color: #ff6b6b;
+      margin-bottom: 20px;
+    }
+  
+    .wishlist-empty .message {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+  
+    .wishlist-empty .description {
+      font-size: 18px;
+      color: #777;
+      margin-bottom: 30px;
+    }
+  
+    .wishlist-empty .btn {
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 30px;
+      background-color: #ff6b6b;
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+      transition: background-color 0.3s ease;
+    }
+  
+    .wishlist-empty .btn:hover {
+      background-color: #ff3b3b;
+    }
+  
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
     </style>
+
+
+
+
+
+<nav id="navigation"></nav>
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Hot Deals</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="/categories/processors">Processors</a></li>
+                <li><a href="#">Smartphones</a></li>
+                <li><a href="#">Cameras</a></li>
+                <li><a href="#">Accessories</a></li>
+            </ul>
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+  
+  
+  
+  
+  <!-- BREADCRUMB -->
+  <div id="breadcrumb" class="section" style="height: 5%;">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Home</a></li>
+                    <li>Wishlist</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /BREADCRUMB -->
+
+
+
+
+  <% if(products.length !== 0){ %>
 
 
 <div class="cart-wrap">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="main-heading mb-10">My wishlist</div>
+                <div class="main-heading mb-10" id="my-wishlist-heading">My wishlist</div>
                 <div class="table-wishlist">
                     <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                        <thead>
+                        
+                        <thead id="table-head">
                             <tr>
                                 <th width="45%">Product Name</th>
                                 <th width="15%">Price</th>
@@ -297,10 +412,9 @@
                         <tbody id="products-body">
 
 
-                <% if(products){ %>
 
                     <% products.forEach((val) =>{ %>
-                        <tr>
+                        <tr class="product-tr">
                             <td width="45%">
                                 <div class="display-flex align-center">
                                     <div class="img-product">
@@ -325,10 +439,40 @@
 
                             <td width="10%" class="text-center"><a class="trash-icon"><i data-id="<%= val._id %>" class="far fa-trash-alt remove-item-btn"></i></a></td>
                         </tr>
+
                     <% }) %>
+                <% } else { %>
+
+
+                   
+                    <!-- Empty Wishlist Div -->
+<div id="emptyWishlist" class="wishlist-empty text-center">
+    <i class="fas fa-heart-broken icon"></i>
+    <h2 class="message">Your Wishlist is Empty!</h2>
+    <p class="description">Start adding items you love to your wishlist to easily find them later.</p>
+    <button class="btn btn-primary" onclick="window.location.href='/'">Browse Shop</button>
+  </div>
+  
+  
+ 
+  
+                      
+                      
+
                 <% } %>            
                             
 
+<!-- Empty Wishlist Div -->
+<div id="emptyWishlist-hidden" class="wishlist-empty text-center" style="display: none;">
+<i class="fas fa-heart-broken icon"></i>
+<h2 class="message">Your Wishlist is Empty!</h2>
+<p class="description">Start adding items you love to your wishlist to easily find them later.</p>
+<button class="btn btn-primary" onclick="window.location.href='/'">Browse Shop</button>
+</div>
+  
+  
+                
+                
 
 
                         </tbody>
@@ -343,5 +487,8 @@
 <!-- Custom Js -->
 <script src="/script/user/wishlist.js" defer></script>
 
+
+ <!-- Font Awesome for Icons -->
+ <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" defer></script>
 
 <%- include('../../partials/user/footer'); -%>

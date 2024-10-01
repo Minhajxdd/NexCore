@@ -19,9 +19,12 @@ export async function productGet(req, res) {
   const products = await getProducts();
   const offer = await checkOffers(product._id, product.category);
 
+  const userId = req.session.userId || req.session.passport.user;
+
   res.render("pages/user/product", {
     product,
     products,
-    offer
+    offer,
+    userId
   });
 }

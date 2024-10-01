@@ -71,6 +71,10 @@ router.route('/api/product/review')
 
 router.route(`/api/product/review/get`)
     .get(product.reviewFilterApi)
+    .post(product.getReviewForm)
+
+router.route(`/api/product/review/delete`)
+    .post(product.deleteReview)
 
 // Product Routes
 

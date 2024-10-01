@@ -83,7 +83,33 @@ function popup(error_message) {
   });
 })();
 // add to cart button
+
+
+
+
+
+
+
+
+
+
+
+
+
 review();
+
+
+
+
+
+
+
+
+
+
+
+
+let page = 1;
 
 // reviewApi
 function review(page = 1){
@@ -113,7 +139,7 @@ function review(page = 1){
 function injectReview(data){
   const container = document.getElementById(`reviews-container`);
   container.innerHTML = '';
-  console.log(data);  
+  
   data[0].reviews.forEach((val) => {
 
     const li = document.createElement('li');
@@ -124,10 +150,11 @@ function injectReview(data){
         <div class="review-rating">
         ${ starLoop(Number( val.rating )) }
         </div>
-    </div>
-    <div class="review-body">
+        
+        </div>
+        <div class="review-body">
         <p>${ val.comment }</p>
-    </div>
+        </div>
     `
     container.appendChild(li);
 
@@ -188,7 +215,17 @@ document
     axios
       .post(`/api/product/review`, data)
       .then(function (res) {
-        console.log(res.data);
+        
+        if(res.data.status === 'Success'){
+          review(page);
+          
+          document.getElementById('review-submit-btn').innerText = 'EDIT';
+          document.getElementById(`review-delete-btn`).style.display = 'inline-block';
+          
+          return console.log('Sucess');
+        }
+        console.log('failed');
+
       })
       .catch(function (err) {
         console.log(`error while fetching data: ${err.message}`);
@@ -198,3 +235,90 @@ document
 
 
 
+
+// Review Pagenation
+document.querySelectorAll('.review-pagenation').forEach((val) => {
+  val.addEventListener('click', () => {
+    review(val.value);
+  })
+})
+// Review Pagenation
+
+fillTheForm();
+// Function to fill the form
+function fillTheForm(){
+
+  const productId = document
+      .getElementById(`review-submit-btn`)
+      .getAttribute(`data-id`);
+
+  axios.post('/api/product/review/get', { productId: productId })
+  .then(function(res){
+    console.log(res.data);
+
+    if(res.data.status === 'Success'){
+      updateReviewForm(res.data.result.reviews[0]);
+    }
+  })
+  .catch(function(err){
+    console.log(`error while feching form review: ${err.message}`);
+  });
+};
+
+// Function to fill the form
+
+
+// Function to update review form
+function updateReviewForm(data){
+  document.getElementById(`review-text-area`).value = data.comment;
+
+  document.querySelectorAll('.review-form-stars').forEach((val) => {
+    if(val.value == data.rating){
+      val.checked = true;
+    }
+  });
+  document.getElementById('review-submit-btn').innerText = 'EDIT';
+  document.getElementById(`review-delete-btn`).style.display = 'inline-block';
+
+}
+// Function to update review form
+
+
+// Delete Review
+document.getElementById(`review-delete-btn`).addEventListener('click', function(){
+
+  const productId = this
+  .getAttribute(`data-id`);
+
+
+  axios.post('/api/product/review/delete', { productId: productId})
+  .then(function(res){
+    if(res.data.status == 'Success'){
+      review();
+
+     
+      document.getElementById(`review-text-area`).value = '';
+
+      document.querySelectorAll('.review-form-stars').forEach((val) => {
+        if(val.checked == true){
+          val.checked = false;
+        }
+      });
+
+      document.getElementById('review-submit-btn').innerText = 'Submit';
+      document.getElementById(`review-delete-btn`).style.display = 'none';
+
+
+      return console.log('success');
+    }
+
+    console.log('failed');
+
+  })
+  .catch(function(err){
+    console.log(`error while delete request: ${err.message}`);
+  });
+
+});
+
+// Delete Review

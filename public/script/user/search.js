@@ -256,7 +256,7 @@ function changeProductDetails(data) {
      
       <div class="product out-of-stock-product">
           <div class="product-img">
-              <img src="/uploads/products/${
+              <img class='prd-img-align' src="/uploads/products/${
                         product.images[0]
                       }" alt="Out of stock image">
               ${

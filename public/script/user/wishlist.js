@@ -1,3 +1,5 @@
+let productCount = 0;
+
 document.getElementById("products-body").addEventListener("click", (e) => {
   if (e.target.classList.contains("add-to-cart-btn")) {
     const productId = e.target.getAttribute("data-id");
@@ -22,7 +24,9 @@ document.getElementById("products-body").addEventListener("click", (e) => {
     axios.get(`/api/wishlist/remove?id=${productId}`)
     .then((res) => {
         if(res.data){
-            window.location.href = '/wishlist';
+            e.target.closest('tr').style.display = 'none';
+            productCount--;
+            emptyCart();
         }
     })
     .catch((err) => {
@@ -31,3 +35,14 @@ document.getElementById("products-body").addEventListener("click", (e) => {
 
   }
 }); 
+
+
+productCount = Number(document.querySelectorAll('.product-tr').length);
+
+function emptyCart(){
+  if(productCount === 0){
+    document.getElementById(`emptyWishlist-hidden`).style.display = 'block';
+    document.getElementById(`table-head`).style.display = 'none';
+    document.getElementById('my-wishlist-heading').style.display = 'none';
+  };
+};
