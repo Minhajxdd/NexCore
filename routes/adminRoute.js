@@ -60,15 +60,20 @@ adminRouter
 // Products dashboard routes
 adminRouter.route("/products").get(authenticate, adminContoller.productsGet);
 
-adminRouter
-  .route("/products/add")
+adminRouter.route("/products/add")
   .post(upload.array("image", 10), adminContoller.addProducts);
+
+
+adminRouter.route("/api/products/edit")
+  .post(upload.array("image", 10), adminContoller.productEdit);
+
 
 adminRouter
   .route("/product/delete")
   .get(authenticate, adminContoller.deleteProducts);
 
-adminRouter.route("/api/admin/product/stock").get(adminContoller.updateStock);
+adminRouter.route("/api/admin/product/stock")
+.get(adminContoller.updateStock);
 
 adminRouter
   .route("/api/product/get-product")
@@ -77,7 +82,8 @@ adminRouter
 
 // Products order routes
 
-adminRouter.route("/orders").get(authenticate, adminContoller.ordersGet);
+adminRouter.route("/orders").
+get(authenticate, adminContoller.ordersGet);
 
 adminRouter
   .route("/api/orders/status-update")
@@ -86,10 +92,6 @@ adminRouter
 adminRouter
   .route("/api/orders/return/:action")
   .post(adminContoller.adminOrderAction);
-
-adminRouter
-  .route("/api/orders/edit")
-  .post(authenticate, adminContoller.productEdit);
 
 adminRouter.route("/api/order/details")
     .post(authenticate, adminContoller.apiOrderProducts)

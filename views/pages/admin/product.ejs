@@ -81,6 +81,43 @@
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Cropperjs edit */
+/* Overlay style */
+#overlay-edit {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none; /* Hidden by default */
+  z-index: 1000;
+}
+
+/* Cropper container */
+#cropContainer-edit {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  display: none; /* Hidden by default */
+  z-index: 1001;
+}
+
+#imagePreview-edit {
+  max-width: 100%;
+  margin-bottom: 10px;
+}
+
+#cropButtons-edit {
+  display: flex;
+  justify-content: space-between;
+}
+/* Cropperjs edit */
+
 </style>
 
 
@@ -214,9 +251,9 @@
                   </div>
                 </div>
 
-
+                
                  <div class="form-group">
-                      <label for="imageInput1">Image 1</label>
+                      <label for="imageInput1">Image 1</label><br>
                       <input name="image" type="file" class="form-control" id="imageInput1" accept="image/*" required>
                       <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
                   </div> 
@@ -230,6 +267,7 @@
                       <input name="image" type="file" class="form-control" id="imageInput3" accept="image/*" required>
                       <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
                   </div> 
+
                   <div class="" id="add-image-form-new-content-div"></div>
               <!-- Button to add more image upload fields -->
               <button type="button" id="addImageButton" class="btn btn-success my-2">+ Add Another Image</button>
@@ -312,6 +350,27 @@
                     </optgroup>
                   </select>
                 </div>
+               
+                  <div id="product-edit-form-file-inputs-inject">
+                    
+                  </div>
+
+                  <div class="" id="add-image-form-new-content-div-edit"></div>
+                  <!-- Button to add more image upload fields -->
+                  <button type="button" id="addImageButton-edit" class="btn btn-success my-2">+ Add Another Image</button>
+                      
+                  <div id="cropContainer-edit">
+                    <img id="imagePreview-edit">
+                    <div id="cropButtons-edit">
+                        <button type="button" class="btn btn-primary" id="cropAndSaveButton-edit">Crop and Save</button>
+                        <button type="button" class="btn btn-danger" id="cancelCropButton-edit">Cancel</button>
+                    </div>
+                 </div>
+        
+                <!-- Overlay for the Pop-Up -->
+                <div class="overlay" id="overlay-edit"></div>  
+
+
 
             <div class="form-group">
               <label>Price</label>

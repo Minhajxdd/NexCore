@@ -83,7 +83,7 @@ export async function getCheckout(req, res) {
     }
 
     const shipping = calculateShipping(
-      cartData.totalPrice - products.offer || 0
+      cartData.totalPrice - ( products.offer || 0 )
     );
 
     res.render("pages/user/checkout.ejs", {
@@ -100,7 +100,7 @@ export async function getCheckout(req, res) {
 
 // Delivery charge Calculate
 function calculateShipping(price) {
-  if (price < 1000) {
+  if (price <= 1000) {
     return 50;
   } else if (price > 1000 && price <= 10000) {
     return 200;
@@ -268,7 +268,7 @@ export async function orderCreate(req, res) {
     }
   }
 
-  const shipping = calculateShipping(cartData.totalPrice - products.offer || 0);
+  const shipping = calculateShipping(cartData.totalPrice - ( products.offer || 0));
 
   cartData.totalPrice = parseInt(
     cartData.totalPrice - (products.offer || 0) + shipping

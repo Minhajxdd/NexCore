@@ -1,3 +1,9 @@
+// Importing Core Modules
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Importing extenal dependencies
 import multer from "multer";
 
 // Importing Schemas
@@ -73,6 +79,112 @@ export async function createProduct(body, id, files) {
   }
 }
 
+
+export async function editProduct(data, files) {
+  try {
+
+    let fileNames;
+    if(files) {
+      fileNames = files.map((val) => val.filename);
+
+      deleteImagesFromDatabase(data.productId); 
+    }
+
+    newCategoryName = null;
+
+    if (data.oldCategoryId != data.categoryId) {
+      if (data.oldCategoryId) {
+        await categoryModel.findByIdAndUpdate(data.oldCategoryId, {
+          $pull: { products_id: data.productId },
+        });
+      }
+
+      var { name: newCategoryName } = await categoryModel.findByIdAndUpdate(
+        data.categoryId,
+        {
+          $addToSet: { products_id: data.productId },
+        }
+      );
+    }
+
+    const updateOptions = {
+      name: data.name,
+      description: data.description,
+      category: data.categoryId,
+      original_price: data.og_price,
+      discounted_price: data.ds_price,
+      stock: data.stock,
+    };
+
+    if(fileNames) {
+      updateOptions.images = fileNames;
+    }
+
+    if (newCategoryName) {
+      updateOptions.category_name = newCategoryName;
+    }
+
+    const newData = await productModel.findByIdAndUpdate(
+      data.productId,
+      { $set: updateOptions },
+      { new: true }
+    );
+
+    return newData;
+  } catch (err) {
+    console.log(`error while editing product : ${err.message}`);
+    return null;
+  }
+}
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
+async function deleteImagesFromDatabase(productId) {
+  try {
+    // Retrieve the document from MongoDB (modify query to suit your requirements)
+    const document = await productModel.findById(productId, { images: 1, _id: 0 }).lean();
+
+    if (document && document.images && document.images.length > 0) {
+      const imageNames = document.images;
+
+      imageNames.forEach(imageName => { 
+        // Construct the file path (assuming files are in a 'uploads/products/' folder)
+        const filePath = path.join(__dirname, '../../public/uploads/products', imageName);
+
+        // Check if the file exists before attempting to delete it
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (!err) {
+            // If file exists, delete it
+            fs.unlink(filePath, (unlinkErr) => {
+              if (unlinkErr) {
+                console.error(`Error deleting file: ${imageName}`, unlinkErr);
+              } else {
+                console.log(`Successfully deleted: ${imageName}`);
+              }
+            });
+          } else {
+            console.error(`File not found: ${imageName}`);
+          }
+        });
+      });
+    } else {
+      console.log('No images to delete.');
+    }
+  } catch (err) {
+    console.error('Error retrieving or deleting images:', err);
+  }
+}
+
+
+
+
+
+
+
+
 export async function getProducts() {
   try {
     const data = await productModel.find();
@@ -83,6 +195,25 @@ export async function getProducts() {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export async function updateDeletedProduct(id) {
   try {
@@ -125,47 +256,3 @@ export async function oneProductDetails(id) {
   }
 }
 
-export async function editProduct(data) {
-  try {
-    newCategoryName = null;
-
-    if (data.oldCategoryId != data.categoryId) {
-      if (data.oldCategoryId) {
-        await categoryModel.findByIdAndUpdate(data.oldCategoryId, {
-          $pull: { products_id: data.productId },
-        });
-      }
-
-      var { name: newCategoryName } = await categoryModel.findByIdAndUpdate(
-        data.categoryId,
-        {
-          $addToSet: { products_id: data.productId },
-        }
-      );
-    }
-
-    const updateOptions = {
-      name: data.name,
-      description: data.description,
-      category: data.categoryId,
-      original_price: data.og_price,
-      discounted_price: data.ds_price,
-      stock: data.stock,
-    };
-
-    if (newCategoryName) {
-      updateOptions.category_name = newCategoryName;
-    }
-
-    const newData = await productModel.findByIdAndUpdate(
-      data.productId,
-      { $set: updateOptions },
-      { new: true }
-    );
-
-    return newData;
-  } catch (err) {
-    console.log(`error while editing product : ${err.message}`);
-    return null;
-  }
-}

@@ -264,7 +264,6 @@ function insertNewElement(data) {
       axios
         .get(`/admin/api/product/get-product?id=${id}`)
         .then((res) => {
-          console.log(res.data);
           updateEditForm(res.data);
         })
         .catch((err) => {
@@ -279,10 +278,14 @@ function insertNewElement(data) {
 
   document.getElementById("edit-prd-cancel").addEventListener("click", () => {
     form.style.display = "none";
+    document.getElementById(`product-edit-form-file-inputs-inject`).innerHTML = '';
   });
 })();
 
+let count2 = 1;
+
 function updateEditForm(data) {
+  
   document.getElementById(`Hidden-Product-id-field`).value = data._id;
   document.getElementById(`Hidden-Category-id-field`).value = data.category;
 
@@ -301,7 +304,136 @@ function updateEditForm(data) {
   document.getElementById("edit-form-discounted-price").value =
     data.discounted_price;
   document.getElementById("edit-product-stock").value = data.stock;
+
+  const productsDiv = document.getElementById(`product-edit-form-file-inputs-inject`);
+  console.log(data.images)
+
+  data.images.forEach((value, indx) => {
+      count2++;
+    productsDiv.insertAdjacentHTML('beforeend', `
+      <div class="form-group">
+        <label for="imageInputedit${indx + 1}">Image ${indx + 1}</label><br>
+        <img src="/uploads/products/${value}" id="productImageedit${indx + 1}" style="width: 100px;height: 100px; margin-bottom: 5px;" alt="product-image">
+        <input name="image" type="file" class="form-control" id="imageInputededit${indx + 1}" accept="image/*">
+        <button type="button" class="btn btn-primary mt-2 cropButton" id="cropButton-edit${indx + 1}">Crop</button>
+      </div>
+    `);
+    
+
+  })
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// Cropperjs edit
+(function () {
+  let cropper;
+  let currentImageInput;
+
+  document
+    .getElementById("product-edit-form-file-inputs-inject")
+    .addEventListener("click", function (event) {
+      if (event.target.classList.contains("cropButton")) {
+        currentImageInput = event.target.previousElementSibling;
+        const file = currentImageInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const image = document.getElementById("imagePreview-edit");
+            image.src = e.target.result;
+
+            // Destroy previous cropper instance if any
+            if (cropper) {
+              cropper.destroy();
+            }
+
+            // Initialize Cropper.js
+            cropper = new Cropper(image, {
+              aspectRatio: 1, // Example: square crop
+              viewMode: 1,
+              scalable: true,
+              zoomable: true,
+              movable: true,
+            });
+
+            // Show the cropper pop-up
+            document.getElementById("cropContainer-edit").style.display = "block";
+            document.getElementById("overlay-edit").style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        } else {
+          alert("Please select an image first.");
+        }
+      }
+    });
+
+  document
+    .getElementById("cropAndSaveButton-edit")
+    .addEventListener("click", function () {
+      cropper.getCroppedCanvas().toBlob(function (blob) {
+        const file = new File([blob], currentImageInput.files[0].name, {
+          type: "image/png",
+        });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        currentImageInput.files = dataTransfer.files;
+
+        // Hide the cropper pop-up
+        document.getElementById("cropContainer-edit").style.display = "none";
+        document.getElementById("overlay-edit").style.display = "none";
+      });
+    });
+
+  document
+    .getElementById("cancelCropButton-edit")
+    .addEventListener("click", function () {
+      // Hide the cropper pop-up without saving
+      document.getElementById("cropContainer-edit").style.display = "none";
+      document.getElementById("overlay-edit").style.display = "none";
+    });
+
+  document
+    .getElementById("addImageButton-edit")
+    .addEventListener("click", function () {
+      const parentDiv = document.getElementById(
+        "product-edit-form-file-inputs-inject"
+      );
+      
+      const container = document.createElement("div");
+      container.classList.add("form-group");
+      container.innerHTML = `
+                <label for="imageInput${count2}">Image ${count2}</label>
+                <input name="image" type="file" class="form-control" id="imageInput${count2}" accept="image/*" required>
+                <button type="button" class="btn btn-primary mt-2 cropButton">Crop</button>
+            `;
+      count2++;
+      parentDiv.appendChild(container);
+    });
+})();
+// Cropperjs edit
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Admin Stock Update Axios
 document.querySelectorAll(".qty-up").forEach((element, ind) => {
@@ -355,19 +487,22 @@ document
 
     const formData = new FormData(this);
 
-    const data = {};
-
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-
     const categoryDrop = document.getElementById(`edit-form-usr-category`);
 
-    data.categoryId =
+    const categoryId =
       categoryDrop.options[categoryDrop.selectedIndex].getAttribute("data-id");
+    
+      formData.append("categoryId", categoryId);
 
+      console.log(formData);
+      
+      // Send the POST request using Axios
     axios
-      .post(`/admin/api/orders/edit`, data)
+      .post(`/admin/api/products/edit`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then(function (res) {
         if (!res.data.status) {
           return console.log("failed");
@@ -382,6 +517,7 @@ document
       .catch(function (err) {
         console.log(`error while sending axios request: ${err.message}`);
       });
+      document.getElementById(`product-edit-form-file-inputs-inject`).innerHTML = '';
   });
 
 // Product edit form Submit
@@ -391,6 +527,10 @@ function updateRow(data){
     const trElement = document.getElementById(data._id);
 
     const tdElements = trElement.querySelectorAll('td');
+
+    const imgElement = tdElements[1].querySelector('img');
+
+    imgElement.src = `/uploads/products/${data.images[0]}`;
 
     tdElements[2].innerHTML = data.name;
     tdElements[3].innerHTML = data.description;

@@ -264,7 +264,11 @@ export async function getProductDetails(req, res) {
 }
 
 export async function productEdit(req, res) {
-  const updateData = await editProduct(req.body);
+
+  const updateData = await editProduct(
+    req.body,
+    req.files
+  );
 
   if (!updateData) {
     return res.json({

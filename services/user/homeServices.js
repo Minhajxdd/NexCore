@@ -5,7 +5,7 @@ import offerModel from '../../models/offerSchema.js';
 
 export async function getProducts(catId) {
   try {
-    const products = await productModel.find().limit(6);
+    const products = await productModel.find().sort({ created_at: -1 }).limit(6).lean();
     return products;
   } catch (err) {
     console.log(
@@ -16,7 +16,7 @@ export async function getProducts(catId) {
 
 export async function getProductDetails(id) {
   try {
-    const product = await productModel.findById(id);
+    const product = await productModel.findById(id).lean();
     return product;
   } catch (err) {
     console.log(
