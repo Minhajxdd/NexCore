@@ -194,10 +194,14 @@ function validateSignupFormEdit(){
         }
     }
 
-}
+};
 
 
 
 // User Search
+document.getElementById(`search-button`).addEventListener('click', function(){
+    const value = document.getElementById(`search-user-input`).value;
 
+    window.location.href = `/admin/users?page=1&usr=${value}`;
+});
 // User Search
