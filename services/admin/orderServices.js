@@ -5,17 +5,51 @@ import productModel from "../../models/productSchema.js";
 import userModel from "../../models/userSchema.js";
 import walletModel from "../../models/walletSchema.js";
 
-export async function getAllOrders(userId) {
+export async function getAllOrders(page, limit) {
   try {
-    const data = await ordersModel
+    const startIndex = (page - 1) * limit;
+
+    const result = {};
+
+    result.orders = await ordersModel
       .find({
         paymentMethod: {
           $ne: "Failed Payment",
         },
       })
-      .sort({ orderedAt: -1 });
+      .sort({ orderedAt: -1 })
+      .skip(startIndex)
+      .limit(limit)
+      .lean();
 
-    return data;
+      if (result.orders.length === limit) {
+        result.next = {
+          page: Number(page) + 1,
+          limit: limit,
+        };
+        
+      } else {
+          result.next = {
+              page: page,
+              limit: limit,
+          }
+      }
+  
+      if (startIndex > 0) {
+        result.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+      } else {
+          result.previous = {
+              page: 1,
+              limit: limit,
+          }
+      }
+  
+
+
+    return result;
   } catch (err) {
     console.log(`error while fetching all orders: ${err.message}`);
   }

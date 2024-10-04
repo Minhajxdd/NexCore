@@ -346,6 +346,9 @@
                         <div class="popup" id="messagePopup">
                           <h4>Return Requests</h4>
 
+                          <% if(orders.length === 0) { %>
+
+                          
 
                           <% orders.forEach((order)=> { %>
 
@@ -371,6 +374,8 @@
                                 <% } %>
 
                                   <% }); %>
+
+                                  <% } %>
                                     <span id="HiddenMessageCountReview" class="hidden" style="display: none;">
                                       <%= msgCount %>
                                     </span>
@@ -395,7 +400,9 @@
                         </tr>
                       </thead>
                       <tbody id="table-body">
-                        <% %>
+                        <% if(orders.length > 0) { %>
+
+
                           <% users.forEach( (user , ind)=> { %>
                             <tr>
                               <td>
@@ -454,8 +461,37 @@
                               </td>
                             </tr>
                             <% }); %>
+
+                          <% } %>
                       </tbody>
                     </table>
+
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          
+                          <% if(next.page > 2) { %>
+                            
+                            <a class="page-link" href="/admin/orders?page=<%= previous.page %>" aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+    
+                          <% } %>
+    
+                        </li>
+                        <li class="page-item"><a class="page-link" href="/admin/orders?page=1">1</a></li>
+                        <li class="page-item"><a class="page-link" href="/admin/orders?page=2">2</a></li>
+                        <li class="page-item"><a class="page-link" href="/admin/orders?page=3">3</a></li>
+                        <li class="page-item">
+                          <a class="page-link" href="/admin/orders?page=<%= next.page %>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+
                   </div>
                 </div>
               </div>

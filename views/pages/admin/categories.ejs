@@ -2,6 +2,9 @@
 
 <title>Categories Dashboard</title>
 
+
+
+
 <%- include('../../partials/admin/nav'); -%>
 
     <!-- partial -->
@@ -48,19 +51,48 @@
                     </tr>
                   </thead>
                   <tbody id="data-body">
-                    <% data.forEach((val , ind) => { %>
-                        <tr>
-                          <td><%= ind + 1 %></td>
-                          <td><%= val.name %></td>
-                          <td id="tb-description"><%= val.description %></td>
-                          <td>
-                            <button class="badge" category-id="<%= val._id %>" id="btn-action"><%= val.isDeleted ? 'Undo' : 'Delete' %></button>
-                            <button class="badge" category-id="<%= val._id %>" id="btn-edit">Edit</button>
-                          </td>
-                        </tr>
-                    <% })  %>
+
+                      <% data.forEach((val , ind) => { %>
+                          <tr>
+                            <td><%= ind + 1 %></td>
+                            <td><%= val.name %></td>
+                            <td id="tb-description"><%= val.description %></td>
+                            <td>
+                              <button class="badge" category-id="<%= val._id %>" id="btn-action"><%= val.isDeleted ? 'Undo' : 'Delete' %></button>
+                              <button class="badge" category-id="<%= val._id %>" id="btn-edit">Edit</button>
+                            </td>
+                          </tr>
+                      <% })  %>
+
                   </tbody>
                 </table>
+
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                    <li class="page-item">
+                      
+                      <% if(next.page > 2) { %>
+                        
+                        <a class="page-link" href="/admin/categories?page=<%= previous.page %>" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+
+                      <% } %>
+
+                    </li>
+                    <li class="page-item"><a class="page-link" href="/admin/categories?page=1">1</a></li>
+                    <li class="page-item"><a class="page-link" href="/admin/categories?page=2">2</a></li>
+                    <li class="page-item"><a class="page-link" href="/admin/categories?page=3">3</a></li>
+                    <li class="page-item">
+                      <a class="page-link" href="/admin/categories?page=<%= next.page %>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+
               </div>
             </div>
           </div>

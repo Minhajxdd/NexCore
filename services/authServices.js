@@ -1,6 +1,7 @@
 // Importing Modules
 import randomstring from 'randomstring';
 import nodemailer from 'nodemailer';
+import bcrypt from 'bcrypt';
 
 // Importing Schemas
 import userModel from '../models/userSchema.js';
@@ -93,10 +94,15 @@ export async function sendOTPReset(email, otp) {
 
 export async function tempUser(body , otp){
     try{
+
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(body.password, saltRounds);
+
+
         await otpModel.create({
             email: body.email,
             fullname: body.fullname,
-            password: body.password,
+            password: hashedPassword,
             phoneNumber: body.phone,
             otp: otp,
         })
@@ -141,16 +147,6 @@ export async function createUser(email){
         console.error(`Error while creating a user on createUser : ${err.message}`);
     }
 
-}
-
-export async function loginUser(email , password){
-    try{
-        const data = await userModel.find({email: email , password: password})
-        return data;
-    }catch(err){
-        console.error(`Error while fething loginUser email and password ${err.message}`);
-        return [];
-    }
 }
 
 export async function updateOtp(email, otp){

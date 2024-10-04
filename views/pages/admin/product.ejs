@@ -202,6 +202,34 @@
                     <% }) %>
                   </tbody>
                 </table>
+
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination">
+                    <li class="page-item">
+                      
+                      <% if(next.page > 2) { %>
+                        
+                        <a class="page-link" href="/admin/products?page=<%= previous.page %>" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+
+                      <% } %>
+
+                    </li>
+                    <li class="page-item"><a class="page-link" href="/admin/products?page=1">1</a></li>
+                    <li class="page-item"><a class="page-link" href="/admin/products?page=2">2</a></li>
+                    <li class="page-item"><a class="page-link" href="/admin/products?page=3">3</a></li>
+                    <li class="page-item">
+                      <a class="page-link" href="/admin/products?page=<%= next.page %>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+
+
               </div>
             </div>
           </div>

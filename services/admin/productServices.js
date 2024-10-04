@@ -1,7 +1,7 @@
 // Importing Core Modules
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Importing extenal dependencies
 import multer from "multer";
@@ -79,15 +79,13 @@ export async function createProduct(body, id, files) {
   }
 }
 
-
 export async function editProduct(data, files) {
   try {
-
     let fileNames;
-    if(files) {
+    if (files) {
       fileNames = files.map((val) => val.filename);
 
-      deleteImagesFromDatabase(data.productId); 
+      deleteImagesFromDatabase(data.productId);
     }
 
     newCategoryName = null;
@@ -116,7 +114,7 @@ export async function editProduct(data, files) {
       stock: data.stock,
     };
 
-    if(fileNames) {
+    if (fileNames) {
       updateOptions.images = fileNames;
     }
 
@@ -140,19 +138,23 @@ export async function editProduct(data, files) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
-
 async function deleteImagesFromDatabase(productId) {
   try {
     // Retrieve the document from MongoDB (modify query to suit your requirements)
-    const document = await productModel.findById(productId, { images: 1, _id: 0 }).lean();
+    const document = await productModel
+      .findById(productId, { images: 1, _id: 0 })
+      .lean();
 
     if (document && document.images && document.images.length > 0) {
       const imageNames = document.images;
 
-      imageNames.forEach(imageName => { 
+      imageNames.forEach((imageName) => {
         // Construct the file path (assuming files are in a 'uploads/products/' folder)
-        const filePath = path.join(__dirname, '../../public/uploads/products', imageName);
+        const filePath = path.join(
+          __dirname,
+          "../../public/uploads/products",
+          imageName
+        );
 
         // Check if the file exists before attempting to delete it
         fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -171,49 +173,56 @@ async function deleteImagesFromDatabase(productId) {
         });
       });
     } else {
-      console.log('No images to delete.');
+      console.log("No images to delete.");
     }
   } catch (err) {
-    console.error('Error retrieving or deleting images:', err);
+    console.error("Error retrieving or deleting images:", err);
   }
 }
 
-
-
-
-
-
-
-
-export async function getProducts() {
+export async function getProducts(page, limit) {
   try {
-    const data = await productModel.find();
-    return data;
+    const startIndex = (page - 1) * limit;
+
+    const result = {};
+
+    result.products = await productModel
+      .find()
+      .skip(startIndex)
+      .limit(limit)
+      .lean();
+
+    if (result.products.length === limit) {
+      result.next = {
+        page: Number(page) + 1,
+        limit: limit,
+      };
+    } else {
+      result.next = {
+        page: page,
+        limit: limit,
+      };
+    }
+
+    if (startIndex > 0) {
+      result.previous = {
+        page: page - 1,
+        limit: limit,
+      };
+    } else {
+      result.previous = {
+        page: 1,
+        limit: limit,
+      };
+    }
+
+    return result;
   } catch (err) {
     console.log(
       `error while fetching product detail's on productServices ${err.message}`
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export async function updateDeletedProduct(id) {
   try {
@@ -255,4 +264,3 @@ export async function oneProductDetails(id) {
     console.log(`error while fetching product using id: ${err.message}`);
   }
 }
-

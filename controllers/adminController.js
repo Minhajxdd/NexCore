@@ -31,7 +31,7 @@ import {
   getUsersData,
   updateOrderStatus,
   acceptOrderRequest,
-  getOrderDetails
+  getOrderDetails,
 } from "../services/admin/orderServices.js";
 
 import {
@@ -109,34 +109,39 @@ export const dashboardCharData = async function (req, res) {
       message: `successfully fetched data`,
       productData,
     });
-
-  }else if(type === `category-data`){
+  } else if (type === `category-data`) {
     const { time } = req.query;
 
-  if (!time) {
+    if (!time) {
+      return res.json({
+        status: false,
+        message: "time zone not specified",
+      });
+    }
+
+    const categoryData = await categoryChartData(time);
+
     return res.json({
-      status: false,
-      message: "time zone not specified",
+      status: true,
+      message: `successfully fetched data`,
+      categoryData,
     });
-  }
-
-  const categoryData = await categoryChartData(time);
-
-  return res.json({
-    status: true,
-    message: `successfully fetched data`,
-    categoryData,
-  });
   }
 };
 
-
 // Admin User Dashboard Controllers
 export const usersGet = async (req, res) => {
-  const users = await getUsers();
+  const page = req.query.page || 1;
+  const limit = 5;
+  const uname = req.query.usr || '';
+
+  
+  const { users, next, previous } = await getUsers(page, limit, uname);
 
   res.render(`pages/admin/user`, {
     users,
+    next,
+    previous
   });
 };
 
@@ -166,8 +171,11 @@ export const editBlocked = async (req, res) => {
 
 // Admin Categories Dashboard Controllers
 export async function categoriesGet(req, res) {
-  const data = await getCategory();
-  res.render("pages/admin/categories", { data });
+  const page = req.query.page || 1;
+  const limit = 5;
+
+  const { data, next, previous} = await getCategory(page, limit);
+  res.render("pages/admin/categories", { data, next, previous });
 }
 
 export async function addCategoryPost(req, res) {
@@ -213,12 +221,17 @@ export async function editCategoryPost(req, res) {
 
 // Admin Product Dashboard Controllers
 export async function productsGet(req, res) {
+  const page = req.query.page || 1;
+  const limit = 5;
+
   const categories = await getCategoryDetails();
-  const products = await getProducts();
+  const {products, next, previous} = await getProducts(page, limit);
 
   res.render(`pages/admin/product`, {
     categories,
     products,
+    next,
+    previous
   });
 }
 
@@ -264,11 +277,7 @@ export async function getProductDetails(req, res) {
 }
 
 export async function productEdit(req, res) {
-
-  const updateData = await editProduct(
-    req.body,
-    req.files
-  );
+  const updateData = await editProduct(req.body, req.files);
 
   if (!updateData) {
     return res.json({
@@ -287,7 +296,12 @@ export async function productEdit(req, res) {
 
 // Admin Orders Dashboard Controllers
 export const ordersGet = async (req, res) => {
-  const orders = await getAllOrders();
+
+  const page = req.query.page || 1;
+  const limit = 10;
+
+  const { orders, next, previous} = await getAllOrders(page, limit);
+
 
   const users = await Promise.all(
     orders.map(async (order) => {
@@ -298,6 +312,8 @@ export const ordersGet = async (req, res) => {
   res.render(`pages/admin/orders`, {
     orders,
     users,
+    next,
+    previous
   });
 };
 
@@ -345,33 +361,29 @@ export async function adminOrderAction(req, res) {
   }
 }
 
-export async function apiOrderProducts(req, res){
-
-  if(!req.body.orderId){
+export async function apiOrderProducts(req, res) {
+  if (!req.body.orderId) {
     return res.json({
       status: false,
-      message: `orderID not found`
+      message: `orderID not found`,
     });
-  };
+  }
 
   const data = await getOrderDetails(req.body.orderId);
 
-  if(!data){
+  if (!data) {
     return res.json({
       status: false,
-      message: `something went wrong`
-    })
+      message: `something went wrong`,
+    });
   }
 
   return res.json({
     status: true,
     message: `successfully fetched`,
-    data
-  })
-
-
+    data,
+  });
 }
-
 
 // Admin Orders Dashboard Controllers
 
@@ -386,9 +398,8 @@ export const couponsGet = async (req, res) => {
 };
 
 export const apiAddCoupon = async (req, res) => {
-
   if (!(await checkDupeCoupon(req.body.cpCode))) {
-    console.log('errormessage');
+    console.log("errormessage");
     return res.json({
       status: "failed",
       err_message: "Coupon Code Already Exists!",

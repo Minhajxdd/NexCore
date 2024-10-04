@@ -22,10 +22,46 @@ export async function createUser(req){
     console.log(`User Created Successfully`);
 }
 
-export async function getUsers(){
+export async function getUsers(page, limit, uname){
     try{
-        const data = await userModel.find().select('-password');
-        return data;
+        const startIndex = (page - 1) * limit;
+        const result = {};
+
+        const regex = new RegExp(uname, 'i');
+        const query = { full_name: { $regex: regex } };
+
+        result.users = await userModel
+        .find(query).select('-password')
+        .skip(startIndex)
+        .limit(limit)
+        .lean();
+  
+        if (result.users.length === limit) {
+            result.next = {
+              page: Number(page) + 1,
+              limit: limit,
+            };
+          } else {
+            result.next = {
+              page: page,
+              limit: limit,
+            };
+          }
+      
+          if (startIndex > 0) {
+            result.previous = {
+              page: page - 1,
+              limit: limit,
+            };
+          } else {
+            result.previous = {
+              page: 1,
+              limit: limit,
+            };
+          }
+      
+
+        return result;
     }catch(err){
         console.error(`Error while fething user data on getUsers on usersServices ${err.message}`);
     }

@@ -2,6 +2,53 @@
 
 <title>User Dashboard</title>
 
+<style>
+.search-bar {
+  width: 100%;
+  max-width: 350px;
+  background-color: #112240;
+  border-radius: 25px;
+  display: flex;
+  box-shadow: none;
+  margin-left: 0;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  border: none;
+  border-radius: 25px 0 0 25px;
+  padding: 8px 12px;
+  background-color: #0f1e33;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  background-color: #182e48;
+}
+
+.search-btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 0 25px 25px 0;
+  background-color: #3b82f6;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-btn:hover {
+  background-color: #2975d7;
+}
+
+.search-btn:active {
+  background-color: #1e5cb3;
+}
+
+</style>
+
 <%- include('../../partials/admin/nav'); -%>
 
     <!-- partial -->
@@ -32,11 +79,19 @@
     <div class="row ">
       <div class="col-12 grid-margin">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body"> 
+
             <div id="card-title">
               <h4 class="card-title">Users</h4>
               <button id="new-user-btn" class="btn btn-success">+ New Users </button>
             </div>
+
+            <div class="input-group search-bar">
+              <input type="search" class="form-control search-input" placeholder="Search users" aria-label="Search" />
+              <button type="button" class="btn search-btn">Search</button>
+            </div>
+                       
+
             <div class="table-responsive">
               <table class="table">
                 <thead>
@@ -65,6 +120,34 @@
                   <% }); %>
                 </tbody>
               </table>
+
+              <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                  <li class="page-item">
+                    
+                    <% if(next.page > 2) { %>
+                      
+                      <a class="page-link" href="/admin/users?page=<%= previous.page %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+
+                    <% } %>
+
+                  </li>
+                  <li class="page-item"><a class="page-link" href="/admin/users?page=1">1</a></li>
+                  <li class="page-item"><a class="page-link" href="/admin/users?page=2">2</a></li>
+                  <li class="page-item"><a class="page-link" href="/admin/users?page=3">3</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="/admin/users?page=<%= next.page %>" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+
+
             </div>
           </div>
         </div>
