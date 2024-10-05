@@ -10,5 +10,5 @@ const PORT = process.env.PORT || 4000;
 
 // to listen to the port
 app.listen(PORT, () => { 
-    console.log(`Server started at port http://localhost:${PORT}`);
+    console.log(`Server started at port http://{domain}:${PORT}`);
 })

@@ -146,7 +146,7 @@ let couponId = null;
                   if (res.data.status === "success") {
                     window.location.href = res.data.redirectUrl;
                   } else {
-                    window.location.href = "http://localhost:4000/not-found";
+                    window.location.href = "http://mohammedminhaj.blog:4000/not-found";
                   }
                 })
                 .catch(function (error) {
@@ -167,7 +167,7 @@ let couponId = null;
                     if (res.data.status === "success") {
                       window.location.href = res.data.redirectUrl;
                     } else {
-                      window.location.href = "http://localhost:4000/not-found";
+                      window.location.href = "http://mohammedminhaj.blog:4000/not-found";
                     }
                   })
                   .catch(function (error) {
@@ -207,7 +207,7 @@ let couponId = null;
           if (res.data.status === "success") {
             window.location.href = res.data.redirectUrl;
           } else {
-            window.location.href = "http://localhost:4000/not-found";
+            window.location.href = "http://mohammedminhaj.blog:4000/not-found";
           }
         })
         .catch(function (error) {
@@ -232,7 +232,7 @@ let couponId = null;
               if (res.data.status === "success") {
                 window.location.href = res.data.redirectUrl;
               } else {
-                window.location.href = "http://localhost:4000/not-found";
+                window.location.href = "http://mohammedminhaj.blog:4000/not-found";
               }
             })
             .catch(function (error) {
