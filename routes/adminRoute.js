@@ -11,7 +11,8 @@ adminRouter
   .get(adminContoller.loginGet)
   .post(adminContoller.loginPost);
 
-adminRouter.route("/logout").get(adminLogout);
+adminRouter.route("/logout")
+  .post(adminLogout);
 
 // Admin Dashboard routes
 adminRouter.route("/").get(authenticate, adminContoller.homeGet);

@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
+import mongoose from 'mongoose';
 
 const cookieMiddleWare = cookieParser();
 
@@ -10,6 +11,9 @@ const expressStatic = express.static('public');
 
 const urlEncodedParser = express.urlencoded({extended: false});
 const jsonParser = express.json();
+
+// Importing Schemas
+import userModel from './models/userSchema.js';
 
 // Session Handling
 const sessionHandler = session({
@@ -30,7 +34,7 @@ const passportSession = passport.session();
 
 
 // Authentication Middleware
-function isAuthenticated(req, res, next){
+async function isAuthenticated(req, res, next){
 
     if(req.path === '/login' && req.session.user){
         return res.redirect('/');
@@ -46,20 +50,29 @@ function isAuthenticated(req, res, next){
         return next();
     }
 
-    // if(req.path.startsWith('/admin')){
-    //     if(req.session.fdaf){
-    //         return next();
-    //     }
-    //     return res.redirect('/admin/login');
-    // }
-
     if(req.session.user){
+
+        const userId = req.session.userId || req.session.passport.user;
+
+        const { isBlocked } = await userModel
+        .findOne({_id: userId}, {_id:0,isBlocked:1})
+        .lean();
+
+        if(isBlocked) {
+            req.session.user = null;
+            req.session.userId = null;
+            req.session.cartId = null;
+
+            return res.redirect('/login');
+        }
+
         return next();
     }
 
     res.redirect('/login');
 
 }
+
 
 const applyMiddlewares = (app) => {
     app.use(cookieMiddleWare);

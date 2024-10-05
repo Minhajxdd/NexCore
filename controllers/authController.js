@@ -181,8 +181,12 @@ export function logout(req, res) {
 }
 
 export function adminLogout(req, res) {
-  req.session.admin = null;
-  res.redirect("/admin/login");
+  if(req.session.admin) {
+    req.session.admin = null;
+    res.redirect("/admin/login");
+  }else {
+    res.redirect('/admin/login');
+  }
 }
 
 // Resent Otp

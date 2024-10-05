@@ -74,7 +74,7 @@ export const loginGet = (req, res) => {
 
 export const loginPost = (req, res) => {
   const { uname, password } = req.body;
-  if (uname === "Admin" && password === "admin123") {
+  if (uname === process.env.ADMINUNAME && password === process.env.ADMINPASS) {
     req.session.admin = uname;
     return res.redirect("/admin");
   }
