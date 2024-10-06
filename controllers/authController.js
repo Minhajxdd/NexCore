@@ -127,7 +127,7 @@ export const loginPost = async (req, res) => {
     }
 
     if (user.cartId) {
-      req.session.cartId = userData.cartId;
+      req.session.cartId = user.cartId;
     }
 
     req.session.userId = user._id;

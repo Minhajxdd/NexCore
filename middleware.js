@@ -20,7 +20,6 @@ const sessionHandler = session({
     secret: 'Secret Key',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }), 
     cookie: { 
         maxAge: 7 * 24 * 60 * 60 * 1000,
         secure: false
