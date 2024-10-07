@@ -380,12 +380,15 @@ if (zipInput) {
 // Zip Code Api
 
 // Address Form
-document
-  .getElementById("new-address-form-btn")
-  .addEventListener("click", function () {
+const newAddressButtonElement = document.getElementById("new-address-form-btn");
+
+if(newAddressButtonElement) {
+  newAddressButtonElement.addEventListener("click", function () {
     document.getElementById("edit-form").style.display = "block";
     document.getElementById("overlay").style.display = "block";
   });
+
+}
 
 document.getElementById("close-form").onclick = function () {
   closeForm();
@@ -410,7 +413,7 @@ function closeForm() {
     let firstName = document.getElementById("firstName").value.trim();
     let lastName = document.getElementById("lastName").value.trim();
     let address1 = document.getElementById("address1").value.trim();
-    let zipcode = document.getElementById("zipcode").value.trim();
+    let zipcode = document.getElementById("zipcode-input").value.trim();
     let state = document.getElementById("state").value.trim();
     let phone = document.getElementById("phone").value.trim();
     let email = document.getElementById("email").value.trim();
