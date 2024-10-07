@@ -35,7 +35,7 @@ let couponId = null;
       let firstName = document.getElementById("firstName").value.trim();
       let lastName = document.getElementById("lastName").value.trim();
       let address1 = document.getElementById("address1").value.trim();
-      let zipcode = document.getElementById("zipcode").value.trim();
+      let zipcode = document.getElementById("zipcode-input").value.trim();
       let state = document.getElementById("state").value.trim();
       let phone = document.getElementById("phone").value.trim();
       let email = document.getElementById("email").value.trim();
@@ -76,10 +76,10 @@ let couponId = null;
         firstName: firstName,
         lastName: lastName,
         company: address1,
-        street: document.getElementById("address2").value.trim(),
+        street: document.getElementById("street-address").value.trim(),
         land_mark: document.getElementById("landmark").value.trim(),
         zipcode: zipcode,
-        city_town: document.getElementById("city").value.trim(),
+        city_town: document.getElementById("city-address").value.trim(),
         state: state,
         phone_no: phone,
         email: email,
@@ -146,7 +146,7 @@ let couponId = null;
                   if (res.data.status === "success") {
                     window.location.href = res.data.redirectUrl;
                   } else {
-                    window.location.href = "http://mohammedminhaj.blog:4000/not-found";
+                    window.location.href = "http://mohammedminhaj.blog/not-found";
                   }
                 })
                 .catch(function (error) {
@@ -167,7 +167,7 @@ let couponId = null;
                     if (res.data.status === "success") {
                       window.location.href = res.data.redirectUrl;
                     } else {
-                      window.location.href = "http://mohammedminhaj.blog:4000/not-found";
+                      window.location.href = "http://mohammedminhaj.blog/not-found";
                     }
                   })
                   .catch(function (error) {
@@ -207,7 +207,7 @@ let couponId = null;
           if (res.data.status === "success") {
             window.location.href = res.data.redirectUrl;
           } else {
-            window.location.href = "http://mohammedminhaj.blog:4000/not-found";
+            window.location.href = "http://mohammedminhaj.blog/not-found";
           }
         })
         .catch(function (error) {
@@ -232,7 +232,7 @@ let couponId = null;
               if (res.data.status === "success") {
                 window.location.href = res.data.redirectUrl;
               } else {
-                window.location.href = "http://mohammedminhaj.blog:4000/not-found";
+                window.location.href = "http://mohammedminhaj.blog/not-found";
               }
             })
             .catch(function (error) {
@@ -413,10 +413,15 @@ function closeForm() {
     let firstName = document.getElementById("firstName").value.trim();
     let lastName = document.getElementById("lastName").value.trim();
     let address1 = document.getElementById("address1").value.trim();
-    let zipcode = document.getElementById("zipcode-input").value.trim();
+    let zipcode = document.getElementById("zipcode").value.trim();
     let state = document.getElementById("state").value.trim();
     let phone = document.getElementById("phone").value.trim();
     let email = document.getElementById("email").value.trim();
+    console.log(zipcode.length);
+    console.log(isNaN(zipcode));
+    
+    re
+
 
     if (!firstName || !/^[A-Za-z\s]+$/.test(firstName)) {
       errorMsg += "First Name is required and should only contain letters.<br>";

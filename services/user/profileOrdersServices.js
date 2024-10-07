@@ -4,14 +4,47 @@ import productModel from "../../models/productSchema.js";
 import addressModel from "../../models/addressSchema.js";
 import walletModel from '../../models/walletSchema.js';
 
-export async function ordersDetails(id) {
+export async function ordersDetails(id, page, limit) {
   try {
-    const data = await orderModel
+    const startIndex = (page - 1) * limit;
+    const result = {};
+
+    result.orders = await orderModel
       .find({
         user_id: id,
       })
-      .sort({ orderedAt: -1 });
-    return data;
+      .sort({ orderedAt: -1 })
+      .skip(startIndex)
+      .limit(limit)
+      .lean();
+
+      if (result.orders.length === limit) {
+        result.next = {
+          page: Number(page) + 1,
+          limit: limit,
+        };
+      } else {
+        result.next = {
+          page: page,
+          limit: limit,
+        };
+      }
+  
+      if (startIndex > 0) {
+        result.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+      } else {
+        result.previous = {
+          page: 1,
+          limit: limit,
+        };
+      }
+  
+
+
+    return result;
   } catch (err) {
     console.log(`error while fething orders details: ${err.message}`);
   }

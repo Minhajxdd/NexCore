@@ -100,7 +100,11 @@ export async function crateAddress(req, res) {
 export async function ordersGet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
   try {
-    const orders = await ordersDetails(userId);
+
+    const page = req.query.page || 1;
+    const limit = 3;
+
+    const { orders, next, previous } = await ordersDetails(userId, page, limit);
 
     const productDetails = [];
 
@@ -122,11 +126,15 @@ export async function ordersGet(req, res) {
     res.render("pages/user/orders", {
       orders,
       productDetails,
+      next,
+      previous
     });
   } catch (err) {
     console.log(`error while rendering address`);
   }
 }
+
+
 
 export async function orderDetailsGet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
