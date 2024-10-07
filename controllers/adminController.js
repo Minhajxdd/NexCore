@@ -69,6 +69,10 @@ export const loginGet = (req, res) => {
     }
   }
 
+  if(req.session.admin) {
+    return res.redirect("/admin");
+  }
+
   res.render("pages/admin/admin_login", { alertMessage: "" });
 };
 

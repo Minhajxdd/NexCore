@@ -46,6 +46,7 @@
             <div class="form-group">
                 <input id="re-password" type="password" class="form-control" placeholder="Re-enter Password" name="repassword" required data-toggle="tooltip" data-placement="top" title="Re-enter your password">
             </div>
+                <input id="reference-id-input" type="text" name="refId" hidden>
             <button type="submit" class="btn btn-signup">Sign Up <i class="fas fa-arrow-right"></i></button>
         </form>
         <div class="footer-links">
@@ -66,6 +67,25 @@
 
     </div>
     <!-- /SIGNUP FORM -->
+
+
+    <script>
+        // Reference Script
+        (function(){
+
+        const url = window.location;
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+
+        const refId = params.get('ref-id');
+        if(refId) {
+        document.getElementById(`reference-id-input`).value = refId;
+        }
+
+        })();
+        // Reference Script
+
+    </script>
 
     <!-- jQuery Plugins -->
     <script src="/script/jQuery.js"></script>

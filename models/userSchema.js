@@ -35,6 +35,9 @@ const UsersSchema = new Schema({
     type: Boolean, 
     default: false 
 },
+  referred: {
+    type: Boolean,
+},
   cartId: {
   type: Schema.Types.ObjectId  
 },

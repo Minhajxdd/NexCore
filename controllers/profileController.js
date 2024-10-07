@@ -266,3 +266,13 @@ export async function getWallet(req, res) {
 }
 
 // Wallet
+
+// Referral
+export async function getReferral(req, res) {
+  const userId = req.session.userId || req.session.passport.user;
+
+  res.render("pages/user/referral.ejs", { userId });
+
+}
+
+// Referral

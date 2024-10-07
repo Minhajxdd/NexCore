@@ -206,6 +206,12 @@ router.route('/wallet')
 
     // Wallet
 
+    // Referral
+router.route('/referrals')
+    .get(profile.getReferral)
+
+    // Referral
+
 
 // Profile
 

@@ -386,7 +386,8 @@
   </div>
   <!-- /BREADCRUMB -->
 
-
+  
+<% if(products) { %>
 
 
   <% if(products.length !== 0){ %>
@@ -460,7 +461,19 @@
                       
 
                 <% } %>            
-                            
+                
+                
+<% } else{ %>
+
+<!-- Empty Wishlist Div -->
+<div id="emptyWishlist" class="wishlist-empty text-center">
+    <i class="fas fa-heart-broken icon"></i>
+    <h2 class="message">Your Wishlist is Empty!</h2>
+    <p class="description">Start adding items you love to your wishlist to easily find them later.</p>
+    <button class="btn btn-primary" onclick="window.location.href='/'">Browse Shop</button>
+  </div>
+
+<% } %>
 
 <!-- Empty Wishlist Div -->
 <div id="emptyWishlist-hidden" class="wishlist-empty text-center" style="display: none;">

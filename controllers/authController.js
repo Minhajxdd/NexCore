@@ -2,7 +2,7 @@ import passport from "passport";
 import bcrypt from "bcrypt";
 
 // Importing Schemas
-import userModel from '../models/userSchema.js';
+import userModel from "../models/userSchema.js";
 
 // Importing Services
 import {
@@ -26,6 +26,7 @@ export const signupGet = (req, res) => {
 };
 
 export const signupPost = async (req, res) => {
+  
   const { email } = req.body;
   const otp = await generateOTP();
 
@@ -181,11 +182,11 @@ export function logout(req, res) {
 }
 
 export function adminLogout(req, res) {
-  if(req.session.admin) {
+  if (req.session.admin) {
     req.session.admin = null;
     res.redirect("/admin/login");
-  }else {
-    res.redirect('/admin/login');
+  } else {
+    res.redirect("/admin/login");
   }
 }
 
@@ -228,7 +229,7 @@ export async function resentOtpOtpPost(req, res) {
   if (!validate) {
     return res.json({ status: "failed", err_message: "Invalida Otp" });
   }
-  console.log(req.body.pword1);
+
   await updatePassword(req.cookies.email_reset, req.body.pword1);
 
   res.json({ status: "success", redirect_url: "/login" });

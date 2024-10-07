@@ -22,6 +22,9 @@ const otp_schema = new Schema({
     type: String,  
     required: false,
   },
+  refId: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

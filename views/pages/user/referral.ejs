@@ -1,0 +1,183 @@
+<%- include('../../partials/user/nav'); -%>
+<title>Refferals</title>
+
+
+
+<style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .referral-card {
+            padding: 40px 30px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        .referral-card h3 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #222;
+        }
+        .referral-card p {
+            color: #555;
+            font-size: 16px;
+        }
+        .referral-input {
+            position: relative;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .referral-input input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            color: #333;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .referral-input input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+        .referral-input .copy-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            padding: 0 20px;
+            border-radius: 0 6px 6px 0;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
+        .copy-alert {
+            display: none;
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 16px;
+            animation: fadeInOut 1.5s ease;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .referral-card {
+                padding: 20px;
+            }
+            .referral-input input {
+                font-size: 14px;
+            }
+            .referral-input .copy-btn {
+                padding: 0 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="/categories/processors">Processors</a></li>
+                <li><a href="/categories/graphics-card">Graphics Card</a></li>
+                <li><a href="/categories/mother-board">Mother Board</a></li>
+                <li><a href="/categories/storage">Storage</a></li>
+                <li><a href="/categories/processors">Memory</a></li>
+            </ul>
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+
+
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section" style="height: 5%;">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li>Referrals</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+
+
+<div class="container">
+    <div class="referral-card">
+        <h3>Invite Friends & Earn Rewards</h3>
+        <p>Share your unique referral link and earn ₹100 rupess for every friend who signs up!</p>
+        
+        <div class="referral-input">
+            <input type="text" id="referralLink" readonly value="https://mohammedminhaj.blog/signup?ref-id=<%= userId %>">
+            <button class="copy-btn" onclick="copyReferralLink()">
+                <i class="fa fa-copy"></i> Copy
+            </button>
+        </div>
+        
+        <p class="copy-alert" id="copyAlert">Copied to Clipboard!</p>
+    </div>
+</div>
+
+<script>
+    function copyReferralLink() {
+        var referralLink = document.getElementById("referralLink");
+        referralLink.select();
+        document.execCommand("copy");
+
+        var copyAlert = document.getElementById("copyAlert");
+        copyAlert.style.display = 'block';
+        copyAlert.classList.add('fadeInOut');
+        
+        setTimeout(function() {
+            copyAlert.style.display = 'none';
+            copyAlert.classList.remove('fadeInOut');
+        }, 1500);
+    }
+</script>
+
+
+<div style="margin-top: 3rem;">
+
+</div>
+<%- include('../../partials/user/footer'); -%>

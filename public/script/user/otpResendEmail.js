@@ -60,6 +60,7 @@ function validateEmail(){
     }
     else{
         errorLabel.innerHTML = "";
+        return true;
     }
 
 }
