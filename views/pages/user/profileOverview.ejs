@@ -1,0 +1,243 @@
+<%- include('../../partials/user/nav'); -%>
+<title>Profile Overview</title>
+
+
+<style>
+
+/* Basic styling for background and fonts */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+.profile-edit-container {
+    margin-top: 50px;
+}
+
+.profile-card-custom {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInCustom 1s ease-in-out;
+}
+
+/* Title Styling */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    animation: slideDownCustom 1.2s ease;
+}
+
+/* Form Styling */
+.form-group-custom {
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.input-group-custom {
+    position: relative;
+}
+
+.form-control-custom {
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    width: calc(100% - 100px); /* Adjust input width to leave room for the button */
+    display: inline-block;
+    color: #333;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.form-control-custom:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Blue Button Styling */
+.btn-blue-custom {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-blue-custom:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Animation */
+@keyframes fadeInCustom {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDownCustom {
+    from {
+        transform: translateY(-30px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .profile-card-custom {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    .form-control-custom {
+        font-size: 13px;
+        padding: 10px;
+        width: 100%; /* Full width for small screens */
+        display: block;
+    }
+
+    .btn-blue-custom {
+        margin-top: 10px;
+        display: block; /* Full width for small screens */
+        width: 100%;
+    }
+}
+
+
+</style>
+
+
+
+
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="/categories/processors">Processors</a></li>
+                <li><a href="/categories/graphics-card">Graphics Card</a></li>
+                <li><a href="/categories/mother-board">Mother Board</a></li>
+                <li><a href="/categories/storage">Storage</a></li>
+                <li><a href="/categories/processors">Memory</a></li>
+            </ul>
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+
+
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li>Profile Overview</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+
+
+
+<div class="container profile-edit-container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 profile-card-custom text-center">
+            <h2>Update Profile</h2>
+            <form>
+                <!-- Email Section -->
+                <div class="form-group-custom">
+                    <label for="email-custom">Email</label>
+                    <div class="input-group-custom">
+                        <input type="email" class="form-control-custom" id="email-custom" value="<%= user.email %>" disabled>
+                        <button type="button" class="btn btn-blue-custom edit-btn-custom" id="reset-email-custom">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Full Name Section -->
+                <div class="form-group-custom">
+                    <label for="full-name-custom">Full Name</label>
+                    <div class="input-group-custom">
+                        <input type="text" class="form-control-custom" id="full-name-custom" value="<%= user.full_name %>">
+                        <button onclick="resetName()" type="button" class="btn btn-blue-custom edit-btn-custom" id="save-fullname-custom">Save</button>
+                   
+                        <span id="full-name-error_message" style="color: rgba(255, 0, 0, 0.732);font-weight: bolder;"></span>
+                    </div>
+                </div>
+
+                <!-- Mobile Number Section -->
+                <div class="form-group-custom">
+                    <label for="mobile-number-custom">Mobile Number</label>
+                    <div class="input-group-custom">
+                        <input type="text" class="form-control-custom" id="mobile-number-custom" value="<%= user.phone_number %>">
+                        <button onclick="resetNumber()" type="button" class="btn btn-blue-custom edit-btn-custom" id="save-mobile-custom">Save</button>
+
+                        <span id="mobil-number-error_message" style="color: rgba(255, 0, 0, 0.732);font-weight: bolder;"></span>
+                    </div>
+                </div>
+
+                <!-- Random Password Section -->
+                <div class="form-group-custom">
+                    <label for="random-password-custom">Password</label>
+                    <div class="input-group-custom">
+                        <input type="password" class="form-control-custom" id="random-password-custom" value="••••••••••" disabled>
+                        <a href="/password_reset">
+                            <button type="button" class="btn btn-blue-custom edit-btn-custom" id="reset-password-custom">Reset</button>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Custom js -->
+<script src="/script/user/profileOverview.js"></script>
+
+
+<div style="margin-top: 3rem;"></div>
+<%- include('../../partials/user/footer'); -%>

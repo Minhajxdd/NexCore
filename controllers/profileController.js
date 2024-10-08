@@ -3,7 +3,7 @@ import {
   deleteAddress,
   updateAddressFun,
   addAddressFun,
-  getAddressDetails
+  getAddressDetails,
 } from "../services/user/profileAddressServices.js";
 import {
   ordersDetails,
@@ -14,6 +14,8 @@ import {
   sendReturnRequest,
   validateOrder,
 } from "../services/user/profileOrdersServices.js";
+
+import { updateProfileDetails, getuserData } from "../services/user/profileOverviewServices.js";
 
 import { getWalletData } from "../services/user/profileWalletServices.js";
 
@@ -27,9 +29,8 @@ export async function addressGet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
 
   try {
-    
     const addresses = await getAddressDetails(userId);
-    
+
     res.render("pages/user/address", {
       addresses,
     });
@@ -74,7 +75,7 @@ export async function crateAddress(req, res) {
       message: `Something went wrong`,
     });
   }
-  
+
   const userId = req.session.userId || req.session.passport.user;
 
   const addressData = await addAddressFun(req.body.formData, userId);
@@ -83,7 +84,7 @@ export async function crateAddress(req, res) {
     return res.json({
       status: "Success",
       message: "Successfully crated address",
-      address: addressData
+      address: addressData,
     });
   }
 
@@ -100,7 +101,6 @@ export async function crateAddress(req, res) {
 export async function ordersGet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
   try {
-
     const page = req.query.page || 1;
     const limit = 3;
 
@@ -127,14 +127,12 @@ export async function ordersGet(req, res) {
       orders,
       productDetails,
       next,
-      previous
+      previous,
     });
   } catch (err) {
     console.log(`error while rendering address`);
   }
 }
-
-
 
 export async function orderDetailsGet(req, res) {
   const userId = req.session.userId || req.session.passport.user;
@@ -143,7 +141,7 @@ export async function orderDetailsGet(req, res) {
     return res.redirect("/not-found");
   }
 
-  const [ orders ] = await getAddressIdAndUser(req.query.id, userId);
+  const [orders] = await getAddressIdAndUser(req.query.id, userId);
 
   if (!orders) {
     return res.redirect("/not-found");
@@ -272,7 +270,29 @@ export async function getReferral(req, res) {
   const userId = req.session.userId || req.session.passport.user;
 
   res.render("pages/user/referral.ejs", { userId });
+}
+// Referral
 
+// Profile Overview
+export async function getProfileOverview(req, res) {
+  const userId = req.session.userId || req.session.passport.user;
+
+  const user = await getuserData(userId);
+  
+  res.render("pages/user/profileOverview.ejs", {user});
 }
 
-// Referral
+export async function apiProfileOverview(req, res) {
+  const userId = req.session.userId || req.session.passport.user;
+
+  if (updateProfileDetails(req.query.type, req.body.value, userId)) {
+    return res.json({
+      status: "success",
+      message: "successfully updated",
+    });
+  } else {
+    return res.json({ status: "failed", message: "something went wrong" });
+  }
+}
+
+// Profile Overview

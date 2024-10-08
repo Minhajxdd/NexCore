@@ -195,7 +195,11 @@
                         </div>
                          </td>
                         <td>
-                          <button class="badge" data-id="<%= val._id%>" id="btn-action">Delete</button>
+                          <% if(val.isDeleted) { %>
+                            <button class="badge" data-id="<%= val._id%>" id="btn-action" style="background-color: green;">Undo</button>
+                          <% } else{ %>
+                            <button class="badge" data-id="<%= val._id%>" id="btn-action">Delete</button>
+                          <% } %>
                           <button class="badge" data-id="<%= val._id%>" id="btn-edit">Edit</button>
                         </td>
                       </tr>

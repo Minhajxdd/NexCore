@@ -208,9 +208,16 @@ router.route('/wallet')
 
     // Referral
 router.route('/referrals')
-    .get(profile.getReferral)
-
+    .get(profile.getReferral);
     // Referral
+
+    // Profile Overview
+router.route('/profile/overview')
+    .get(profile.getProfileOverview);
+
+router.route('/api/profile/overview')
+    .post(profile.apiProfileOverview)
+    // Profile Overview
 
 
 // Profile

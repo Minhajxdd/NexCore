@@ -1,90 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Signup</title>
-    
+
     <!-- Google font -->
-    <link href="/style/cdn/googleFontMontserrat.css" rel="stylesheet">
+    <link href="/style/cdn/googleFontMontserrat.css" rel="stylesheet" />
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
 
     <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
 
     <!-- Style Sheet -->
-    <link rel="stylesheet" href="/style/form-style.css">
+    <link rel="stylesheet" href="/style/form-style.css" />
+  </head>
 
-</head>
-
-<body>
-
+  <body>
     <!-- SIGNUP FORM -->
     <div class="signup-form">
-        <h2>Create Your Account</h2>
-        <!-- Error message placeholder -->
-        <label id="error-message"></label> 
+      <h2>Create Your Account</h2>
+      <!-- Error message placeholder -->
+      <label id="error-message"></label>
 
-        <form action="/signup" method="POST" onsubmit="return validateSignupForm()">
-            <div class="form-group">
-                <input id="full-name" type="text" class="form-control" placeholder="Full Name" name="fullname" required data-toggle="tooltip" data-placement="top" title="Enter your full name">
-            </div>
-            <div class="form-group">
-                <input id="email" type="email" class="form-control" placeholder="Email" name="email" required data-toggle="tooltip" data-placement="top" title="Enter your email address">
-            </div>
-            <div class="form-group">
-                <input id="phone-number" type="tel" class="form-control" placeholder="Phone Number" name="phone" required data-toggle="tooltip" data-placement="top" title="Enter your phone number">
-            </div>
-            <div class="form-group">
-                <input id="password" type="password" class="form-control" placeholder="Password" name="password" required data-toggle="tooltip" data-placement="top" title="Create a password">
-            </div>
-            <div class="form-group">
-                <input id="re-password" type="password" class="form-control" placeholder="Re-enter Password" name="repassword" required data-toggle="tooltip" data-placement="top" title="Re-enter your password">
-            </div>
-                <input id="reference-id-input" type="text" name="refId" hidden>
-            <button type="submit" class="btn btn-signup">Sign Up <i class="fas fa-arrow-right"></i></button>
-        </form>
-        <div class="footer-links">
-            <a href="#">Terms of Service</a>
-            <a href="#">Privacy Policy</a>
+      <form
+        action="/signup"
+        method="POST"
+        onsubmit="return validateSignupForm()"
+      >
+        <div class="form-group">
+          <input
+            id="full-name"
+            type="text"
+            class="form-control"
+            placeholder="Full Name"
+            name="fullname"
+            required
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Enter your full name"
+          />
         </div>
-
-        <div class="bottom-div mt-3">
-            <a href="/login" class="click-a">
-            Already have an account?
-            </a>
-            <p class="mt-2 fw-bolder">or</p>
-            <a href="/auth/google" class="click-a">
-                <i class="fa-brands fa-google mr-1"></i>
-                Continue with Google
-            </a>
+        <div class="form-group">
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            placeholder="Email"
+            name="email"
+            required
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Enter your email address"
+          />
         </div>
+        <div class="form-group">
+          <input
+            id="phone-number"
+            type="tel"
+            class="form-control"
+            placeholder="Phone Number"
+            name="phone"
+            required
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Enter your phone number"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            placeholder="Password"
+            name="password"
+            required
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Create a password"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            id="re-password"
+            type="password"
+            class="form-control"
+            placeholder="Re-enter Password"
+            name="repassword"
+            required
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Re-enter your password"
+          />
+        </div>
+        <input id="reference-id-input" type="text" name="refId" hidden />
+        <button type="submit" class="btn btn-signup">
+          Sign Up <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+      <div class="footer-links">
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+      </div>
 
+      <div class="bottom-div mt-3">
+        <a href="/login" class="click-a"> Already have an account? </a>
+        <p class="mt-2 fw-bolder">or</p>
+        <a href="/auth/google" class="click-a">
+          <i class="fa-brands fa-google mr-1"></i>
+          Continue with Google
+        </a>
+      </div>
     </div>
     <!-- /SIGNUP FORM -->
 
-
     <script>
-        // Reference Script
-        (function(){
+      window.onload = function () {
+        loadRefer();
+      };
 
+    // Reference Script
+      function loadRefer() {
         const url = window.location;
         const urlObj = new URL(url);
         const params = new URLSearchParams(urlObj.search);
 
-        const refId = params.get('ref-id');
-        if(refId) {
-        document.getElementById(`reference-id-input`).value = refId;
+        const refId = params.get("ref-id");
+        if (refId) {
+          document.getElementById(`reference-id-input`).value = refId;
         }
-
-        })();
-        // Reference Script
-
+        }
+    // Reference Script
     </script>
 
     <!-- jQuery Plugins -->
@@ -93,11 +151,9 @@
     <script src="/script/validate.js"></script>
 
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

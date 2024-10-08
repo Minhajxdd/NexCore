@@ -9,9 +9,14 @@
             data.id = button.getAttribute('data-id');
             axios.post('/cart/product/add', data)
             .then((res) => {
-                if(res.data.error_message === 'no stock'){
-                  popup(res.data.error_message);
+              
+                if(res.data.error_message){
+                  return showPopup(res.data.error_message,"red");
                 }
+                if(res.data.status == 'success') {
+                  return showPopup("Item added to Cart successfully!","#4CAF50");
+                }
+
               })
               .catch((err) => {
                 console.log(`axios add to cart error: ${err}`);
@@ -29,7 +34,11 @@ document.querySelectorAll('.add-to-wishlist-btn').forEach(function (button){
 
     axios.get(`/api/wishlist/add?productId=${productId}`)
     .then(function(res){
-      console.log(res.data);
+      if(res.data.status) {
+        console.log(`Success`);
+        return showPopup("Item added to wishlist successfully!","#4CAF50");
+      }
+      console.log('Failed');
     })
     .catch(function(err){
       console.log(`error while axios add to wishlist : ${err.message}`);
@@ -53,3 +62,15 @@ function popup(error_message) {
 }
 
 
+// Notification Popup
+function showPopup(msg, color) {
+  const popup = document.getElementById("popup-notification");
+  popup.innerHTML = msg;
+  popup.classList.add("show");
+  popup.style.backgroundColor = color;
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 2000);
+}
+// Notification Popup

@@ -143,7 +143,7 @@ export async function createUser(email) {
         phone_number: data[0].phoneNumber,
         password: data[0].password,
     };
-    console.log(data);
+
     if(data[0].refId) {
         user.referred = true;
     
@@ -161,10 +161,11 @@ export async function createUser(email) {
                     $inc: {
                         balance_amount: 100
                     }
-                }
+                },
+                { upsert: true }
             );
 
-            await otpModel.findByIdAndDelete({ email: email });
+            await otpModel.findOneAndDelete({ email: email });
 
 
         }catch(err) {
